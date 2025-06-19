@@ -22,6 +22,9 @@ export const auth = betterAuth({
     provider: "pg",
   }),
 
+  appName: config.branding.name,
+  baseURL: config.urls.client,
+
   plugins: plugins,
 
   emailAndPassword: {
@@ -55,4 +58,6 @@ export const auth = betterAuth({
       // });
     },
   },
+
+  socialProviders: config.auth.socialProviders
 });

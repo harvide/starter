@@ -4,13 +4,9 @@ import { db } from "@repo/db";
 import { openAPI } from "better-auth/plugins";
 import { config } from "@repo/config";
 
-let plugins: BetterAuthPlugin[] = [
-  // captcha({
-  //   provider: "cloudflare-turnstile", // or google-recaptcha, hcaptcha
-  //   secretKey: process.env.TURNSTILE_SECRET_KEY!,
-  // }),
-]
-if (config.env === "development") {
+let plugins: BetterAuthPlugin[] = config.plugins;
+if (config.env === "development" && !plugins.some(plugin => plugin.id === 'open-api')) {
+  // Add OpenAPI plugin only in development mode if not already included
   plugins = [
     ...plugins,
     openAPI(),
@@ -28,15 +24,7 @@ export const auth = betterAuth({
   plugins: plugins,
 
   emailAndPassword: {
-    enabled: true,
-
-    autoSignIn: false,
-
-    disableSignUp: false,
-    minPasswordLength: 8,
-    maxPasswordLength: 128,
-
-    requireEmailVerification: true,
+    ...config.auth.emailAndPassword,
     sendResetPassword: async ({ user, url, token }, request) => {
       throw new Error("Reset password is not implemented yet");
       // await sendEmail({
@@ -44,8 +32,7 @@ export const auth = betterAuth({
       //   subject: "Reset your password",
       //   text: `Click the link to reset your password: ${url}`,
       // });
-    },
-    resetPasswordTokenExpiresIn: 3600
+    }
   },
 
   emailVerification: {

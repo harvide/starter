@@ -1,4 +1,3 @@
-import { Provider } from "@supabase/supabase-js";
 import {
   FaGithub,
   FaGoogle,
@@ -17,7 +16,7 @@ import { SiNotion, SiFigma, SiZoom, SiKakao } from "react-icons/si";
 import { TbBrandAzure } from "react-icons/tb";
 import { BsKey } from "react-icons/bs";
 
-export const oauthIconsMap: Partial<Record<Provider, React.ComponentType<{ className?: string }>>> = {
+export const oauthIconsMap: Partial<Record<string, React.ComponentType<{ className?: string }>>> = {
   apple: FaApple,
   azure: TbBrandAzure,
   bitbucket: FaBitbucket,

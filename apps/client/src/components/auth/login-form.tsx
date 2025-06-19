@@ -13,8 +13,6 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@repo/ui/components/ta
 
 import { useState } from "react";
 
-// import { InputOTP, InputOTPGroup, InputOTPSlot, InputOTPSeparator } from "@repo/ui/components/input-otp";
-
 import { useRouter } from "next/navigation";
 import { config } from "@repo/config";
 
@@ -209,7 +207,7 @@ export function LoginForm({
                                                 id="email"
                                                 type="email"
                                                 name="email"
-                                                placeholder="m@example.com"
+                                                placeholder="example@example.com"
                                                 required
                                             />
                                         </div>
@@ -364,11 +362,11 @@ export function LoginForm({
                         </form>
                     )}
 
-                    <div className="relative hidden bg-muted md:block">
+                    <div className="relative hidden bg-muted border-border border rounded md:block mr-2">
                         <img
-                            src="https://harvide.com/logo/small-dark-transparent.svg"
+                            src="https://www.harvide.com/logo/small-dark-white.svg"
                             alt="Image"
-                            className="absolute inset-0 h-full w-full object-cover dark:brightness-[0.2] dark:grayscale"
+                            className="absolute inset-0 h-full w-full object-cover dark:brightness-[0.2] dark:grayscale rounded"
                         />
                     </div>
                 </CardContent>

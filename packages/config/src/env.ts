@@ -24,6 +24,17 @@ const configSchema = z.object({
   db: z.object({
     url: z.literal(env.DATABASE_URL),
   }),
+  
+  branding: z.object({
+    name: z.literal("Better Auth"),
+    description: z.literal("A simple authentication solution for your applications."),
+    logo: z.object({
+      large: z.string().url(),
+      icon: z.string().url(),
+      altText: z.string().min(1, "Logo alt text is required"),
+    })
+  }),
+  
   urls: z.object({
     client: z.literal(env.NEXT_PUBLIC_CLIENT_URL),
     core: z.literal(env.NEXT_PUBLIC_CORE_URL),

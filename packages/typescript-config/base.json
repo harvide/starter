@@ -6,7 +6,11 @@
     "esModuleInterop": true,
     "incremental": false,
     "isolatedModules": true,
-    "lib": ["es2022", "DOM", "DOM.Iterable"],
+    "lib": [
+      "es2022",
+      "DOM",
+      "DOM.Iterable"
+    ],
     "module": "NodeNext",
     "moduleDetection": "force",
     "moduleResolution": "NodeNext",
@@ -14,6 +18,27 @@
     "resolveJsonModule": true,
     "skipLibCheck": true,
     "strict": true,
-    "target": "ES2022"
+    "target": "ES2022",
+    "baseUrl": "../..",
+    "paths": {
+      "@repo/config": [
+        "packages/config/src"
+      ],
+      "@repo/db": [
+        "packages/db/src"
+      ],
+      "@repo/auth": [
+        "packages/auth/src"
+      ],
+      "@repo/trpc": [
+        "packages/trpc/src"
+      ],
+      "@repo/services": [
+        "packages/services/src"
+      ],
+      "@repo/types": [
+        "packages/types/src"
+      ]
+    }
   }
 }

@@ -1,0 +1,23 @@
+{
+  "name": "@repo/config",
+  "module": "index.ts",
+  "type": "module",
+  "exports": {
+    ".": {
+      "import": "./src/index.ts"
+    },
+    "./load-env": {
+      "import": "./src/load-env.ts"
+    }
+  },
+  "private": true,
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  },
+  "dependencies": {
+    "zod": "^3.25.67"
+  }
+}

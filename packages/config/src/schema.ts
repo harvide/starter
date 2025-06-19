@@ -22,6 +22,10 @@ export const configSchema = z.object({
       maxPasswordLength: z.number().min(1).default(128),
       requireEmailVerification: z.boolean().default(true),
       resetPasswordTokenExpiresIn: z.number().min(1).default(3600),
+
+      verificationTokenExpiresIn: z.number().min(1).default(3600),
+      sendResetPassword: z.boolean().default(false),
+      sendVerificationEmail: z.boolean().default(false),
     }),
     socialProviders: z.record(
       z.string(),

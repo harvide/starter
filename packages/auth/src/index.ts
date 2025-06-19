@@ -9,7 +9,7 @@ if (config.env === "development" && !plugins.some(plugin => plugin.id === 'open-
   // Add OpenAPI plugin only in development mode if not already included
   plugins = [
     ...plugins,
-    openAPI(),
+    openAPI()
   ]
 }
 
@@ -26,7 +26,9 @@ export const auth = betterAuth({
   emailAndPassword: {
     ...config.auth.emailAndPassword,
     sendResetPassword: async ({ user, url, token }, request) => {
-      throw new Error("Reset password is not implemented yet");
+      if (!config.auth.emailAndPassword.sendResetPassword) {
+        throw new Error("Sending reset password emails is disabled in the configuration");
+      }
       // await sendEmail({
       //   to: user.email,
       //   subject: "Reset your password",
@@ -37,7 +39,9 @@ export const auth = betterAuth({
 
   emailVerification: {
     sendVerificationEmail: async ({ user, url, token }, request) => {
-      throw new Error("Email verification is not implemented yet");
+      if (!config.auth.emailAndPassword.sendVerificationEmail) {
+        throw new Error("Sending verification emails is disabled in the configuration");
+      }
       // await sendEmail({
       //   to: user.email,
       //   subject: "Verify your email address",

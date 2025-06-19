@@ -11,15 +11,22 @@ const config = {
       requireEmailVerification: true,
       resetPasswordTokenExpiresIn: 3600,
     },
-    socialProviders: {},
+    socialProviders: {
+      apple: {
+        enabled: true,
+      },
+      google: {
+        enabled: true,
+      },
+    },
   },
   branding: {
-    name: "Better Auth",
+    name: "Starter",
     description: "A simple authentication solution for your applications.",
     logo: {
-      large: "https://example.com/logo.svg",
-      icon: "https://example.com/icon.svg",
-      altText: "Better Auth Logo",
+      large: "https://harvide.com/logo/big-dark-transparent.svg",
+      icon: "https://www.harvide.com/logo/small-dark-white.svg",
+      altText: "Harvide Logo",
     },
   },
   plugins: [] as BetterAuthPlugin[],

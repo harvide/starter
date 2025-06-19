@@ -1,14 +1,34 @@
-import { betterAuth } from "better-auth";
+import { betterAuth, type BetterAuthPlugin } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { db } from "@repo/db";
+import { openAPI } from "better-auth/plugins";
+import { config } from "@repo/config";
+
+let plugins: BetterAuthPlugin[] = [
+  // captcha({
+  //   provider: "cloudflare-turnstile", // or google-recaptcha, hcaptcha
+  //   secretKey: process.env.TURNSTILE_SECRET_KEY!,
+  // }),
+]
+if (config.env === "development") {
+  plugins = [
+    ...plugins,
+    openAPI(),
+  ]
+}
 
 export const auth = betterAuth({
   database: drizzleAdapter(db, {
     provider: "pg",
   }),
 
+  plugins: plugins,
+
   emailAndPassword: {
     enabled: true,
+
+    autoSignIn: false,
+
     disableSignUp: false,
     minPasswordLength: 8,
     maxPasswordLength: 128,

@@ -14,6 +14,10 @@ export const configSchema = z.object({
     url: envSchema.shape.DATABASE_URL,
   }),
   auth: z.object({
+    phone: z.object({
+      enabled: z.boolean().default(false),
+    }),
+    
     emailAndPassword: z.object({
       enabled: z.boolean().default(true),
       autoSignIn: z.boolean().default(false),
@@ -26,6 +30,15 @@ export const configSchema = z.object({
       verificationTokenExpiresIn: z.number().min(1).default(3600),
       sendResetPassword: z.boolean().default(false),
       sendVerificationEmail: z.boolean().default(false),
+
+      otp: z.object({
+        enabled: z.boolean().default(false),
+        otpLength: z.number().min(1).default(6),
+        expiresIn: z.number().min(1).default(300),
+        sendVerificationOnSignUp: z.boolean().default(true),
+        disableSignUp: z.boolean().default(false),
+        allowedAttempts: z.number().min(1).default(5),
+      })
     }),
     socialProviders: z.record(
       z.string(),
@@ -49,6 +62,15 @@ export const configSchema = z.object({
   }),
   secrets: z.object({
     auth: envSchema.shape.BETTER_AUTH_SECRET,
+  }),
+  preferences: z.object({
+    showToasts: z.object({
+      success: z.boolean().default(true),
+      error: z.boolean().default(true),
+      info: z.boolean().default(true),
+      warning: z.boolean().default(true),
+      debug: z.boolean().default(false), // only in development
+    }),
   }),
 });
 

@@ -1,84 +1,33 @@
-# Turborepo starter
+# Starter
 
-This Turborepo starter is maintained by the Turborepo core team.
+Starter is a simple and idiomatic starter kit for building SaaS applications.
 
-## Using this example
+> Starter is a free version on MIT license, which means you can use it for personal and commercial projects without any restrictions.
+> There is also a paid version with additional features, better support, early access to new features and a lot of ready to use components. [Starter Pro](https://starter.harvide.com/pro) is available for purchase on our website.
 
-Run the following command:
+# Features
 
-```sh
-npx create-turbo@latest
-```
+- **Modular**: Use only the features you need.
+- **Extensible**: Easily add new features or replace existing ones.
+- **Idiomatic**: Follows best practices and conventions of the language and framework.
 
-## What's inside?
+# Configuration
 
-This Turborepo includes the following packages/apps:
+Starter is meant to be very customizable. Basic stack is:
+- **Trpc** used for API and RPC calls.
+- **Next.js** used for the frontend and server-side rendering.
+- **Drizzle** used for database access.
+  * You can customize the database provider and use any database supported by Drizzle.
+- **Tailwind CSS** used for styling with **Shadcn UI** components.
+- **Zod** used for schema validation.
+- **Better Auth** used for authentication and authorization.
+  * Starter is designed to automatically detect additional plugins you use with better auth. Seamlessly integrate phone authentication, magic links, social logins, and more.
 
-### Apps and Packages
+## Customization
+Starter is meant to be one-file customizable. You can change the configuration in the `packages/config/src/config.ts` file. Here you can:
+- Change your app's entire branding - name, logo, descriptions. It's adjusted for SEO and social media sharing.
+- Change auth behavior - you can enable or disable email verification, phone authentication, magic links, and more.
 
-- `docs`: a [Next.js](https://nextjs.org/) app
-- `web`: another [Next.js](https://nextjs.org/) app
-- `@repo/ui`: a stub React component library shared by both `web` and `docs` applications
-- `@repo/eslint-config`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
-- `@repo/typescript-config`: `tsconfig.json`s used throughout the monorepo
 
-Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
+# Contributors
 
-### Utilities
-
-This Turborepo has some additional tools already setup for you:
-
-- [TypeScript](https://www.typescriptlang.org/) for static type checking
-- [ESLint](https://eslint.org/) for code linting
-- [Prettier](https://prettier.io) for code formatting
-
-### Build
-
-To build all apps and packages, run the following command:
-
-```
-cd my-turborepo
-pnpm build
-```
-
-### Develop
-
-To develop all apps and packages, run the following command:
-
-```
-cd my-turborepo
-pnpm dev
-```
-
-### Remote Caching
-
-> [!TIP]
-> Vercel Remote Cache is free for all plans. Get started today at [vercel.com](https://vercel.com/signup?/signup?utm_source=remote-cache-sdk&utm_campaign=free_remote_cache).
-
-Turborepo can use a technique known as [Remote Caching](https://turborepo.com/docs/core-concepts/remote-caching) to share cache artifacts across machines, enabling you to share build caches with your team and CI/CD pipelines.
-
-By default, Turborepo will cache locally. To enable Remote Caching you will need an account with Vercel. If you don't have an account you can [create one](https://vercel.com/signup?utm_source=turborepo-examples), then enter the following commands:
-
-```
-cd my-turborepo
-npx turbo login
-```
-
-This will authenticate the Turborepo CLI with your [Vercel account](https://vercel.com/docs/concepts/personal-accounts/overview).
-
-Next, you can link your Turborepo to your Remote Cache by running the following command from the root of your Turborepo:
-
-```
-npx turbo link
-```
-
-## Useful Links
-
-Learn more about the power of Turborepo:
-
-- [Tasks](https://turborepo.com/docs/crafting-your-repository/running-tasks)
-- [Caching](https://turborepo.com/docs/crafting-your-repository/caching)
-- [Remote Caching](https://turborepo.com/docs/core-concepts/remote-caching)
-- [Filtering](https://turborepo.com/docs/crafting-your-repository/running-tasks#using-filters)
-- [Configuration Options](https://turborepo.com/docs/reference/configuration)
-- [CLI Usage](https://turborepo.com/docs/reference/command-line-reference)

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React from "react";
 import { cn } from "@repo/ui/lib/utils"
 import { Button } from "@repo/ui/components/button"
 import { Card, CardContent } from "@repo/ui/components/card"
@@ -15,6 +15,11 @@ import { useState } from "react";
 
 import { useRouter } from "next/navigation";
 import { config } from "@repo/config";
+import { authClient } from "@/lib/auth";
+
+import { toast } from 'sonner'
+import { showToast } from "@/lib/toast";
+import { InputOTP, InputOTPGroup, InputOTPSlot } from "@repo/ui/components/input-otp";
 
 export function LoginForm({
     className,
@@ -22,53 +27,95 @@ export function LoginForm({
 }: React.ComponentProps<"div">) {
     const router = useRouter();
 
+    const [currentTab, setCurrentTab] = useState<"email" | "phone">("email");
     const [step, setStep] = useState<"login" | "email-link-sent" | "enter-otp-code" | "prompt-email" | "reset-password" | "reset-password-link-sent">("login");
-    const [submittedEmail, setSubmittedEmail] = useState<string>("");
+    const [submittedValue, setSubmittedValue] = useState<{
+        value: string;
+        type: "email" | "phone";
+    } | null>(null);
 
     const [error, setError] = useState<string | null>(null);
 
+    // check if otp plugins are enabled
+    const isPhoneSigninEnabled = config.auth.phone.enabled
+    const isPhoneOTPPluginEnabled = config.auth.phone.otp?.enabled
+    const isEmailOTPPluginEnabled = config.auth.emailAndPassword.otp.enabled
+
+    // main login function - this flow is handled after user clicks the login button
     async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
         setError(null);
+
         const form = new FormData(e.currentTarget);
-        const email = (form.get("email") as string) || "";
-        const phone = (form.get("phone") as string) || "";
+
+        const email = (form.get("email") as string);
+        const phone = (form.get("phone") as string);
         const password = form.get("password") as string;
 
-        if (config.authorization.otp) {
-            setSubmittedEmail(email || phone);
-            let data;
-            if (config.authorization.otp.email) {
-                data = await supabase.auth.signInWithOtp({ email, options: { shouldCreateUser: false } });
-            } else if (config.authorization.otp.phone) {
-                data = await supabase.auth.signInWithOtp({ phone, options: { shouldCreateUser: false } });
-            } else {
-                throw new Error("OTP method is not configured correctly.");
-            }
-            if (data.error) {
-                setError(data.error.message);
-                return;
-            }
+        let data;
 
-            if (config.authorization.otp.method === "link") {
-                setStep("email-link-sent");
-                return;
-            } else if (config.authorization.otp.method === "code") {
-                setStep("enter-otp-code");
-                return;
-            } else {
-                throw new Error("Invalid OTP method configured.");
-            }
-
-        } else {
-            const { error } = await supabase.auth.signInWithPassword({
-                email, phone, password
+        // OTP flow has priority
+        if (isEmailOTPPluginEnabled && email) {
+            // email otp flow
+            setSubmittedValue({
+                value: email,
+                type: "email"
             });
-            if (error) throw error;
-            router.push(config.authorization.oauth?.redirectUri || "/");
+            data = await authClient.emailOtp.sendVerificationOtp({
+                email: email,
+                type: "sign-in"
+            });
+            if (data.error) {
+                setError(`${data.error.code}: ${data.error.message}`);
+                return;
+            }
+            setStep("enter-otp-code");
+        } else if (isPhoneOTPPluginEnabled && phone) {
+            // phone otp flow
+            setSubmittedValue({
+                value: phone,
+                type: "phone"
+            });
+            data = await authClient.phoneNumber.sendOtp({
+                phoneNumber: phone
+            });
+            if (data.error) {
+                setError(`${data.error.code}: ${data.error.message}`);
+                return;
+            }
+            setStep("enter-otp-code");
+        } else if (email && password) {
+            // email + password flow
+            data = await authClient.signIn.email({
+                email: email,
+                password: password,
+                rememberMe: true,
+                callbackURL: '/app'
+            })
+            if (data.error) {
+                setError(`${data.error.code}: ${data.error.message}`);
+                return;
+            }
+            showToast.success("Login successful!");
+        } else if (phone && password) {
+            // phone + password flow
+            data = await authClient.signIn.phoneNumber({
+                phoneNumber: phone,
+                password: password,
+                rememberMe: true
+            })
+            if (data.error) {
+                setError(`${data.error.code}: ${data.error.message}`);
+                return;
+            }
+            showToast.success(<>Hi, {data.data.user.name}!</>, {
+                description: <>Good to see you back!</>
+            })
+        } else {
+            setError("Please provide a valid email or phone number.");
+            throw new Error("Please provide a valid email or phone number.");
         }
     }
-
 
     async function handleVerifyOtp(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
@@ -76,39 +123,59 @@ export function LoginForm({
 
         let error;
 
-        if (config.authorization.otp?.email) {
-            const { error: otpError } = await supabase.auth.verifyOtp({
-                email: submittedEmail,
-                token: code,
-                type: "email"
-            });
-
-            if (otpError) {
-                error = otpError;
-            }
-        } else if (config.authorization.otp?.phone) {
-            const { error: otpError } = await supabase.auth.verifyOtp({
-                phone: submittedEmail,
-                token: code,
-                type: "sms"
-            });
-
-            if (otpError) {
-                error = otpError;
-            }
+        if (!submittedValue) {
+            setError("No submitted value found. Please try again.");
+            throw new Error("No submitted value found. Please try again.");
         }
 
-        if (error) {
-            setError(error.message);
+        if (submittedValue.type === "email") {
+            const data = await authClient.signIn.emailOtp({
+                email: submittedValue.value,
+                otp: code,
+            })
+
+            if (data.error) {
+                setError(`${data.error.code}: ${data.error.message}`);
+                return;
+            }
+
+            showToast.success(<>Hi, {data.data.user.name}!</>, {
+                description: <>Good to see you back!</>
+            })
+            router.push("/app");
+        } else if (submittedValue.type === "phone") {
+            const data = await authClient.phoneNumber.verify({
+                phoneNumber: submittedValue.value,
+                code: code
+            })
+
+            if (data.error) {
+                setError(`${data.error.code}: ${data.error.message}`);
+                return;
+            }
+
+            showToast.success(<>Hi, {data.data.user.name}!</>, {
+                description: <>Good to see you back!</>
+            })
+            router.push("/app");
+        } else {
+            setError("Invalid submitted value type. Please try again.");
+            throw new Error("Invalid submitted value type. Please try again.");
+        }
+    }
+
+    async function handleOAuthSignIn(provider: string) {
+        const data = await authClient.signIn.social({
+            provider: "apple",
+            callbackURL: '/app'
+        })
+
+        if (data.error) {
+            setError(`${data.error.code}: ${data.error.message}`);
             return;
         }
 
-        router.push(config.authorization?.oauth?.redirectUri || "/");
-    }
-
-    async function handleOAuthSignIn(provider: Provider) {
-        const { error } = await supabase.auth.signInWithOAuth({ provider: provider });
-        if (error) setError(error.message);
+        showToast.info("Redirecting to " + provider + "...");
     }
 
     async function handleResetPassword(e: React.FormEvent<HTMLFormElement>) {
@@ -123,38 +190,29 @@ export function LoginForm({
             return;
         }
 
-        const { error } = await supabase.auth
-            .resetPasswordForEmail(email, {
-                redirectTo: window.location.href
-            })
-        if (error) {
-            setError(error.message);
-            return;
-        }
-
-        setSubmittedEmail(email);
-        setStep("reset-password-link-sent");
-    }
-
-    async function handleChangePassword(e: React.FormEvent<HTMLFormElement>) {
-        e.preventDefault();
-
-        const form = new FormData(e.currentTarget);
-        const newPassword = form.get("newPassword") as string;
-        const { error } = await supabase.auth.updateUser({
-            password: newPassword
+        const { data, error } = await authClient.requestPasswordReset({
+            email: email,
         });
+
         if (error) {
-            setError(error.message);
+            setError(`${error.code}: ${error.message}`);
             return;
         }
-        setStep("login");
-        router.push(config.authorization?.oauth?.redirectUri || "/");
+
+        setSubmittedValue({
+            value: email,
+            type: "email"
+        });
+        setStep("reset-password-link-sent");
+        showToast.info(<>
+            A password reset link has been sent to <b>{email}</b>. Please check your inbox.
+            If you don't see it, check your spam folder.
+        </>);
     }
 
     return (
         <div className={cn("flex flex-col gap-6", className)} {...props}>
-            <Card className="overflow-hidden">
+            <Card className="overflow-hidden h-full">
                 <CardContent className="grid p-0 md:grid-cols-2">
                     {step === "login" && (
                         <form className="p-6 md:p-8" onSubmit={handleSubmit}>
@@ -167,9 +225,9 @@ export function LoginForm({
                                 </div>
 
                                 {
-                                    config.auth.emailAndPassword.enabled && config.plugins.some(plugin => plugin.id === 'phone-number') ? (
+                                    config.auth.emailAndPassword.enabled && (isPhoneSigninEnabled || isPhoneOTPPluginEnabled) ? (
                                         <>
-                                            <Tabs defaultValue="email">
+                                            <Tabs defaultValue="email" value={currentTab} onValueChange={(value) => setCurrentTab(value as "phone" | "email")}>
                                                 <TabsList className="grid w-full grid-cols-2 mb-4">
                                                     <TabsTrigger value="email">Email</TabsTrigger>
                                                     <TabsTrigger value="phone">Phone</TabsTrigger>
@@ -211,7 +269,7 @@ export function LoginForm({
                                                 required
                                             />
                                         </div>
-                                    ) : config.plugins.some(plugin => plugin.id === 'phone-number') ? (
+                                    ) : isPhoneSigninEnabled || isPhoneOTPPluginEnabled ? (
                                         <div className="grid gap-2">
                                             <Label htmlFor="phone">Phone</Label>
                                             <Input
@@ -225,7 +283,9 @@ export function LoginForm({
                                     ) : null
                                 }
                                 {
-                                    config.auth.emailAndPassword.enabled && (
+                                    (currentTab === "email" ? (config.auth.emailAndPassword.enabled && !config.auth.emailAndPassword.otp.enabled) :
+                                        (config.auth.phone.enabled && !config.auth.phone.otp?.enabled)
+                                    ) && (
                                         <>
                                             <div className="grid gap-2">
                                                 <div className="flex items-center">
@@ -301,7 +361,7 @@ export function LoginForm({
                         <div className="text-center p-6 md:p-8">
                             <h2 className="text-xl font-semibold">Check your inbox</h2>
                             <p className="text-sm text-muted-foreground mt-2">
-                                We've sent a login link to <b>{submittedEmail}</b>.
+                                We've sent a login link to <b>{submittedValue?.value}</b>.
                             </p>
                         </div>
                     )}
@@ -310,7 +370,7 @@ export function LoginForm({
                         <div className="text-center p-6 md:p-8">
                             <h2 className="text-xl font-semibold">Check your inbox</h2>
                             <p className="text-sm text-muted-foreground mt-2">
-                                We've sent a password reset link to <b>{submittedEmail}</b>.
+                                We've sent a password reset link to <b>{submittedValue?.value}</b>.
                             </p>
                             <p className="text-sm text-muted-foreground mt-2">
                                 If you don't see it, check your spam folder.
@@ -346,19 +406,6 @@ export function LoginForm({
                             <Button type="submit" className="w-full">Send reset link</Button>
                             {error && <p className="text-red-600">{error}</p>}
                             <Button type="button" className="w-full" onClick={() => setStep("login")} variant="outline">Back to login</Button>
-                        </form>
-                    )}
-
-                    {step === "reset-password" && (
-                        <form onSubmit={handleChangePassword} className="p-6 md:p-8 space-y-4">
-                            <h2 className="text-xl font-semibold">Choose new password</h2>
-                            <Input type="hidden" name="email" value={submittedEmail} />
-                            <div className="grid gap-2">
-                                <Label htmlFor="new-password">New password</Label>
-                                <Input id="new-password" type="password" name="newPassword" required />
-                            </div>
-                            <Button type="submit" className="w-full">Reset password</Button>
-                            {error && <p className="text-red-600">{error}</p>}
                         </form>
                     )}
 

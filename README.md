@@ -2,6 +2,8 @@
 
 Starter is a simple and idiomatic starter kit for building SaaS applications.
 
+You'll never have to worry about boring stuff like authorization, authentication, database, mailing or other common features. Starter provides you with a solid foundation to build your application on top of.
+
 > Starter is a free version on MIT license, which means you can use it for personal and commercial projects without any restrictions.
 > There is also a paid version with additional features, better support, early access to new features and a lot of ready to use components. [Starter Pro](https://starter.harvide.com/pro) is available for purchase on our website.
 

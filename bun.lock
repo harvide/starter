@@ -17,6 +17,7 @@
       "name": "client",
       "version": "0.1.0",
       "dependencies": {
+        "@repo/auth": "workspace:*",
         "@repo/config": "workspace:*",
         "@repo/ui": "workspace:*",
         "next": "^15.3.0",

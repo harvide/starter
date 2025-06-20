@@ -7,7 +7,6 @@
     "lint": "turbo run lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "check-types": "turbo run check-types",
-
     "db:generate": "cd packages/db && bunx drizzle-kit generate --config ./drizzle.config.js",
     "db:migrate": "cd packages/db && bunx drizzle-kit migrate --config ./drizzle.config.js"
   },
@@ -23,5 +22,9 @@
   "workspaces": [
     "apps/*",
     "packages/*"
-  ]
+  ],
+  "dependencies": {
+    "nextra": "^4.2.17",
+    "nextra-theme-docs": "^4.2.17"
+  }
 }

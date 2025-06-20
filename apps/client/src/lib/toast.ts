@@ -7,19 +7,19 @@ const canShow = (type: keyof typeof config.preferences.showToasts): boolean => {
 }
 
 export const showToast = {
-  success: (message: string, options?: Parameters<typeof toast.success>[1]) => {
+  success: (message: Parameters<typeof toast.warning>[0], options?: Parameters<typeof toast.success>[1]) => {
     if (canShow("success")) toast.success(message, options)
   },
-  error: (message: string, options?: Parameters<typeof toast.error>[1]) => {
+  error: (message: Parameters<typeof toast.warning>[0], options?: Parameters<typeof toast.error>[1]) => {
     if (canShow("error")) toast.error(message, options)
   },
-  info: (message: string, options?: Parameters<typeof toast.info>[1]) => {
+  info: (message: Parameters<typeof toast.warning>[0], options?: Parameters<typeof toast.info>[1]) => {
     if (canShow("info")) toast.info(message, options)
   },
-  warning: (message: string, options?: Parameters<typeof toast.warning>[1]) => {
+  warning: (message: Parameters<typeof toast.warning>[0], options?: Parameters<typeof toast.warning>[1]) => {
     if (canShow("warning")) toast.warning(message, options)
   },
-  debug: (message: string, options?: Parameters<typeof toast>[1]) => {
+  debug: (message: Parameters<typeof toast.warning>[0], options?: Parameters<typeof toast>[1]) => {
     if (canShow("debug")) toast(`DEBUG: ${message}`, options)
   },
 }

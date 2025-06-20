@@ -16,6 +16,14 @@ export const configSchema = z.object({
   auth: z.object({
     phone: z.object({
       enabled: z.boolean().default(false),
+
+      otp: z.object({
+        enabled: z.boolean().default(false),
+        otpLength: z.number().min(1).default(6),
+        expiresIn: z.number().min(1).default(300), // 5 minutes
+        allowedAttempts: z.number().min(1).default(5),
+        requireVerification: z.boolean().default(true),
+      })
     }),
     
     emailAndPassword: z.object({
@@ -29,7 +37,6 @@ export const configSchema = z.object({
 
       verificationTokenExpiresIn: z.number().min(1).default(3600),
       sendResetPassword: z.boolean().default(false),
-      sendVerificationEmail: z.boolean().default(false),
 
       otp: z.object({
         enabled: z.boolean().default(false),

@@ -33,13 +33,7 @@ const baseConfig = configSchema.parse({
   },
   auth: userConfig.auth,
   branding: userConfig.branding,
+  preferences: userConfig.preferences,
 });
 
-export type FullConfig = BaseConfig & {
-  plugins: typeof userConfig.plugins;
-};
-
-export const config: FullConfig = {
-  ...baseConfig,
-  plugins: userConfig.plugins,
-};
+export const config = baseConfig

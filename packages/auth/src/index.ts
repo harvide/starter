@@ -1,10 +1,52 @@
 import { betterAuth, type BetterAuthPlugin } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { db } from "@repo/db";
-import { openAPI } from "better-auth/plugins";
+import { emailOTP, oAuthProxy, openAPI, phoneNumber } from "better-auth/plugins";
 import { config } from "@repo/config";
 
-let plugins: BetterAuthPlugin[] = config.plugins;
+let plugins: BetterAuthPlugin[] = [
+  emailOTP({
+    ...config.auth.emailAndPassword.otp,
+
+    // uncomment to use a custom OTP generation function
+    // Note: This is just an example, you can implement your own OTP generation logic
+    // generateOTP: () => {
+    //   return Math.floor(100000 + Math.random() * 900000).toString();
+    // },
+
+    async sendVerificationOTP({
+      email,
+      otp,
+      type
+    }) {
+      if (type === "sign-in") {
+        // Send the OTP for sign-in
+      } else if (type === "email-verification") {
+        // Send the OTP for email verification
+      } else {
+        // Send the OTP for password reset
+      }
+    },
+  }),
+  phoneNumber({
+    ...config.auth.phone.otp,
+    sendOTP: ({ phoneNumber, code }, request) => {
+      // Implement sending OTP code via SMS
+    },
+    sendPasswordResetOTP: ({ phoneNumber, code }, request) => {
+      
+    },
+    signUpOnVerification: {
+      getTempEmail: (phoneNumber) => {
+        return `${phoneNumber}@example.com`
+      },
+      //optionally, you can also pass `getTempName` function to generate a temporary name for the user
+      getTempName: (phoneNumber) => {
+        return phoneNumber //by default, it will use the phone number as the name
+      }
+    }
+  })
+];
 if (config.env === "development" && !plugins.some(plugin => plugin.id === 'open-api')) {
   // Add OpenAPI plugin only in development mode if not already included
   plugins = [
@@ -39,7 +81,7 @@ export const auth = betterAuth({
 
   emailVerification: {
     sendVerificationEmail: async ({ user, url, token }, request) => {
-      if (!config.auth.emailAndPassword.sendVerificationEmail) {
+      if (!config.auth.emailAndPassword.requireEmailVerification) {
         throw new Error("Sending verification emails is disabled in the configuration");
       }
       // await sendEmail({

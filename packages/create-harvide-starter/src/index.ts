@@ -53,19 +53,25 @@ async function main() {
         },
       }),
 
-    packageManager: () =>
-      selectedPackageManager ? 
-        selectedPackageManager :
-        select({
-          message: 'Select preferred package manager',
-          options: [
-            { value: 'npm' as const, label: `npm ${!isPackageManagerInstalled('npm') && '(not installed)'}` },
-            { value: 'yarn' as const, label: `yarn ${!isPackageManagerInstalled('yarn') && '(not installed)'}` },
-            { value: 'pnpm' as const, label: `pnpm ${!isPackageManagerInstalled('pnpm') && '(not installed)'}` },
-            { value: 'bun' as const, label: `bun ${!isPackageManagerInstalled('bun') && '(not installed)'}`, hint: 'recommended' },
-          ],
-          initialValue: 'bun',
-        }),
+    packageManager: async () => {
+      if (selectedPackageManager) return selectedPackageManager;
+
+      const npmInstalled = await isPackageManagerInstalled('npm').catch(() => false);
+      const yarnInstalled = await isPackageManagerInstalled('yarn').catch(() => false);
+      const pnpmInstalled = await isPackageManagerInstalled('pnpm').catch(() => false);
+      const bunInstalled = await isPackageManagerInstalled('bun').catch(() => false);
+
+      return select({
+        message: 'Select preferred package manager',
+        options: [
+          { value: 'npm' as const, label: `npm ${!npmInstalled ? '(not installed)' : ''}` },
+          { value: 'yarn' as const, label: `yarn ${!yarnInstalled ? '(not installed)' : ''}` },
+          { value: 'pnpm' as const, label: `pnpm ${!pnpmInstalled ? '(not installed)' : ''}` },
+          { value: 'bun' as const, label: `bun ${!bunInstalled ? '(not installed)' : ''}`, hint: 'recommended' },
+        ],
+        initialValue: 'bun',
+      });
+    },
 
     name: () =>
       text({

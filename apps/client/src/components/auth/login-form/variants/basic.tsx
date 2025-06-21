@@ -310,6 +310,7 @@ export function BasicLoginForm({
               <p className="text-sm text-muted-foreground mt-2">
                 We&apos;ve sent a login link to <b>{submitted?.value}</b>.
               </p>
+              {error && <p className="text-red-700 text-xs -mt-4 tracking-tighter">{error}</p>}
             </div>
           )}
 
@@ -325,6 +326,7 @@ export function BasicLoginForm({
               <Button className="mt-4" onClick={() => setStep("login")}>
                 Back to login
               </Button>
+              {error && <p className="text-red-700 text-xs -mt-4 tracking-tighter">{error}</p>}
             </div>
           )}
 
@@ -347,6 +349,7 @@ export function BasicLoginForm({
               <Button type="submit" className="mt-4">
                 Verify
               </Button>
+              {error && <p className="text-red-700 text-xs -mt-4 tracking-tighter">{error}</p>}
             </form>
           )}
 
@@ -363,7 +366,7 @@ export function BasicLoginForm({
               <Button type="submit" className="w-full">
                 Send reset link
               </Button>
-              {error && <p className="text-red-600">{error}</p>}
+              {error && <p className="text-red-700 text-xs -mt-4 tracking-tighter">{error}</p>}
               <Button
                 type="button"
                 className="w-full"

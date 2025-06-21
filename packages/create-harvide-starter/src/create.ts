@@ -98,6 +98,28 @@ export async function createApp(options: CreateAppOptions) {
 
     pkg.name = appName.toLowerCase().replace(/\s+/g, '-');
     pkg.description = description || '';
+
+    // Update package manager specific scripts
+    const execPrefix = {
+      npm: 'npx',
+      pnpm: 'pnpm',
+      yarn: 'yarn',
+      bun: 'bunx'
+    }[packageManager];
+
+    // Update scripts that use package manager specific commands
+    if (pkg.scripts) {
+      Object.keys(pkg.scripts).forEach(scriptName => {
+        if (pkg.scripts[scriptName].includes('bunx')) {
+          pkg.scripts[scriptName] = pkg.scripts[scriptName].replace('bunx', execPrefix);
+        } else if (pkg.scripts[scriptName].includes('npx')) {
+          pkg.scripts[scriptName] = pkg.scripts[scriptName].replace('npx', execPrefix);
+        }
+      });
+    }
+
+    // Update packageManager field
+    pkg.packageManager = `${packageManager}@latest`;
     
     await fs.writeJson(pkgPath, pkg, { spaces: 2 });
     spin.success('Project configured');

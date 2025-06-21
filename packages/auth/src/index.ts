@@ -1,10 +1,13 @@
 import { betterAuth, type BetterAuthPlugin } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { db } from "@repo/db";
-import { emailOTP, oAuthProxy, openAPI, phoneNumber } from "better-auth/plugins";
+import { admin, emailOTP, oAuthProxy, openAPI, phoneNumber } from "better-auth/plugins";
 import { config } from "@repo/config";
 
 let plugins: BetterAuthPlugin[] = [
+  admin({
+    ...config.admin
+  }),
   emailOTP({
     ...config.auth.emailAndPassword.otp,
 

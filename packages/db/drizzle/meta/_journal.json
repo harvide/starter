@@ -8,6 +8,13 @@
       "when": 1750349885115,
       "tag": "0000_careless_patch",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1750541702976,
+      "tag": "0001_curvy_lifeguard",
+      "breakpoints": true
     }
   ]
 }

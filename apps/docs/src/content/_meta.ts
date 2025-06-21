@@ -1,4 +1,5 @@
 export default {
     index: '',
-    // 'get-started': '',
+    'getting-started': '',
+    configuration: ''
 }

@@ -1,25 +1,36 @@
 import { Footer, Layout, Navbar } from 'nextra-theme-docs'
-import { Banner, Head } from 'nextra/components'
+import { Head } from 'nextra/components'
 import { getPageMap } from 'nextra/page-map'
 import 'nextra-theme-docs/style.css'
+import Image from 'next/image'
 
 export const metadata = {
-  metadataBase: new URL('https://nextra.site'),
+  metadataBase: new URL('https://starter.harvide.com'),
   title: {
-    template: '%s - Nextra'
+    template: '%s - Harvide Starter',
   },
-  description: 'Nextra: the Next.js site builder',
-  applicationName: 'Nextra',
+  description: 'Never handle flows manually again. Kickstart your next project with pre-configured authentication, UI components, and best practices baked in.',
+  applicationName: 'Harvide Starter',
   generator: 'Next.js',
   appleWebApp: {
-    title: 'Nextra'
+    title: 'Harvide Starter',
   },
   other: {
     'msapplication-TileImage': '/ms-icon-144x144.png',
     'msapplication-TileColor': '#fff'
   },
   twitter: {
-    site: 'https://nextra.site'
+    site: '@harvide',
+    card: 'summary_large_image',
+    title: 'Harvide Starter',
+    description: 'Never handle flows manually again. Kickstart your next project with pre-configured authentication, UI components, and best practices baked in.',
+    creator: '@harvide',
+    images: [
+      {
+        url: 'https://www.harvide.com/logo/small-dark-white.svg',
+        alt: 'Harvide Logo',
+      },
+    ],
   }
 }
 
@@ -29,12 +40,35 @@ export default async function RootLayout({ children }: {
   const navbar = (
     <Navbar
       logo={
-        <div>
-          <b>Nextra</b>{' '}
-          <span style={{ opacity: '60%' }}>The Next Docs Builder</span>
+        <div style={{
+          display: 'flex',
+          flexDirection: 'row',
+          alignItems: 'end',
+          gap: '0.5rem',
+          fontSize: '1.25rem',
+        }}>
+          <Image
+            src="https://www.harvide.com/logo/small-dark-white.svg"
+            alt="Harvide Logo"
+            width={30}
+            height={30}
+            priority
+            style={{
+              marginRight: '0.5rem',
+              filter: 'brightness(0.2) grayscale',
+              padding: '0.25rem',
+              borderRadius: '0.25rem',
+              border: '1px solid var(--border)',
+              backgroundColor: '#fff',
+            }}
+          />
+          <b>@harvide/starter</b>{' '}
+          <span style={{ opacity: '60%', fontSize: '0.875rem', fontWeight: '300' }}>
+            Never handle flows manually again.
+          </span>
         </div>
       }
-      chatLink="https://discord.gg/hEM84NMkRv"
+      projectLink='https://github.com/harvide/starter'
     />
   )
   const pageMap = await getPageMap()
@@ -43,11 +77,11 @@ export default async function RootLayout({ children }: {
       <Head faviconGlyph="✦" />
       <body>
         <Layout
-          banner={<Banner storageKey="Nextra 2">Nextra 2 Alpha</Banner>}
+          // banner={<Banner storageKey="Starter Pro">Starter Pro is out!</Banner>}
           navbar={navbar}
           footer={<Footer>MIT {new Date().getFullYear()} © Nextra.</Footer>}
           editLink="Edit this page on GitHub"
-          docsRepositoryBase="https://github.com/shuding/nextra/blob/main/examples/docs"
+          docsRepositoryBase="https://github.com/harvide/starter/blob/master/apps/docs"
           sidebar={{ defaultMenuCollapseLevel: 1 }}
           pageMap={pageMap}
         >

@@ -60,6 +60,32 @@ export function deepClone<T>(obj: T): T {
   return JSON.parse(JSON.stringify(obj));
 }
 
+/**
+ * Converts an object into a string representation with clean JavaScript object literal syntax
+ * (without unnecessary quotes around property names)
+ */
+export function stringifyConfig(obj: any, indent = 0): string {
+  if (obj === null) return 'null';
+  if (typeof obj !== 'object') return JSON.stringify(obj);
+  if (Array.isArray(obj)) {
+    if (obj.length === 0) return '[]';
+    const items = obj.map(item => `${' '.repeat(indent + 2)}${stringifyConfig(item, indent + 2)}`);
+    return `[\n${items.join(',\n')}\n${' '.repeat(indent)}]`;
+  }
+  
+  const entries = Object.entries(obj);
+  if (entries.length === 0) return '{}';
+  
+  const props = entries.map(([key, value]) => {
+    // Use string literal only if key contains special characters
+    const needsQuotes = !/^[a-zA-Z_$][a-zA-Z0-9_$]*$/.test(key);
+    const keyStr = needsQuotes ? JSON.stringify(key) : key;
+    return `${' '.repeat(indent + 2)}${keyStr}: ${stringifyConfig(value, indent + 2)}`;
+  });
+  
+  return `{\n${props.join(',\n')}\n${' '.repeat(indent)}}`;
+}
+
 export const SocialProviderConfigs = {
   facebook: {
     clientId: process.env.FACEBOOK_CLIENT_ID as string,

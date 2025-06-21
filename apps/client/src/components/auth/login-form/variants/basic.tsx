@@ -24,6 +24,7 @@ import { config } from "@repo/config";
 
 import { oauthIconsMap } from "../../oauth-icons";
 import * as flows from "../flows";
+import { LoginFormProps } from "../types";
 
 type Tab = "email" | "phone";
 type Step =
@@ -48,8 +49,9 @@ const SOCIAL_PROVIDERS = Object.entries(config.auth.socialProviders ?? {}).filte
 
 export function BasicLoginForm({
   className,
+  forceEmailAndPasswordOnly = false,
   ...props
-}: React.ComponentProps<"div">) {
+}: LoginFormProps) {
   const router = useRouter();
 
   const [tab, setTab] = useState<Tab>("email");

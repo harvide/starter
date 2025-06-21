@@ -42,6 +42,8 @@ interface SubmittedValue {
 export function BasicLoginForm({
   className,
   forceEmailAndPasswordOnly = false,
+  header = <>Welcome back</>,
+  subtitle = <>Login to your <b>{config.branding.name}</b> account</>,
   ...props
 }: LoginFormProps) {
   const router = useRouter();
@@ -62,6 +64,9 @@ export function BasicLoginForm({
     : Object.entries(config.auth.socialProviders ?? {}).filter(
       ([, provider]) => provider.enabled,
     );
+  const SHOW_FORGOT_PASSWORD = !FORCE_EMAIL_PASSWORD_ONLY && config.auth.emailAndPassword.sendResetPassword;
+  const SHOW_SIGNUP_LINK = !FORCE_EMAIL_PASSWORD_ONLY && !config.auth.emailAndPassword.disableSignUp;
+  const SHOW_TOS = !FORCE_EMAIL_PASSWORD_ONLY;
 
   function buildFlowProps(): flows.LoginFlowProps {
     return {
@@ -214,9 +219,9 @@ export function BasicLoginForm({
             <form className="p-6 md:p-8" onSubmit={handleSubmit}>
               <div className="flex flex-col gap-6">
                 <div className="flex flex-col items-center text-center">
-                  <h1 className="text-2xl font-bold">Welcome back</h1>
+                  <h1 className="text-2xl font-bold">{header}</h1>
                   <p className="text-balance text-sm text-muted-foreground">
-                    Login to your <b>{config.branding.name}</b> account
+                    {subtitle}
                   </p>
                 </div>
 
@@ -226,7 +231,7 @@ export function BasicLoginForm({
                   <div className="grid gap-2">
                     <div className="flex items-center">
                       <Label htmlFor="password">Password</Label>
-                      {config.auth.emailAndPassword.sendResetPassword && (
+                      {SHOW_FORGOT_PASSWORD && (
                         <button
                           type="button"
                           className="ml-auto text-sm underline-offset-2 hover:underline"
@@ -283,7 +288,7 @@ export function BasicLoginForm({
                   </>
                 )}
 
-                {!config.auth.emailAndPassword.disableSignUp && (
+                {SHOW_SIGNUP_LINK && (
                   <div className="text-center text-sm">
                     Don&apos;t have an account?{" "}
                     <Link
@@ -381,11 +386,15 @@ export function BasicLoginForm({
         </CardContent>
       </Card>
 
-      <div className="text-balance text-center text-xs text-muted-foreground [&_a]:underline [&_a]:underline-offset-4 hover:[&_a]:text-primary">
-        By clicking continue, you agree to our{" "}
-        <Link href="/legal/terms-of-service">Terms of Service</Link> and{" "}
-        <Link href="/legal/privacy-policy">Privacy Policy</Link>.
-      </div>
+      {
+        SHOW_TOS && (
+          <div className="text-balance text-center text-xs text-muted-foreground [&_a]:underline [&_a]:underline-offset-4 hover:[&_a]:text-primary">
+            By clicking continue, you agree to our{" "}
+            <Link href="/legal/terms-of-service">Terms of Service</Link> and{" "}
+            <Link href="/legal/privacy-policy">Privacy Policy</Link>.
+          </div>
+        )
+      }
     </div>
   );
 }

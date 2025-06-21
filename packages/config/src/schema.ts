@@ -20,6 +20,8 @@ export interface BaseConfig {
   ui: {
     /** Login form variant to use */
     loginForm: import("../../../apps/client/src/components/auth/login-form").LoginFormVariant;
+    /** Signup form variant to use */
+    signupForm: import("../../../apps/client/src/components/auth/signup-form").SignupFormVariant;
   };
 
   /** Authentication configuration */

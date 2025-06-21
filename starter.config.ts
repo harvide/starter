@@ -12,6 +12,12 @@ export default {
          * @default "basic"
          */
         loginForm: "basic",
+        /** 
+         * Signup form variant to use.
+         * Choose which signup form implementation to display.
+         * @default "basic"
+         */
+        signupForm: "basic",
     },
 
     /** Authentication configuration for all supported methods */

@@ -43,7 +43,7 @@ const PHONE_OTP_ENABLED = config.auth.phone.otp.enabled;
 const EMAIL_AUTH_ENABLED = config.auth.emailAndPassword.enabled;
 const EMAIL_OTP_ENABLED = config.auth.emailAndPassword.otp.enabled;
 const SOCIAL_PROVIDERS = Object.entries(config.auth.socialProviders ?? {}).filter(
-  ([, enabled]) => enabled,
+  ([, provider]) => provider.enabled,
 );
 
 export function BasicLoginForm({

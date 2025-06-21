@@ -254,6 +254,7 @@ export function BasicLoginForm({
                 <Button type="submit" className="w-full">
                   Login
                 </Button>
+                {error && <p className="text-red-700 text-xs -mt-4 tracking-tighter">{error}</p>}
 
                 {SOCIAL_PROVIDERS.length > 0 && (
                   <>

@@ -4,6 +4,16 @@
  * Customize authentication flows, branding, and preferences.
  */
 export default {
+    /** UI Component configuration */
+    ui: {
+        /** 
+         * Login form variant to use.
+         * Choose which login form implementation to display.
+         * @default "basic"
+         */
+        loginForm: "basic",
+    },
+
     /** Authentication configuration for all supported methods */
     auth: {
         /** Phone number authentication settings */
@@ -13,7 +23,7 @@ export default {
              * When enabled, users can sign up and sign in using phone numbers.
              * @default true 
              */
-            enabled: true,
+            enabled: false,
 
             /** One-Time Password (OTP) settings for phone authentication */
             otp: {
@@ -152,7 +162,12 @@ export default {
                 allowedAttempts: 5,
             }
         },
-        /** Social authentication providers configuration */
+        /** Social authentication providers configuration
+         * This section allows you to configure third-party social login providers.
+         * Basic usage is enabled only to showcase the functionality (logos appearing in login form automatically).
+         * It must be configured. Please read the documentation of Better Auth
+         * @see {@link https://www.better-auth.com/docs/concepts/oauth Better Auth OAuth docs}
+        */
         socialProviders: {
             /** Apple Sign In configuration */
             apple: {
@@ -172,6 +187,9 @@ export default {
                  */
                 enabled: true,
             },
+            facebook: {
+                enabled: true
+            }
         },
     },
     /** Application branding configuration */
@@ -186,7 +204,7 @@ export default {
          * Application description.
          * Used in meta tags and documentation.
          */
-        description: "A simple authentication solution for your applications.",
+        description: "Never handle flows manually again. Use Harvide Starter to kickstart your next project with pre-configured authentication and UI components.",
 
         /** Logo configuration */
         logo: {

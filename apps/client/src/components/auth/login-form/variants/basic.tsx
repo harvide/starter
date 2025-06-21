@@ -363,13 +363,13 @@ export function BasicLoginForm({
             </form>
           )}
 
-          <div className="relative hidden bg-muted border-border border rounded md:block mr-2">
+          <div className="relative hidden bg-muted border-border border rounded-md md:block mr-2">
             <img
               src="https://www.harvide.com/logo/small-dark-white.svg"
               alt="Image"
               width={400}
               height={400}
-              className="absolute inset-0 h-full w-full object-cover dark:brightness-[0.2] dark:grayscale rounded"
+              className="absolute inset-0 h-full w-full object-cover dark:brightness-[0.2] dark:grayscale rounded-md"
             />
           </div>
         </CardContent>

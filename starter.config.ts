@@ -225,6 +225,39 @@ export default {
             }
         }
     },
+
+    /** Admin panel configuration */
+    admin: {
+        /** Enable or disable the admin panel */
+        enabled: true,
+        defaultRole: "user",
+        /** The roles that are considered admin roles. Defaults to ["admin"].
+         * @default ["admin"]
+         */
+        adminRoles: ["admin", "superadmin"],
+        /** You can pass an array of userIds that should be considered as admin.
+          * @default []
+        */
+        adminUserIds: [],
+        /**
+         * The duration of the impersonation session in seconds. Defaults to 1 hour.
+         * @default 86400 (24 hours)
+         */
+        impersonationSessionDuration: 60 * 60 * 24,
+        /** The default ban reason for a user created by the admin. Defaults to No reason.
+         * @default "No reason"
+         */
+        defaultBanReason: "No reason",
+        /** The default ban duration in seconds. Defaults to 1 day.
+         * @default 86400 (24 hours)
+         */
+        defaultBanExpiresIn: 60 * 60 * 24,
+        /**The message to show when a banned user tries to sign in. 
+         * @default "You have been banned from this application. Please contact support if you believe this is an error."
+         */
+        bannedUserMessage: "You have been banned from this application. Please contact support if you believe this is an error."
+    },
+
     /** Application branding configuration */
     branding: {
         /**

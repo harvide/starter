@@ -76,6 +76,18 @@ export interface BaseConfig {
     }
   };
 
+  /** Admin configuration */
+  admin: {
+    enabled: boolean;
+    defaultRole?: string;
+    adminRoles?: string[];
+    adminUserIds?: string[];
+    impersonationSessionDuration?: number;
+    defaultBanReason?: string;
+    defaultBanExpiresIn?: number;
+    bannedUserMessage?: string;
+  };
+
   /** Branding configuration */
   branding: {
     name: string;

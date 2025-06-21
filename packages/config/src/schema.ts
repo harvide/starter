@@ -1,20 +1,18 @@
-export interface Environment {
-  ENV: "development" | "production" | "test";
-  DATABASE_URL: string;
-  NEXT_PUBLIC_CLIENT_URL: string;
-  NEXT_PUBLIC_CORE_URL: string;
-  BETTER_AUTH_SECRET: string;
+declare global {
+  namespace NodeJS {
+    interface ProcessEnv {
+      DATABASE_URL: string;
+      NEXT_PUBLIC_CLIENT_URL: string;
+      NEXT_PUBLIC_CORE_URL: string;
+      BETTER_AUTH_SECRET: string;
+    }
+  }
 }
 
 /** Base configuration type for the starter project */
 export interface BaseConfig {
   /** Environment configuration */
-  env: Environment["ENV"];
-  
-  /** Database configuration */
-  db: {
-    url: string;
-  };
+  env: "development" | "production" | "test";
 
   /** UI Component configuration */
   ui: {
@@ -99,17 +97,6 @@ export interface BaseConfig {
     };
   };
 
-  /** URL configuration */
-  urls: {
-    client: string;
-    core: string;
-  };
-
-  /** Secret configuration */
-  secrets: {
-    auth: string;
-  };
-
   /** UI preferences */
   preferences: {
     showToasts: {
@@ -121,12 +108,3 @@ export interface BaseConfig {
     };
   };
 }
-
-/** Default environment values */
-export const defaultEnv: Environment = {
-  ENV: "development",
-  DATABASE_URL: "postgres://localhost:5432/starter",
-  NEXT_PUBLIC_CLIENT_URL: "http://localhost:3000",
-  NEXT_PUBLIC_CORE_URL: "http://localhost:3000/api",
-  BETTER_AUTH_SECRET: "development-secret",
-};

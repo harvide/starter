@@ -336,34 +336,5 @@ export default {
 
     // todo fix
     /** Environment configuration */
-    env: "development",
-
-    /** Database configuration */
-    db: {
-        url: "postgres://user:password@localhost:5432/database",
-    },
-
-    /** Application URLs */
-    urls: {
-        /**
-         * Base URL of the application.
-         * Example: "https://example.com"
-         */
-        client: "https://example.com",
-
-        /**
-         * API endpoint URL.
-         * Example: "https://api.example.com"
-         */
-        core: "https://api.example.com",
-    },
-
-    /** Secrets configuration */
-    secrets: {
-        /**
-         * Secret key for signing tokens.
-         * Example: "your-secret-key"
-         */
-        auth: "your-secret-key",
-    }
+    env: "development"
 } satisfies import('./packages/config/src/index').BaseConfig;

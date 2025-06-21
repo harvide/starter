@@ -157,6 +157,10 @@ async function main() {
 
     const result = await createApp(projectOptions);
     
+    if (!result) {
+      throw new Error('Failed to create project');
+    }
+    
     outro(`
 ✨ ${chalk.green('Project created successfully!')}
 

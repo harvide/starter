@@ -33,6 +33,10 @@ export async function createApp(options: CreateAppOptions) {
     'packages/auth',
   ];
 
+  const filterFunc = (src: string) => {
+    return !src.includes('node_modules') && !src.includes('.next');
+  };
+
   try {
     for (const file of filesToCopy) {
       const sourcePath = path.join(templatePath, file);
@@ -42,7 +46,7 @@ export async function createApp(options: CreateAppOptions) {
         throw new Error(`Source file not found: ${sourcePath}`);
       }
       
-      await fs.copy(sourcePath, targetPath);
+      await fs.copy(sourcePath, targetPath, { filter: filterFunc });
     }
     spin.success('Base files copied');
   } catch (error) {
@@ -58,12 +62,21 @@ export async function createApp(options: CreateAppOptions) {
     await fs.writeFile(path.join(projectPath, 'starter.config.ts'), configContent);
 
   spin = createSpinner('Setting up selected features');
+
   if (features.includes('web')) {
-    await fs.copy(path.join(templatePath, 'apps/client'), path.join(projectPath, 'apps/client'));
+    await fs.copy(
+      path.join(templatePath, 'apps/client'), 
+      path.join(projectPath, 'apps/client'),
+      { filter: filterFunc }
+    );
   }
 
   if (features.includes('docs')) {
-    await fs.copy(path.join(templatePath, 'apps/docs'), path.join(projectPath, 'apps/docs'));
+    await fs.copy(
+      path.join(templatePath, 'apps/docs'), 
+      path.join(projectPath, 'apps/docs'),
+      { filter: filterFunc }
+    );
   }
 
   if (auth?.includes('social') && options.socialProviders?.length) {

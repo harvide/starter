@@ -1,27 +1,30 @@
-import { envSchema, configSchema, type BaseConfig } from "./schema";
-import userConfig from "./config";
-import type z from "zod";
+import type { BaseConfig, Environment } from "./schema";
+import { defaultEnv } from "./schema";
+import userConfig from "../../../starter.config";
 
-let env: z.infer<typeof envSchema>;
-
+// Load environment variables on the server
 if (typeof window === "undefined") {
-  // parse .env on the server
   require("./load-env");
-  env = envSchema.parse(process.env);
-} else {
-  // won't be used in the browser, but we need to define it for type safety
-  env = {
-    ENV: "development",
-    DATABASE_URL: "postgres://test.test",
-    NEXT_PUBLIC_CLIENT_URL: "https://test.test",
-    NEXT_PUBLIC_CORE_URL: "https://test.test",
-    BETTER_AUTH_SECRET: "test123",
-    ...Object.fromEntries(
-      Object.entries(process.env).filter(([key]) => key.startsWith("NEXT_PUBLIC_"))
-    ),
-  } as z.infer<typeof envSchema>;
 }
-const baseConfig = configSchema.parse({
+
+// Get environment values, with fallbacks for browser
+const env: Environment = typeof window === "undefined" 
+  ? {
+      ENV: process.env.ENV as Environment["ENV"] || defaultEnv.ENV,
+      DATABASE_URL: process.env.DATABASE_URL || defaultEnv.DATABASE_URL,
+      NEXT_PUBLIC_CLIENT_URL: process.env.NEXT_PUBLIC_CLIENT_URL || defaultEnv.NEXT_PUBLIC_CLIENT_URL,
+      NEXT_PUBLIC_CORE_URL: process.env.NEXT_PUBLIC_CORE_URL || defaultEnv.NEXT_PUBLIC_CORE_URL,
+      BETTER_AUTH_SECRET: process.env.BETTER_AUTH_SECRET || defaultEnv.BETTER_AUTH_SECRET,
+    }
+  : {
+      ...defaultEnv,
+      ...Object.fromEntries(
+        Object.entries(process.env).filter(([key]) => key.startsWith("NEXT_PUBLIC_"))
+      ),
+    };
+
+// Merge environment variables and user config
+const baseConfig: BaseConfig = {
   env: env.ENV,
   db: { url: env.DATABASE_URL },
   urls: {
@@ -31,9 +34,9 @@ const baseConfig = configSchema.parse({
   secrets: {
     auth: env.BETTER_AUTH_SECRET,
   },
-  auth: userConfig.auth,
-  branding: userConfig.branding,
-  preferences: userConfig.preferences,
-});
+  ...userConfig,
+};
 
-export const config = baseConfig
+export const config = baseConfig;
+
+export type { BaseConfig };

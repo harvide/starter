@@ -64,8 +64,6 @@ export const auth = betterAuth({
   }),
 
   appName: config.branding.name,
-  baseURL: process.env.NEXT_PUBLIC_CLIENT_URL,
-
   plugins: plugins,
 
   emailAndPassword: {

@@ -18,5 +18,8 @@
       "cache": false,
       "persistent": true
     }
-  }
+  },
+  "globalEnv": [
+    "DATABASE_URL"
+  ]
 }

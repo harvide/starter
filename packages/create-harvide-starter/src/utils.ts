@@ -95,6 +95,11 @@ export function generateSecretKey(length = 32): string {
   return secret;
 }
 
+export async function getPackageManagerVersion(pm: string): Promise<string> {
+  const { stdout } = await execa(pm, ['--version']);
+  return stdout.trim();
+}
+
 export const SocialProviderConfigs = {
   facebook: {
     clientId: process.env.FACEBOOK_CLIENT_ID as string,

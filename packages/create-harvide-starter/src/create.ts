@@ -2,7 +2,7 @@ import fs from 'fs-extra';
 import path from 'path';
 import { execa } from 'execa';
 import type { CreateAppOptions } from './types.js';
-import { ensurePackageManager, installDependencies } from './utils.js';
+import { ensurePackageManager, getPackageManagerVersion, installDependencies } from './utils.js';
 import { createSpinner } from './spinner.js';
 import { updateAuthConfig } from './auth-config.js';
 import { generateConfig } from './config.js';
@@ -121,7 +121,8 @@ export async function createApp(options: CreateAppOptions) {
     }
 
     // Update packageManager field
-    pkg.packageManager = `${packageManager}@latest`;
+    const version = await getPackageManagerVersion(packageManager);
+    pkg.packageManager = `${packageManager}@${version}`;
     
     await fs.writeJson(pkgPath, pkg, { spaces: 2 });
     spin.success('Project configured');

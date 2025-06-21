@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "@repo/ui/globals.css";
+import { AdminCheckWrapper } from "@/components/wrapper/admin-check-wrapper";
+import { Toaster } from "@repo/ui/components/sonner";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -27,6 +29,8 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
+        <AdminCheckWrapper />
+        <Toaster />
         {children}
       </body>
     </html>

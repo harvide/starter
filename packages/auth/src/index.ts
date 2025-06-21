@@ -1,7 +1,7 @@
 import { betterAuth, type BetterAuthPlugin } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { db } from "@repo/db";
-import { admin, emailOTP, oAuthProxy, openAPI, phoneNumber } from "better-auth/plugins";
+import { admin, emailOTP, openAPI, phoneNumber } from "better-auth/plugins";
 import { config } from "@repo/config";
 
 let plugins: BetterAuthPlugin[] = [
@@ -64,7 +64,7 @@ export const auth = betterAuth({
   }),
 
   appName: config.branding.name,
-  baseURL: config.urls.client,
+  baseURL: process.env.NEXT_PUBLIC_CLIENT_URL,
 
   plugins: plugins,
 

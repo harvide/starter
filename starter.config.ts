@@ -175,26 +175,21 @@ export default {
          * @see {@link https://www.better-auth.com/docs/concepts/oauth Better Auth OAuth docs}
         */
         socialProviders: {
-            /** Apple Sign In configuration */
             apple: {
-                /**
-                 * Enable Apple Sign In.
-                 * @default true
-                 * @requires auth.oauth.apple - Apple OAuth credentials must be configured
-                 */
                 enabled: true,
+                clientId: "",
+                clientSecret: "",
             },
             /** Google Sign In configuration */
             google: {
-                /**
-                 * Enable Google Sign In.
-                 * @default true
-                 * @requires auth.oauth.google - Google OAuth credentials must be configured
-                 */
                 enabled: true,
+                clientId: "",
+                clientSecret: "",
             },
             facebook: {
-                enabled: true
+                enabled: true,
+                clientId: "",
+                clientSecret: "",
             }
         },
 

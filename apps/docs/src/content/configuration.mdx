@@ -1,0 +1,378 @@
+# Configuration
+
+Harvide Starter uses a central configuration file (`starter.config.ts`) for managing all aspects of your application.
+
+## Auth
+
+Authentication and authorization settings for various login methods and account management.
+
+### Email & Password
+
+Email is the primary authentication method in Harvide Starter. Users can register and sign in using their email address and password.
+
+#### Features
+- Password-based authentication
+- Email verification
+- Password reset functionality
+- Email OTP (One-Time Password)
+- Configurable password requirements
+
+#### Example
+
+```typescript
+{
+  auth: {
+    emailAndPassword: {
+      enabled: true,
+      autoSignIn: false,
+      requireEmailVerification: true,
+      minPasswordLength: 8
+    }
+  }
+}
+```
+
+#### Properties
+
+`enabled`  
+Controls whether email/password authentication is available.  
+<span className="text-muted-foreground text-sm">required · default: true</span>
+
+`autoSignIn`  
+Sign in users automatically after email verification.  
+<span className="text-muted-foreground text-sm">default: false</span>
+
+`disableSignUp`  
+Prevent new user registration via email. Useful for invite-only systems.  
+<span className="text-muted-foreground text-sm">default: false</span>
+
+`minPasswordLength`  
+Minimum number of characters required for passwords.  
+<span className="text-muted-foreground text-sm">default: 8</span>
+
+`maxPasswordLength`  
+Maximum number of characters allowed for passwords.  
+<span className="text-muted-foreground text-sm">default: 128</span>
+
+`requireEmailVerification`  
+Force users to verify their email before accessing the account.  
+<span className="text-muted-foreground text-sm">default: true</span>  
+<span className="text-yellow-500">⚠️ Requires configured email service and verification template</span>
+
+`verificationTokenExpiresIn`  
+Expiration time for email verification tokens in seconds.  
+<span className="text-muted-foreground text-sm">default: 3600 (1 hour)</span>
+
+`sendResetPassword`  
+Enable password reset via email functionality.  
+<span className="text-muted-foreground text-sm">default: true</span>  
+<span className="text-yellow-500">⚠️ Requires configured email service and reset template</span>
+
+`resetPasswordTokenExpiresIn`  
+Expiration time for password reset tokens in seconds.  
+<span className="text-muted-foreground text-sm">default: 3600 (1 hour)</span>
+
+##### OTP Settings
+
+`otp.enabled`  
+Enable email-based one-time password authentication.  
+<span className="text-muted-foreground text-sm">default: true</span>
+
+`otp.otpLength`  
+Length of generated OTP codes.  
+<span className="text-muted-foreground text-sm">default: 6</span>
+
+`otp.expiresIn`  
+Expiration time for OTP codes in seconds.  
+<span className="text-muted-foreground text-sm">default: 300 (5 minutes)</span>
+
+`otp.sendVerificationOnSignUp`  
+Send verification code when user signs up.  
+<span className="text-muted-foreground text-sm">default: true</span>  
+<span className="text-yellow-500">⚠️ Requires configured email service and OTP template</span>
+
+`otp.disableSignUp`  
+Prevent new user registration via email OTP.  
+<span className="text-muted-foreground text-sm">default: false</span>
+
+`otp.allowedAttempts`  
+Maximum number of OTP verification attempts before lockout.  
+<span className="text-muted-foreground text-sm">default: 5</span>
+
+### Phone
+
+Phone-based authentication with OTP verification support.
+
+#### Features
+- Phone number authentication
+- SMS verification
+- Configurable OTP settings
+- Verification requirements
+
+#### Example
+
+```typescript
+{
+  auth: {
+    phone: {
+      enabled: true,
+      otp: {
+        enabled: true,
+        otpLength: 6,
+        expiresIn: 300
+      }
+    }
+  }
+}
+```
+
+#### Properties
+
+`enabled`  
+Enable phone number authentication.  
+<span className="text-muted-foreground text-sm">required · default: false</span>
+
+##### OTP Settings
+
+`otp.enabled`  
+Enable OTP verification for phone numbers.  
+<span className="text-muted-foreground text-sm">default: false</span>
+
+`otp.allowedAttempts`  
+Maximum number of OTP verification attempts before lockout.  
+<span className="text-muted-foreground text-sm">default: 5</span>
+
+`otp.otpLength`  
+Length of generated OTP codes.  
+<span className="text-muted-foreground text-sm">default: 6</span>
+
+`otp.expiresIn`  
+Expiration time for OTP codes in seconds.  
+<span className="text-muted-foreground text-sm">default: 300 (5 minutes)</span>
+
+`otp.requireVerification`  
+Force phone number verification before account access.  
+<span className="text-muted-foreground text-sm">default: true</span>
+
+### Social Providers
+
+Third-party authentication provider integration via OAuth2.
+
+#### Features
+- OAuth2 integration
+- Automatic provider button display
+
+Harvide Starter uses Better Auth for social authentication. For implementation details and provider-specific configuration, refer to the [Better Auth OAuth documentation](https://www.better-auth.com/docs/concepts/oauth).
+
+#### Example
+
+```typescript
+{
+  auth: {
+    socialProviders: {
+      google: { 
+        enabled: true, 
+        clientId: process.env.GOOGLE_CLIENT_ID as string, 
+        clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,  
+      },
+      apple: { 
+        enabled: true, 
+        clientId: process.env.APPLE_CLIENT_ID as string, 
+        clientSecret: process.env.APPLE_CLIENT_SECRET as string, 
+        // Optional
+        appBundleIdentifier: process.env.APPLE_APP_BUNDLE_IDENTIFIER as string,
+        // Apple provider also requires you to set trustedOrigins: `["https://appleid.apple.com"],`.
+        // You can configure it in packages/auth/src/auth.ts on your own.
+      },
+      // ... other providers
+    }
+  }
+}
+```
+
+### Account Management
+
+Configure account-related features like linking multiple authentication methods.
+
+#### Features
+- Account linking
+- Multiple provider support
+- Safe unlinking rules
+
+#### Example
+
+```typescript
+{
+  auth: {
+    account: {
+      accountLinking: {
+        enabled: true,
+        allowUnlinkingAll: false
+      }
+    }
+  }
+}
+```
+
+#### Properties
+
+`accountLinking.enabled`  
+Allow users to link multiple authentication methods to one account.  
+<span className="text-muted-foreground text-sm">default: true</span>  
+[Account Linking docs →](https://www.better-auth.com/docs/concepts/users-accounts#account-linking)
+
+`accountLinking.allowUnlinkingAll`  
+Allow users to unlink all authentication methods. When false, prevents account lockout.  
+<span className="text-muted-foreground text-sm">default: false</span>
+
+## Branding
+
+Customize your application's appearance and identity.
+
+### Features
+- Custom application name
+- Application description
+- Logo configuration
+- Email template branding
+
+### Example
+
+```typescript
+{
+  branding: {
+    name: "My App",
+    description: "A powerful application built with Harvide Starter",
+    logo: {
+      large: "/logo.svg",
+      icon: "/icon.svg",
+      altText: "My App Logo"
+    }
+  }
+}
+```
+
+### Properties
+
+`name`  
+Your application name, used throughout the UI and emails.  
+<span className="text-muted-foreground text-sm">required</span>
+
+`description`  
+Application description for meta tags and documentation.  
+<span className="text-muted-foreground text-sm">required</span>
+
+`logo.large`  
+Full-size logo URL for login pages and email headers.  
+<span className="text-muted-foreground text-sm">required</span>
+
+`logo.icon`  
+Small logo URL for favicons and UI elements.  
+<span className="text-muted-foreground text-sm">required</span>
+
+`logo.altText`  
+Alternative text for logo images.  
+<span className="text-muted-foreground text-sm">required</span>
+
+## Preferences
+
+Configure user interface behavior and appearance settings.
+
+### Toast Notifications
+
+Control when and how notifications appear in your application.
+
+#### Features
+- Success notifications
+- Error messages
+- Information alerts
+- Warning messages
+- Debug notifications in development
+
+#### Example
+
+```typescript
+{
+  preferences: {
+    showToasts: {
+      success: true,
+      error: true,
+      info: true,
+      warning: true,
+      debug: true
+    }
+  }
+}
+```
+
+#### Properties
+
+`showToasts.success`  
+Display notifications for successful actions like login, signup.  
+<span className="text-muted-foreground text-sm">default: true</span>
+
+`showToasts.error`  
+Show error messages for failed operations and validation errors.  
+<span className="text-muted-foreground text-sm">default: true</span>
+
+`showToasts.info`  
+Display informational messages like "verification email sent".  
+<span className="text-muted-foreground text-sm">default: true</span>
+
+`showToasts.warning`  
+Show warning messages for potential issues like weak passwords.  
+<span className="text-muted-foreground text-sm">default: true</span>
+
+`showToasts.debug`  
+Display debug information in development environment.  
+<span className="text-muted-foreground text-sm">default: true</span>
+
+## Environment & Infrastructure
+
+Configure environment-specific settings and infrastructure connections.
+
+### Features
+- Environment mode selection
+- Database configuration
+- Application URLs
+- Secret key management
+
+### Example
+
+```typescript
+{
+  env: "development",
+  db: {
+    url: "postgres://user:password@localhost:5432/database"
+  },
+  urls: {
+    client: "https://example.com",
+    core: "https://api.example.com"
+  },
+  secrets: {
+    auth: "your-secret-key"
+  }
+}
+```
+
+### Properties
+
+`env`  
+Application environment mode affecting debug features and error reporting.  
+<span className="text-muted-foreground text-sm">required · default: "development"</span>
+
+`db.url`  
+PostgreSQL connection URL.  
+<span className="text-muted-foreground text-sm">required</span>
+
+`urls.client`  
+Base URL of your application for email links and redirects.  
+<span className="text-muted-foreground text-sm">required</span>
+
+`urls.core`  
+API endpoint URL for backend communication.  
+<span className="text-muted-foreground text-sm">required</span>
+
+`secrets.auth`  
+Secret key for signing authentication tokens.  
+<span className="text-muted-foreground text-sm">required</span>  
+<span className="text-yellow-500">⚠️ Use environment variables in production</span>

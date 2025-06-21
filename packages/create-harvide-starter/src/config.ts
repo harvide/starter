@@ -49,7 +49,6 @@ export async function generateConfig(options: CreateAppOptions) {
   // Generate and write .env file
   const envContent = generateEnvContent(auth.includes('social') ? socialProviders : []);
   await fs.writeFile(path.join(projectPath, '.env'), envContent);
-  await fs.writeFile(path.join(projectPath, '.env.example'), envContent);
   // Custom object stringifier that produces clean JS object literals
 
   return `/** 

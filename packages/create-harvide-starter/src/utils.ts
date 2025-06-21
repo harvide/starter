@@ -1,6 +1,15 @@
 import { execa } from 'execa';
 import type { PackageManager } from './types.js';
 
+export function isPackageManagerInstalled(packageManager: PackageManager): boolean {
+  try {
+    execa(packageManager, ['--version']);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
 export async function ensurePackageManager(packageManager: PackageManager): Promise<void> {
   try {
     await execa(packageManager, ['--version']);

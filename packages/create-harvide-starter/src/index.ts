@@ -4,6 +4,7 @@ import chalk from 'chalk';
 import { Command } from 'commander';
 import path from 'path';
 import { createApp } from './create.js';
+import { isPackageManagerInstalled } from './utils.js';
 
 const program = new Command()
   .name('create-harvide-starter')
@@ -58,10 +59,10 @@ async function main() {
         select({
           message: 'Select preferred package manager',
           options: [
-            { value: 'npm' as const, label: 'npm' },
-            { value: 'pnpm' as const, label: 'pnpm' },
-            { value: 'yarn' as const, label: 'yarn' },
-            { value: 'bun' as const, label: 'bun', hint: 'recommended' },
+            { value: 'npm' as const, label: `npm ${!isPackageManagerInstalled('npm') && '(not installed)'}` },
+            { value: 'yarn' as const, label: `yarn ${!isPackageManagerInstalled('yarn') && '(not installed)'}` },
+            { value: 'pnpm' as const, label: `pnpm ${!isPackageManagerInstalled('pnpm') && '(not installed)'}` },
+            { value: 'bun' as const, label: `bun ${!isPackageManagerInstalled('bun') && '(not installed)'}`, hint: 'recommended' },
           ],
           initialValue: 'bun',
         }),

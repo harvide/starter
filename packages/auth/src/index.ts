@@ -3,6 +3,7 @@ import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { db } from "@repo/db";
 import { admin, emailOTP, openAPI, phoneNumber } from "better-auth/plugins";
 import { config } from "@repo/config";
+import { schema } from "@repo/db"
 
 let plugins: BetterAuthPlugin[] = [
   admin({
@@ -61,6 +62,7 @@ if (config.env === "development" && !plugins.some(plugin => plugin.id === 'open-
 export const auth = betterAuth({
   database: drizzleAdapter(db, {
     provider: "pg",
+    schema: schema.auth
   }),
 
   appName: config.branding.name,

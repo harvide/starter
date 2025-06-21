@@ -1,5 +1,4 @@
 "use server";
-import { authClient } from "@/lib/auth";
 import { auth } from "@repo/auth/index";
 import { config } from "@repo/config";
 
@@ -37,28 +36,38 @@ export async function checkAdminsExist() {
   }
 }
 
-export async function handleAdminSignup(
+export async function createAdminUser(
   email: string,
   password: string,
   firstName: string,
-  lastName: string,
-  props: SignupFlowProps
-) {
+  lastName: string
+): Promise<{ success: boolean; error?: string }> {
+  if (!config.admin.enabled) return { success: false, error: "Admin feature is disabled" };
+
+  if (!email || !password || !firstName || !lastName) {
+    return { success: false, error: "All fields are required" };
+  }
+
   try {
-    const newUser = await authClient.admin.createUser({
+    const { exists, error } = await checkAdminsExist();
+    if (error) return { success: false, error };
+    if (exists) return { success: false, error: "An admin account already exists" };
+
+    await (await auth.$context).internalAdapter.createUser({
       email,
       password,
       name: `${firstName} ${lastName}`,
-      role: ["admin"],
+      role: "admin", // ✅ FIXED: single role
+      emailVerified: true,
+      image: config.branding.logo.icon,
     });
 
-    if (newUser.error) {
-      props.onError(newUser.error.message ?? null);
-      return;
+    return { success: true };
+  } catch (err: any) {
+    if (err?.code === "23505") {
+      return { success: false, error: "A user with this email already exists" };
     }
 
-    props.onSuccess();
-  } catch (error: any) {
-    props.onError(error?.message || "Something went wrong");
+    return { success: false, error: err?.message || "Unknown error" };
   }
 }

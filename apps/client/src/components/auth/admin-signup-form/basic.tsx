@@ -7,23 +7,15 @@ import { Input } from "@repo/ui/components/input";
 import { Label } from "@repo/ui/components/label";
 import { cn } from "@repo/ui/lib/utils";
 import { config } from "@repo/config";
-import { handleAdminSignup } from "@/components/auth/flows/admin-signup";
+import { createAdminUser } from "@/components/auth/flows/admin-signup";
 import { AlertTriangle } from "lucide-react";
+import { showToast } from "@/lib/toast";
 
 export function BasicSignupForm({
   className,
   ...props
 }: React.ComponentProps<"div">) {
   const [error, setError] = useState<string | null>(null);
-
-  function buildFlowProps(): any {
-    return {
-      onError: setError,
-      onSuccess: () => {
-        alert("Admin account created successfully!");
-      },
-    };
-  }
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -51,13 +43,15 @@ export function BasicSignupForm({
       return;
     }
 
-    await handleAdminSignup(
-      email,
-      password,
-      firstName,
-      lastName,
-      buildFlowProps()
-    );
+    const result = await createAdminUser(email, password, firstName, lastName);
+
+    if (!result.success) {
+      setError(result.error ?? "Unknown error");
+      return;
+    }
+
+    showToast.success(<>Nice to meet you, {firstName}!</>);
+    window.location.reload();
   }
 
   return (
@@ -66,7 +60,7 @@ export function BasicSignupForm({
         <CardContent className="grid p-0 md:grid-cols-2">
           <form className="p-6 md:p-8" onSubmit={handleSubmit}>
             <div className="mb-2">
-              <h2 className="text-2xl font-bold mb-4">Create Admin Account</h2>            
+              <h2 className="text-2xl font-bold mb-4">Create Admin Account</h2>
             </div>
             <div className="mb-4 flex items-start gap-3 rounded-md border border-yellow-400 bg-yellow-100 p-3 text-sm text-yellow-800">
               <AlertTriangle className="mt-0.5 h-5 w-5 flex-shrink-0 text-yellow-600" />

@@ -22,9 +22,5 @@
   "workspaces": [
     "apps/*",
     "packages/*"
-  ],
-  "dependencies": {
-    "nextra": "^4.2.17",
-    "nextra-theme-docs": "^4.2.17"
-  }
+  ]
 }

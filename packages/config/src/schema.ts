@@ -16,6 +16,12 @@ export interface BaseConfig {
     url: string;
   };
 
+  /** UI Component configuration */
+  ui: {
+    /** Login form variant to use */
+    loginForm: import("../../../apps/client/src/components/auth/login-form").LoginFormVariant;
+  };
+
   /** Authentication configuration */
   auth: {
     /** Phone authentication settings */

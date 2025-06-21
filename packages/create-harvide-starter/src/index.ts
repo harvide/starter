@@ -94,7 +94,7 @@ async function main() {
         options: [
           { value: 'web' as const, label: 'Web Application', hint: 'Next.js' },
           { value: 'docs' as const, label: 'Documentation Site', hint: 'Nextra' },
-          { value: 'mobile' as const, label: 'Mobile App', hint: 'Coming soon' },
+          { value: 'admin' as const, label: 'Admin Panel', hint: 'Next.js' },
         ],
         required: true,
       }),
@@ -123,7 +123,7 @@ async function main() {
               { value: 'google' as const, label: 'Google' },
               { value: 'github' as const, label: 'GitHub' },
               { value: 'facebook' as const, label: 'Facebook' },
-              { value: 'apple' as const, label: 'Apple', hint: 'Includes Sign in with Apple setup' },
+              { value: 'apple' as const, label: 'Apple' },
               { value: 'twitter' as const, label: 'Twitter' },
               { value: 'discord' as const, label: 'Discord' },
               { value: 'linkedin' as const, label: 'LinkedIn' },

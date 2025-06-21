@@ -1,6 +1,6 @@
 export type StarterType = 'basic' | 'pro';
 export type PackageManager = 'npm' | 'pnpm' | 'yarn' | 'bun';
-export type Feature = 'web' | 'docs' | 'mobile';
+export type Feature = 'web' | 'docs' | 'admin';
 export type AuthMethod = 'email' | 'phone' | 'social';
 
 export type SocialProvider = 

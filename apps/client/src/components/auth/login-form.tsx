@@ -17,7 +17,6 @@ import { useRouter } from "next/navigation";
 import { config } from "@repo/config";
 import { authClient } from "@/lib/auth";
 
-import { toast } from 'sonner'
 import { showToast } from "@/lib/toast";
 import { InputOTP, InputOTPGroup, InputOTPSlot } from "@repo/ui/components/input-otp";
 

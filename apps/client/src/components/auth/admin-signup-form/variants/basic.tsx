@@ -7,7 +7,7 @@ import { Input } from "@repo/ui/components/input";
 import { Label } from "@repo/ui/components/label";
 import { cn } from "@repo/ui/lib/utils";
 import { config } from "@repo/config";
-import { createAdminUser } from "@/components/auth/flows/admin-signup";
+import { createAdminUser } from "../flows";
 import { AlertTriangle } from "lucide-react";
 import { showToast } from "@/lib/toast";
 

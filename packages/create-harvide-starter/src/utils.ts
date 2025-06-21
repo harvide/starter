@@ -2,13 +2,11 @@ import { execa } from 'execa';
 import type { PackageManager } from './types.js';
 
 export async function ensurePackageManager(packageManager: PackageManager): Promise<void> {
-  if (packageManager === 'pnpm') {
-    try {
-      await execa('pnpm', ['--version']);
-    } catch {
-      console.log('Installing pnpm globally...');
-      await execa('npm', ['install', '-g', 'pnpm']);
-    }
+  try {
+    await execa(packageManager, ['--version']);
+  } catch {
+    console.log(`Installing ${packageManager} globally...`);
+    await execa('npm', ['install', '-g', packageManager]);
   }
 }
 

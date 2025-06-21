@@ -6,13 +6,6 @@ export async function updateAuthConfig(projectPath: string, socialProviders: Soc
   const authIndexPath = path.join(projectPath, 'packages/auth/src/index.ts');
   let content = await fs.readFile(authIndexPath, 'utf-8');
 
-  // Add imports for selected social providers
-  let imports = `import { betterAuth, type BetterAuthPlugin } from "better-auth";
-import { drizzleAdapter } from "better-auth/adapters/drizzle";
-import { db } from "@repo/db";
-import { emailOTP, oAuthProxy, openAPI, phoneNumber } from "better-auth/plugins";
-import { config } from "@repo/config";`;
-
   // Add Apple trusted origins if needed
   if (socialProviders.includes('apple')) {
     content = content.replace(

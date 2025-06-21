@@ -34,7 +34,8 @@ export async function createApp(options: CreateAppOptions) {
   ];
 
   const filterFunc = (src: string) => {
-    return !src.includes('node_modules') && !src.includes('.next');
+    const base = path.basename(src);
+    return base !== 'node_modules' && base !== '.next';
   };
 
   try {
@@ -78,6 +79,8 @@ export async function createApp(options: CreateAppOptions) {
       { filter: filterFunc }
     );
   }
+  
+  spin.success('Features set up successfully');
 
   if (auth?.includes('social') && options.socialProviders?.length) {
     spin = createSpinner('Configuring authentication');
@@ -85,7 +88,6 @@ export async function createApp(options: CreateAppOptions) {
     spin.success('Authentication configured');
   }
 
-  spin.success('Features set up successfully');
 
   spin = createSpinner('Configuring project');
   try {

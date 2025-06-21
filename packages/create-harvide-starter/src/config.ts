@@ -1,5 +1,5 @@
 import type { CreateAppOptions } from './types.js';
-import { deepClone, SocialProviderConfigs } from './utils.js';
+import { deepClone, SocialProviderConfigs, stringifyConfig } from './utils.js';
 import fs from 'fs-extra';
 import path from 'path';
 import chalk from 'chalk';
@@ -50,8 +50,10 @@ export async function generateConfig(options: CreateAppOptions) {
   const envContent = generateEnvContent(auth.includes('social') ? socialProviders : []);
   await fs.writeFile(path.join(projectPath, '.env'), envContent);
   await fs.writeFile(path.join(projectPath, '.env.example'), envContent);
+  // Custom object stringifier that produces clean JS object literals
+
   return `/** 
  * @type {import('@repo/config').Config}
  */
-export default ${JSON.stringify(config, null, 2)} satisfies import('@repo/config').BaseConfig;`;
+export default ${stringifyConfig(config)} satisfies import('@repo/config').BaseConfig;`;
 }

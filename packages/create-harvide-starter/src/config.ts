@@ -6,13 +6,12 @@ import chalk from 'chalk';
 import { generateEnvContent } from './env.js';
 import { checkMissingEnvVars } from './check-env.js';
 import defaultConfig from '../../../starter.config.js';
-const starterConfig = defaultConfig.default;
 
 export async function generateConfig(options: CreateAppOptions) {
   const { appName, description, auth = [], socialProviders = [], projectPath } = options;
 
   // Clone the starter config
-  const config = deepClone(starterConfig);
+  const config = deepClone(defaultConfig) as typeof defaultConfig.default;
 
   // Update branding
   config.branding.name = appName;

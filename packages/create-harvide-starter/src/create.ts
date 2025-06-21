@@ -9,7 +9,10 @@ import { generateConfig } from './config.js';
 
 export async function createApp(options: CreateAppOptions) {
   const { projectPath, appName, description, features, auth, packageManager } = options;
-  const templatePath = path.resolve(process.cwd(), '../..');
+  const templatePath = path.resolve(
+    path.dirname(new URL(import.meta.url).pathname),
+    '../../..'
+  );
 
   let spin = createSpinner('Creating project directory');
   await fs.ensureDir(projectPath);
@@ -30,10 +33,25 @@ export async function createApp(options: CreateAppOptions) {
     'packages/auth',
   ];
 
-  for (const file of filesToCopy) {
-    await fs.copy(path.join(templatePath, file), path.join(projectPath, file));
-  }
+  try {
+    for (const file of filesToCopy) {
+      const sourcePath = path.join(templatePath, file);
+      const targetPath = path.join(projectPath, file);
+      
+      if (!await fs.pathExists(sourcePath)) {
+        throw new Error(`Source file not found: ${sourcePath}`);
+      }
+      
+      await fs.copy(sourcePath, targetPath);
+    }
     spin.success('Base files copied');
+  } catch (error) {
+    spin.error('Failed to copy base files');
+    if (error instanceof Error) {
+      throw new Error(`Failed to copy files: ${error.message}`);
+    }
+    throw error;
+  }
 
     // Generate and write the starter config
     const configContent = await generateConfig(options);
@@ -57,12 +75,26 @@ export async function createApp(options: CreateAppOptions) {
   spin.success('Features set up successfully');
 
   spin = createSpinner('Configuring project');
-  const pkgPath = path.join(projectPath, 'package.json');
-  const pkg = await fs.readJson(pkgPath);
-  pkg.name = appName.toLowerCase().replace(/\s+/g, '-');
-  pkg.description = description;
-  await fs.writeJson(pkgPath, pkg, { spaces: 2 });
-  spin.success('Project configured');
+  try {
+    const pkgPath = path.join(projectPath, 'package.json');
+    
+    const pkg = await fs.readJson(pkgPath);
+    if (!pkg) {
+      throw new Error('Failed to read package.json - file is empty or invalid');
+    }
+
+    pkg.name = appName.toLowerCase().replace(/\s+/g, '-');
+    pkg.description = description || '';
+    
+    await fs.writeJson(pkgPath, pkg, { spaces: 2 });
+    spin.success('Project configured');
+  } catch (error) {
+    spin.error('Failed to configure project');
+    if (error instanceof Error) {
+      throw new Error(`Failed to update package.json: ${error.message}`);
+    }
+    throw error;
+  }
 
   spin = createSpinner('Initializing Git repository');
   try {

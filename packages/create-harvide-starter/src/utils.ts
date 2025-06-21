@@ -86,6 +86,15 @@ export function stringifyConfig(obj: any, indent = 0): string {
   return `{\n${props.join(',\n')}\n${' '.repeat(indent)}}`;
 }
 
+export function generateSecretKey(length = 32): string {
+  const charset = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+[]{}|;:,.<>?';
+  let secret = '';
+  for (let i = 0; i < length; i++) {
+    secret += charset.charAt(Math.floor(Math.random() * charset.length));
+  }
+  return secret;
+}
+
 export const SocialProviderConfigs = {
   facebook: {
     clientId: process.env.FACEBOOK_CLIENT_ID as string,

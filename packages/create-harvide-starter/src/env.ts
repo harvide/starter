@@ -1,11 +1,12 @@
 import type { SocialProvider } from './types.js';
+import { generateSecretKey } from './utils.js';
 
 export function generateEnvContent(socialProviders: SocialProvider[] = []): string {
   const baseEnv = `# Database
 DATABASE_URL="postgres://user:password@localhost:5432/database"
 
 # Auth
-AUTH_SECRET="your-secret-key"
+AUTH_SECRET="${generateSecretKey(32)}"
 
 `;
 

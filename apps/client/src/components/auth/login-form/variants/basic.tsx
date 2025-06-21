@@ -39,14 +39,6 @@ interface SubmittedValue {
   type: "email" | "phone";
 }
 
-const PHONE_AUTH_ENABLED = config.auth.phone.enabled;
-const PHONE_OTP_ENABLED = config.auth.phone.otp.enabled;
-const EMAIL_AUTH_ENABLED = config.auth.emailAndPassword.enabled;
-const EMAIL_OTP_ENABLED = config.auth.emailAndPassword.otp.enabled;
-const SOCIAL_PROVIDERS = Object.entries(config.auth.socialProviders ?? {}).filter(
-  ([, provider]) => provider.enabled,
-);
-
 export function BasicLoginForm({
   className,
   forceEmailAndPasswordOnly = false,
@@ -58,6 +50,18 @@ export function BasicLoginForm({
   const [step, setStep] = useState<Step>("login");
   const [submitted, setSubmitted] = useState<SubmittedValue | null>(null);
   const [error, setError] = useState<string | null>(null);
+
+  const FORCE_EMAIL_PASSWORD_ONLY = forceEmailAndPasswordOnly === true;
+
+  const PHONE_AUTH_ENABLED = !FORCE_EMAIL_PASSWORD_ONLY && config.auth.phone.enabled;
+  const PHONE_OTP_ENABLED = !FORCE_EMAIL_PASSWORD_ONLY && config.auth.phone.otp.enabled;
+  const EMAIL_AUTH_ENABLED = FORCE_EMAIL_PASSWORD_ONLY || config.auth.emailAndPassword.enabled;
+  const EMAIL_OTP_ENABLED = !FORCE_EMAIL_PASSWORD_ONLY && config.auth.emailAndPassword.otp.enabled;
+  const SOCIAL_PROVIDERS = FORCE_EMAIL_PASSWORD_ONLY
+    ? []
+    : Object.entries(config.auth.socialProviders ?? {}).filter(
+      ([, provider]) => provider.enabled,
+    );
 
   function buildFlowProps(): flows.LoginFlowProps {
     return {

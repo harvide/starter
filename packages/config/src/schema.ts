@@ -64,6 +64,16 @@ export interface BaseConfig {
       enabled: boolean;
       [key: string]: unknown;
     }>;
+
+    /** Account */
+    account: {
+      /** Account linking settings */
+      accountLinking: {
+        enabled: boolean;
+        trustedProviders?: string[];
+        allowUnlinkingAll?: boolean;
+      }
+    }
   };
 
   /** Branding configuration */

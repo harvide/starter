@@ -197,6 +197,33 @@ export default {
                 enabled: true
             }
         },
+
+        /** Account management settings */
+        account: {
+            /** Account linking configuration 
+             * @see https://www.better-auth.com/docs/concepts/users-accounts#account-linking
+            */
+            accountLinking: {
+                /**
+                 * Enable account linking feature.
+                 * Allows users to link multiple social accounts to a single user account.
+                 * @default true
+                 */
+                enabled: true,
+                /**
+                 * Trusted providers for account linking.
+                 * Users can link accounts from these providers.
+                 * This is optional and can be customized based on your requirements.
+                 */
+                // trustedProviders: ["google", "apple"],
+                /**
+                 * If the user only has one account, the unlinking process will fail to prevent account lockout 
+                 * unless allowUnlinkingAll is set to true.
+                 * @default false
+                 */
+                allowUnlinkingAll: false,
+            }
+        }
     },
     /** Application branding configuration */
     branding: {

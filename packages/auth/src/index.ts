@@ -92,5 +92,7 @@ export const auth = betterAuth({
     },
   },
 
+  account: config.auth.account,
+
   socialProviders: config.auth.socialProviders
 });

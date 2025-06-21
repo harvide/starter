@@ -2,27 +2,34 @@ import { execa } from 'execa';
 import type { PackageManager } from './types.js';
 
 export async function isPackageManagerInstalled(packageManager: PackageManager): Promise<boolean> {
-  if (packageManager === 'npm') return true; // npm is always available
   try {
-    const result = await execa(packageManager, ['--version']);
-    return result.exitCode === 0;
+    await execa(packageManager, ['--version']);
+    return true;
   } catch {
+    if (packageManager === 'npm') {
+      throw new Error('npm is required but not found');
+    }
     return false;
   }
 }
 
 export async function ensurePackageManager(packageManager: PackageManager): Promise<void> {
-  if (packageManager === 'npm') return; // npm is always available
+  try {
+    await execa(packageManager, ['--version']);
+    return;
+  } catch (error) {
+    if (packageManager === 'npm') {
+      throw new Error('npm is required but not found');
+    }
 
-  const isInstalled = await isPackageManagerInstalled(packageManager);
-  if (!isInstalled) {
     console.log(`${packageManager} not found, installing globally...`);
     try {
       await execa('npm', ['install', '-g', packageManager]);
       
       // Verify installation
-      const installed = await isPackageManagerInstalled(packageManager);
-      if (!installed) {
+      try {
+        await execa(packageManager, ['--version']);
+      } catch {
         throw new Error(`Failed to verify ${packageManager} installation`);
       }
     } catch (error) {

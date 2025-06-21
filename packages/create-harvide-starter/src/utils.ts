@@ -1,5 +1,4 @@
 import { execa } from 'execa';
-import { execSync } from 'child_process';
 import type { PackageManager } from './types.js';
 
 export async function isPackageManagerInstalled(packageManager: PackageManager): Promise<boolean> {

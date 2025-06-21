@@ -9,9 +9,20 @@ You'll never have to worry about boring stuff like authorization, authentication
 
 # Features
 
-- **Modular**: Use only the features you need.
-- **Extensible**: Easily add new features or replace existing ones.
-- **Idiomatic**: Follows best practices and conventions of the language and framework.
+- **Authentication** - Starter comes with a fully functional authentication system that supports email/password, phone authentication, magic links, and social logins (Google, GitHub, etc.). You can easily add or remove authentication methods. This includes:
+  - **Multi-tenacy** - Turnable organizations system that allows you to create and manage organizations, invite users, and assign roles. You can easily customize the organization model and add your own features.
+  - **Multi-session** - Support for multiple sessions per user. You can easily manage user sessions and revoke them if needed.
+  - **2FA** - Support for two-factor authentication using TOTP (Time-based One-Time Password) or WebAuthn. You can easily enable or disable 2FA for your users.
+  - **OTP** - Support for one-time passwords (OTP) for email and phone authentication. You can easily customize the OTP generation and validation logic.
+  - **Magic Links** - Support for magic links that allow users to log in without a password. You can easily customize the magic link generation and validation logic.
+  - **Social Logins** - Support for social logins using OAuth providers like Google, GitHub, Facebook, etc. You can easily add or remove social login providers.
+  - And multiple ready to use Login and Signup components adapted to your flow and design system!
+- **Mailing** - Starter includes a mailing system that allows you to send emails for verification, password reset, and other notifications. You can customize the email templates and use any email provider.
+- **User Experience** - Customizable user experience with reactive component out of box, beatiful user flows, animations and responsive design.
+- **Database** - Starter uses Drizzle ORM for database access. It supports multiple databases and allows you to easily switch between them. You can also customize the database schema and add your own models.
+- **API** - Starter provides a fully functional API that allows you to access your data and perform CRUD operations. You can easily extend the API with your own endpoints and logic.
+- **Admin Panel** - Starter includes a fully functional admin panel that allows you to manage your users, roles, and permissions. You can easily customize the admin panel and add your own features.
+- **Localization** - Starter supports multiple languages out of the box. You can easily add new languages and translations.
 
 # Configuration
 

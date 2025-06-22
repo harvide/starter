@@ -53,14 +53,23 @@ export async function createAdminUser(
     if (error) return { success: false, error };
     if (exists) return { success: false, error: "An admin account already exists" };
 
-    await (await auth.$context).internalAdapter.createUser({
+    const ctx = await auth.$context;
+
+    const newUser = await ctx.internalAdapter.createUser({
       email,
-      password,
       name: `${firstName} ${lastName}`,
-      role: "admin", // ✅ FIXED: single role
+      role: ["admin", "superadmin"],
       emailVerified: true,
       image: config.branding.logo.icon,
     });
+
+    const hash = await ctx.password.hash(password);
+    await ctx.internalAdapter.linkAccount({
+      userId: newUser.id,
+      providerId: "credential",
+      accountId: newUser.id,
+      password: hash
+    })
 
     return { success: true };
   } catch (err: any) {

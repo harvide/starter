@@ -4,8 +4,10 @@ import { db, userModel } from "@repo/db";
 import { admin, emailOTP, openAPI, phoneNumber } from "better-auth/plugins";
 import { config } from "@repo/config";
 import { schema } from "@repo/db"
+import { nextCookies } from "better-auth/next-js";
 
 let plugins: BetterAuthPlugin[] = [
+  nextCookies(),
   admin({
     ...config.admin
   }),

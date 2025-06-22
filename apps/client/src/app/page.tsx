@@ -24,7 +24,7 @@ export default function Home() {
             @harvide/starter
           </h1>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto font-extralight leading-relaxed">
-            Never handle flows manually again. Kickstart your next project with pre-configured authentication, 
+            Never handle flows manually again. Kickstart your next project with pre-configured authentication,
             UI components, and best practices baked in.
           </p>
         </div>
@@ -86,29 +86,31 @@ export default function Home() {
             </a>
           </Button>
           <Tooltip>
-            <TooltipTrigger>
-              <Button
-                variant="secondary"
-                size="lg"
-                className="gap-2"
-                disabled
-              >
-                <svg
-                  className="w-5 h-5"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                  aria-hidden="true"
+            <TooltipTrigger asChild>
+              <span>
+                <Button
+                  variant="secondary"
+                  size="lg"
+                  className="gap-2"
+                  disabled
                 >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"
-                  />
-                </svg>
-                Pro
-              </Button>
+                  <svg
+                    className="w-5 h-5"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    aria-hidden="true"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"
+                    />
+                  </svg>
+                  Pro
+                </Button>
+              </span>
             </TooltipTrigger>
             <TooltipContent>Coming soon ✨</TooltipContent>
           </Tooltip>

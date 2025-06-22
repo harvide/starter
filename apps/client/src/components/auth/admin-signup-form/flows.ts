@@ -27,20 +27,8 @@ export async function checkAdminsExist() {
         }
       ]
     );
-    const superAdminUsers = await ctx.internalAdapter.listUsers(
-      undefined,
-      undefined,
-      undefined,
-      [
-        {
-          field: "role",
-          operator: "contains",
-          value: "superadmin"
-        }
-      ]
-    );
 
-    if (adminUsers.length > 0 || superAdminUsers.length > 0) {
+    if (adminUsers.length > 0) {
       return { exists: true };
     }
 
@@ -73,7 +61,7 @@ export async function createAdminUser(
     const newUser = await ctx.internalAdapter.createUser({
       email,
       name: `${firstName} ${lastName}`,
-      role: "superadmin",
+      role: "admin",
       emailVerified: true,
       image: config.branding.logo.icon,
     });

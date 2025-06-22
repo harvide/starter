@@ -225,15 +225,15 @@ export default {
     admin: {
         /** Enable or disable the admin panel */
         enabled: true,
-        defaultRole: "user",
+        // defaultRole: "user",
         /** The roles that are considered admin roles. Defaults to ["admin"].
          * @default ["admin"]
          */
-        adminRoles: ["admin"],
+        // adminRoles: [],
         /** You can pass an array of userIds that should be considered as admin.
           * @default []
         */
-        adminUserIds: [],
+        // adminUserIds: [],
         /**
          * The duration of the impersonation session in seconds. Defaults to 1 hour.
          * @default 86400 (24 hours)

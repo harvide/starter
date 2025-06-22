@@ -15,6 +15,13 @@
       "when": 1750541702976,
       "tag": "0001_curvy_lifeguard",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1750595237348,
+      "tag": "0002_complete_warbird",
+      "breakpoints": true
     }
   ]
 }

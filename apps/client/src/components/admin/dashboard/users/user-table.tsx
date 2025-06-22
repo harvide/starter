@@ -31,6 +31,8 @@ import { Avatar, AvatarFallback, AvatarImage } from "@repo/ui/components/avatar"
 import { getAcronym } from "@/lib/utils";
 import { Skeleton } from "@repo/ui/components/skeleton";
 import { Badge } from "@repo/ui/components/badge";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@repo/ui/components/tooltip";
+import Link from "next/link";
 
 function SkeletonRow() {
   return (
@@ -102,7 +104,20 @@ export function UserTable() {
             <DropdownMenuItem>Profile</DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem>Promote to admin</DropdownMenuItem>
-            <DropdownMenuItem disabled>Set role</DropdownMenuItem>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <span>
+                  <DropdownMenuItem disabled>
+                    Set role
+                  </DropdownMenuItem>
+                </span>
+              </TooltipTrigger>
+              <TooltipContent>
+                You need to enable <Button variant="link" size="sm" className="p-0 m-0 gap-0 text-white text-xs underline">
+                  <Link href="https://www.better-auth.com/docs/plugins/admin#access-control">Access Control</Link>
+                </Button>
+              </TooltipContent>
+            </Tooltip>
             <DropdownMenuSeparator />
             <DropdownMenuItem>List Session</DropdownMenuItem>
             <DropdownMenuItem>Revoke session</DropdownMenuItem>
@@ -195,10 +210,10 @@ export function UserTable() {
       <div className="flex items-center justify-between space-x-2 py-2">
         <div className="flex flex-col w-fit items-start justify-center text-sm text-muted-foreground">
           <span>
-          Page {pageIndex + 1} of {Math.ceil(users.length / pageSize)}
+            Page {pageIndex + 1} of {Math.ceil(users.length / pageSize)}
           </span>
           <span className="text-[9px]">
-          {users.length > 0 ? ` (${users.length} users)` : " (No users found)"}
+            {users.length > 0 ? ` (${users.length} users)` : " (No users found)"}
           </span>
         </div>
         <div className="space-x-2">

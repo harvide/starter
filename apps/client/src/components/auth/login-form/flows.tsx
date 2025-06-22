@@ -2,6 +2,8 @@ import { authClient } from "@/lib/auth";
 import { showToast } from "@/lib/toast";
 
 export type LoginFlowProps = {
+  callbackUrl?: string;
+
   onError: (error: string) => void;
   onSuccess: () => void;
   onOtpRequired: (value: string, type: "email" | "phone") => void;
@@ -16,7 +18,7 @@ export async function handleEmailPasswordLogin(
     email,
     password,
     rememberMe: true,
-    callbackURL: '/app'
+    callbackURL: props.callbackUrl
   });
 
   if (data.error) {
@@ -148,7 +150,7 @@ export async function handleOAuthSignIn(
 ) {
   const data = await authClient.signIn.social({
     provider,
-    callbackURL: '/app'
+    callbackURL: props.callbackUrl
   });
 
   if (data.error) {

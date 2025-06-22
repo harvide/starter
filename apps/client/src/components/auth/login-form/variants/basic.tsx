@@ -41,6 +41,7 @@ interface SubmittedValue {
 
 export function BasicLoginForm({
   className,
+  callbackUrl = "/app",
   forceEmailAndPasswordOnly = false,
   header = <>Welcome back</>,
   subtitle = <>Login to your <b>{config.branding.name}</b> account</>,
@@ -70,8 +71,9 @@ export function BasicLoginForm({
 
   function buildFlowProps(): flows.LoginFlowProps {
     return {
+      callbackUrl,
       onError: setError,
-      onSuccess: () => router.push("/app"),
+      onSuccess: () => router.push(callbackUrl),
       onOtpRequired: (value, type) => {
         setSubmitted({ value, type });
         setStep("enter-otp-code");

@@ -26,7 +26,7 @@ export async function Page() {
       <AppSidebar user={{
         email: user.email,
         name: user.name,
-        avatar: user.avatar as string | undefined,
+        avatar: user.image as string | undefined,
       }} variant="inset" />
       <SidebarInset>
         <SiteHeader />

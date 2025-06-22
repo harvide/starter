@@ -8,7 +8,7 @@ import { checkMissingEnvVars } from './check-env.js';
 import defaultConfig from '../../../starter.config.js';
 
 export async function generateConfig(options: CreateAppOptions) {
-  const { appName, description, auth = [], socialProviders = [], projectPath } = options;
+  const { appName, description, auth = [], features, socialProviders = [], projectPath } = options;
 
   // Clone the starter config
   const config = deepClone(defaultConfig) as typeof defaultConfig.default;
@@ -35,6 +35,8 @@ export async function generateConfig(options: CreateAppOptions) {
   }
   
   config.auth.socialProviders = socialProviderConfig;
+
+  config.admin.enabled = features.includes('admin');
 
   // Check for missing environment variables
   const missingVars = checkMissingEnvVars(socialProviders);

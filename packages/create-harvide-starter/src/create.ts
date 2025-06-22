@@ -79,14 +79,6 @@ export async function createApp(options: CreateAppOptions) {
       { filter: filterFunc }
     );
   }
-
-  if (features.includes('admin')) {
-    await fs.copy(
-      path.join(templatePath, 'apps/admin'), 
-      path.join(projectPath, 'apps/admin'),
-      { filter: filterFunc }
-    );
-  }
   
   spin.success('Features set up successfully');
 

@@ -29,7 +29,7 @@ export default {
              * When enabled, users can sign up and sign in using phone numbers.
              * @default true 
              */
-            enabled: false,
+            enabled: true,
 
             /** One-Time Password (OTP) settings for phone authentication */
             otp: {
@@ -133,7 +133,7 @@ export default {
                  * Enable email OTP authentication.
                  * @default true
                  */
-                enabled: true,
+                enabled: false,
 
                 /**
                  * Length of the generated OTP code.
@@ -186,10 +186,10 @@ export default {
                 clientId: "",
                 clientSecret: "",
             },
-            facebook: {
+            linkedin: {
                 enabled: true,
                 clientId: "",
-                clientSecret: "",
+                clientSecret: ""
             }
         },
 
@@ -279,6 +279,15 @@ export default {
                 {
                     type: "total_users",
                 },
+                {
+                    type: "new_users_month",
+                },
+                {
+                    type: "active_users_month"
+                },
+                {
+                    type: "active_sessions_now"
+                }
                 
             ]
         }

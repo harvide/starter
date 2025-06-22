@@ -273,6 +273,13 @@ export default {
                     label: "Documentation",
                     href: "https://starter.harvide.com/docs"
                 }
+            ],
+            /** Metrics displayed on the admin dashboard */
+            metrics: [
+                {
+                    type: "total_users",
+                },
+                
             ]
         }
     },

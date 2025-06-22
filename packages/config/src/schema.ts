@@ -92,6 +92,10 @@ export interface BaseConfig {
         icon?: string | React.ComponentType<any>;
         href: string;
       }[];
+      /** Metrics displayed on the admin dashboard */
+      metrics: {
+        type: import("../../../apps/client/src/components/admin/dashboard/metric-card").MetricType;
+      }[];
     }
   };
 

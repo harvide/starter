@@ -14,7 +14,7 @@ export function AdminCheckWrapper() {
             setTimeout(() => {
                 toast.warning(<>No Admin Account Found</>, {
                     description: (
-                        <>Please create the first admin account at <Link href="/admin/signin" className="text-foreground">/admin/signin</Link></>
+                        <>Please create the first admin account at <Link href="/admin/signin">/admin/signin</Link></>
                     )
                 });
             }, 100);

@@ -13,19 +13,34 @@ export async function checkAdminsExist() {
   }
 
   try {
-    const adminUsers = await (await auth.$context).internalAdapter.listUsers(
+    const ctx = await auth.$context;
+    // make OR connector working todo
+    const adminUsers = await ctx.internalAdapter.listUsers(
       undefined,
       undefined,
       undefined,
       [
         {
           field: "role",
-          value: "admin"
+          operator: "contains",
+          value: "admin",
+        }
+      ]
+    );
+    const superAdminUsers = await ctx.internalAdapter.listUsers(
+      undefined,
+      undefined,
+      undefined,
+      [
+        {
+          field: "role",
+          operator: "contains",
+          value: "superadmin"
         }
       ]
     );
 
-    if (adminUsers.length > 0) {
+    if (adminUsers.length > 0 || superAdminUsers.length > 0) {
       return { exists: true };
     }
 
@@ -58,7 +73,7 @@ export async function createAdminUser(
     const newUser = await ctx.internalAdapter.createUser({
       email,
       name: `${firstName} ${lastName}`,
-      role: ["admin", "superadmin"],
+      role: "superadmin",
       emailVerified: true,
       image: config.branding.logo.icon,
     });

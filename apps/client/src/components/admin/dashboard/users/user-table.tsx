@@ -43,13 +43,22 @@ import {
   AlertDialogAction,
   AlertDialogCancel,
 } from "@repo/ui/components/alert-dialog";
-import { MoreHorizontal } from "lucide-react";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@repo/ui/components/popover";
+import { ChevronDownIcon, MoreHorizontal } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@repo/ui/components/avatar";
 import { Skeleton } from "@repo/ui/components/skeleton";
 import { Badge } from "@repo/ui/components/badge";
 import { Tooltip, TooltipTrigger, TooltipContent } from "@repo/ui/components/tooltip";
+import { Label } from "@repo/ui/components/label";
 import Link from "next/link";
 import { getAcronym } from "@/lib/utils";
+import { Checkbox } from "@repo/ui/components/checkbox";
+import { Calendar } from "@repo/ui/components/calendar";
+import { config } from "@repo/config";
 
 type DialogAction = "profile" | "listSession" | "revokeSession" | "impersonate";
 type AlertAction = "promote" | "revokeAll" | "ban" | "delete";
@@ -76,6 +85,20 @@ export function UserTable() {
   const [dialogAction, setDialogAction] = useState<DialogAction | null>(null);
   const [alertAction, setAlertAction] = useState<AlertAction | null>(null);
   const [actionUser, setActionUser] = useState<User | null>(null);
+
+  const [confirmInput, setConfirmInput] = useState("");
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [deleteError, setDeleteError] = useState("");
+
+  const [banReason, setBanReason] = useState("");
+  const [banUntilDate, setBanUntilDate] = useState<Date | null>(null);
+  const [banUntilTime, setBanUntilTime] = useState<string | null>(null);
+  const [banForever, setBanForever] = useState(false);
+
+  const [isBanning, setIsBanning] = useState(false);
+  const [banError, setBanError] = useState("");
+
+  const [popoverOpen, setPopoverOpen] = useState(false);
 
   const columns = useMemo<ColumnDef<User>[]>(() => [
     {
@@ -252,14 +275,14 @@ export function UserTable() {
           {isLoading
             ? Array.from({ length: 8 }).map((_, i) => <SkeletonRow key={i} />)
             : table.getRowModel().rows.map(row => (
-                <TableRow key={row.id}>
-                  {row.getVisibleCells().map(cell => (
-                    <TableCell key={cell.id}>
-                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                    </TableCell>
-                  ))}
-                </TableRow>
-              ))}
+              <TableRow key={row.id}>
+                {row.getVisibleCells().map(cell => (
+                  <TableCell key={cell.id}>
+                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                  </TableCell>
+                ))}
+              </TableRow>
+            ))}
         </TableBody>
       </Table>
 
@@ -316,35 +339,196 @@ export function UserTable() {
       </Dialog>
 
       <AlertDialog open={!!alertAction} onOpenChange={v => { if (!v) setAlertAction(null); }}>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>
-              {alertAction === "promote" && "Promote to admin?"}
-              {alertAction === "revokeAll" && "Revoke all sessions?"}
-              {alertAction === "ban" && (actionUser?.banned ? "Unban user?" : "Ban user?")}
-              {alertAction === "delete" && "Delete user?"}
-            </AlertDialogTitle>
-            <AlertDialogDescription>
-              {alertAction === "promote" && `Grant admin to ${actionUser?.name}.`}
-              {alertAction === "revokeAll" && `This will revoke all sessions for ${actionUser?.name}.`}
-              {alertAction === "ban" && (
-                actionUser?.banned
-                  ? `Remove ban from ${actionUser.name}.`
-                  : `Ban ${actionUser?.name} from the system.`
+        {alertAction === "ban" && (
+          <>
+            {actionUser && (
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>
+                    {actionUser.banned ? "Unban user?" : "Ban user?"}
+                  </AlertDialogTitle>
+                  <AlertDialogDescription>
+                    {actionUser.banned
+                      ? `Remove ban from ${actionUser.name}.`
+                      : `Ban ${actionUser.name}. Provide reason and expiry date.`}
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+
+                {!actionUser.banned && (
+                  <div className="mt-4 space-y-4">
+                    <div className="flex flex-col gap-2">
+                      <Label>Reason</Label>
+                      <Input
+                        placeholder={config.admin.defaultBanReason || "No reason"}
+                        value={banReason}
+                        onChange={e => { setBanReason(e.target.value); setBanError("") }}
+                        disabled={isBanning}
+                      />
+                    </div>
+                    <div className="flex gap-4">
+                      <div className="flex flex-col gap-2">
+                        <Label htmlFor="date-picker" className="px-1">
+                          Date
+                        </Label>
+                        <Popover open={popoverOpen} onOpenChange={setPopoverOpen}>
+                          <PopoverTrigger asChild>
+                            <Button
+                              variant="outline"
+                              id="date-picker"
+                              className="w-32 justify-between font-normal"
+                            >
+                              {banUntilDate ? banUntilDate.toLocaleDateString() : "Select date"}
+                              <ChevronDownIcon />
+                            </Button>
+                          </PopoverTrigger>
+                          <PopoverContent className="w-auto overflow-hidden p-0" align="start">
+                            <Calendar
+                              mode="single"
+                              selected={banUntilDate || undefined}
+                              showOutsideDays={true}
+                              disabled={(data) => {
+                                if (banForever) return true;
+
+                                const today = new Date();
+                                return data < today || data > new Date(today.getFullYear() + 1, today.getMonth(), today.getDate());
+                              }}
+                              captionLayout="dropdown"
+                              
+                              onSelect={(date) => {
+                                setBanUntilDate(date || null);
+                                setPopoverOpen(false)
+                              }}
+                            />
+                          </PopoverContent>
+                        </Popover>
+                      </div>
+                      <div className="flex flex-col gap-2">
+                        <Label htmlFor="time-picker" className="px-1">
+                          Time
+                        </Label>
+                        <Input
+                          type="time"
+                          id="time-picker"
+                          onChange={(e) => {
+                            // todo fix
+                            const timeParts = e.target.value.split(":");
+                            if (timeParts.length === 3) {
+                              const date = new Date(banUntilDate || Date.now());
+                              date.setHours(
+                                parseInt(timeParts[0] || "0", 10),
+                                parseInt(timeParts[1] || "0", 10),
+                              );
+                              setBanUntilDate(date);
+                              setBanUntilTime(e.target.value);
+                            }
+                          }}
+                          value={banUntilTime || "10:30"}
+                          disabled={!banUntilDate || isBanning || banForever}
+                          step="3600" // 1 hour step
+                          className="bg-background appearance-none [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none"
+                        />
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Checkbox
+                        checked={banForever}
+                        onCheckedChange={(checked) => {
+                          setBanForever(checked as boolean); // what the actual fuck todo 
+                        }
+                        }
+                        disabled={isBanning}
+                      />
+                      <Label htmlFor="ban-forever">Forever</Label>
+                    </div>
+                    {banError && <p className="text-sm text-destructive">{banError}</p>}
+                  </div>
+                )}
+
+                <AlertDialogFooter>
+                  <AlertDialogCancel disabled={isBanning}>Cancel</AlertDialogCancel>
+                  <AlertDialogAction
+                    disabled={isBanning}
+                    onClick={async () => {
+                      setIsBanning(true);
+                      try {
+                        if (actionUser.banned) {
+                          await authClient.admin.unbanUser({ userId: actionUser.id });
+                        } else {
+                          const expiresIn = banForever
+                            ? undefined
+                            : banUntilDate
+                              ? Math.floor((banUntilDate.getTime() - Date.now()) / 1000)
+                              : undefined;
+                          await authClient.admin.banUser({
+                            userId: actionUser.id,
+                            banReason: banReason || undefined,
+                            banExpiresIn: expiresIn,
+                          });
+                        }
+                        setIsBanning(false);
+                        setAlertAction(null);
+                      } catch (err: any) {
+                        setIsBanning(false);
+                        setBanError(err.message || "Error processing ban");
+                      }
+                    }}
+                  >
+                    {isBanning
+                      ? actionUser.banned ? "Unbanning…" : "Banning…"
+                      : actionUser.banned ? "Unban" : "Ban"}
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            )}
+          </>
+        )}
+        {alertAction === "delete" && actionUser && (
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Delete user?</AlertDialogTitle>
+              <AlertDialogDescription>
+                This action is permanent and cannot be undone.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <div className="mt-4">
+              <Label className="pb-2 tracking-tigher">
+                To confirm, type the full name of the user <code className="font-mono text-xs tracking-tighter select-none text-muted-foreground ml-2">{actionUser.name}</code>
+              </Label>
+              <Input
+                placeholder={actionUser.name}
+                value={confirmInput}
+                onChange={e => { setConfirmInput(e.target.value); setDeleteError(""); }}
+                disabled={isDeleting}
+              />
+              {deleteError && (
+                <p className="text-sm text-destructive mt-2">
+                  {deleteError}
+                </p>
               )}
-              {alertAction === "delete" && `Permanently delete ${actionUser?.name}.`}
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction>
-              {alertAction === "promote" && "Promote"}
-              {alertAction === "revokeAll" && "Revoke All"}
-              {alertAction === "ban" && (actionUser?.banned ? "Unban" : "Ban")}
-              {alertAction === "delete" && "Delete"}
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
+            </div>
+            <AlertDialogFooter>
+              <AlertDialogCancel disabled={isDeleting}>
+                Cancel
+              </AlertDialogCancel>
+              <AlertDialogAction
+                disabled={confirmInput !== actionUser.name || isDeleting}
+                onClick={async () => {
+                  setIsDeleting(true);
+                  try {
+                    await authClient.admin.removeUser({ userId: actionUser.id });
+                    setIsDeleting(false);
+                    setAlertAction(null);
+                  } catch (err: any) {
+                    setIsDeleting(false);
+                    setDeleteError(err.message || "Error deleting user");
+                  }
+                }}
+              >
+                {isDeleting ? "Deleting…" : "Delete"}
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        )}
       </AlertDialog>
     </>
   );

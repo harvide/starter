@@ -1,6 +1,6 @@
 import { betterAuth, type BetterAuthPlugin } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
-import { db } from "@repo/db";
+import { db, userModel } from "@repo/db";
 import { admin, emailOTP, openAPI, phoneNumber } from "better-auth/plugins";
 import { config } from "@repo/config";
 import { schema } from "@repo/db"
@@ -67,6 +67,8 @@ export const auth = betterAuth({
 
   appName: config.branding.name,
   plugins: plugins,
+
+  user: userModel,
 
   emailAndPassword: {
     ...config.auth.emailAndPassword,

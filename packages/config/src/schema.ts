@@ -84,6 +84,15 @@ export interface BaseConfig {
     defaultBanReason?: string;
     defaultBanExpiresIn?: number;
     bannedUserMessage?: string;
+
+    /** Admin Panel configuration */
+    dashboard: {
+      shortcuts: {
+        label: string;
+        icon?: string | React.ComponentType<any>;
+        href: string;
+      }[];
+    }
   };
 
   /** Branding configuration */

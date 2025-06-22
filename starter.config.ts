@@ -229,7 +229,7 @@ export default {
         /** The roles that are considered admin roles. Defaults to ["admin"].
          * @default ["admin"]
          */
-        adminRoles: ["admin", "superadmin"],
+        adminRoles: ["admin"],
         /** You can pass an array of userIds that should be considered as admin.
           * @default []
         */
@@ -250,7 +250,31 @@ export default {
         /**The message to show when a banned user tries to sign in. 
          * @default "You have been banned from this application. Please contact support if you believe this is an error."
          */
-        bannedUserMessage: "You have been banned from this application. Please contact support if you believe this is an error."
+        bannedUserMessage: "You have been banned from this application. Please contact support if you believe this is an error.",
+    
+        /** Admin panel UI configuration */
+        dashboard: {
+            /** 
+             * Shortcuts shown in top navigation bar.
+             * Order matters, first item is the first shown.
+             */
+            shortcuts: [
+                {
+                    label: "GitHub",
+                    href: "https://github.com/harvide/starter",
+                    icon: (await import("lucide-react")).Github
+                },
+                {
+                    label: "Harvide",
+                    href: "https://harvide.com",
+                    icon: "https://harvide.com/logo/small-dark-white.svg"
+                },
+                {
+                    label: "Documentation",
+                    href: "https://starter.harvide.com/docs"
+                }
+            ]
+        }
     },
 
     /** Application branding configuration */

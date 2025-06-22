@@ -26,7 +26,9 @@ export async function handleEmailPasswordLogin(
     return;
   }
 
-  showToast.success("Login successful!");
+  showToast.success(<>Hi, {data.data.user.name}!</>, {
+    description: <>Good to see you again!</>
+  });
   props.onSuccess();
 }
 

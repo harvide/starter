@@ -9,10 +9,20 @@ declare global {
   }
 }
 
+type Environment = "development" | "production" | "test";
+type EmailProvider = "smtp" | "resend" | "mailgun" | "postmark" | "sendgrid" | "ses" | "none";
+
+type EmailAddress = {
+  /** Email address */
+  email: string;
+  /** Name of the email address */
+  name?: string;
+}
+
 /** Base configuration type for the starter project */
 export interface BaseConfig {
   /** Environment configuration */
-  env: "development" | "production" | "test";
+  env: Environment;
 
   /** UI Component configuration */
   ui: {
@@ -20,6 +30,18 @@ export interface BaseConfig {
     loginForm: import("../../../apps/client/src/components/auth/login-form").LoginFormVariant;
     /** Signup form variant to use */
     signupForm: import("../../../apps/client/src/components/auth/signup-form").SignupFormVariant;
+  };
+
+  email: {
+    enabled: boolean;
+    /** Email provider to use */
+    provider: EmailProvider;
+    /** Default sender email address */
+    from: {
+      admin: EmailAddress;
+      support: EmailAddress;
+      noReply: EmailAddress;
+    } | EmailAddress | string;
   };
 
   /** Authentication configuration */

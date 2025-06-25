@@ -12,7 +12,7 @@ declare global {
 type Environment = "development" | "production" | "test";
 type EmailProvider = "smtp" | "resend" | "mailgun" | "postmark" | "sendgrid" | "ses" | "none";
 
-type EmailAddress = {
+export type EmailAddress = {
   /** Email address */
   email: string;
   /** Name of the email address */

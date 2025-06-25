@@ -1,6 +1,7 @@
 import { SMTPAdapter } from "./adapters/smtp";
 import { ResendAdapter } from "./adapters/resend";
 import { EmailAddress } from "../../config/src/schema";
+import { config } from "@repo/config";
 
 export interface MailAdapter {
   send(mailOptions: MailOptions): Promise<void>;
@@ -26,3 +27,5 @@ export function createMailAdapter(
       throw new Error("Invalid mail adapter");
   }
 }
+
+export const mail = createMailAdapter(config.email.provider);

@@ -20,6 +20,28 @@ export default {
         signupForm: "basic",
     },
 
+    /** Mail service configuration */
+    email: {
+        /** Enable or disable email service */
+        enabled: true,
+        /** Email provider to use */
+        provider: "resend", // Options: "resend", "mailgun", "smtp"
+        /** Default sender email address */
+        from: {
+            admin: {
+                email: "admin@harvide.com",
+                name: "Harvide Admin"
+            },
+            support: {
+                email: "contact@harvide.com",
+                name: "Harvide Support"
+            },
+            noReply: {
+                email: "no-reply@harvide.com",
+            }
+        },
+    },
+
     /** Authentication configuration for all supported methods */
     auth: {
         /** Phone number authentication settings */

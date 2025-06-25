@@ -5,13 +5,24 @@ import {
   TooltipTrigger,
 } from "@repo/ui/components/tooltip";
 import Image from "next/image";
+import Link from "next/link";
+import { ChevronRight, LogIn, Rocket } from "lucide-react";
 
 export default function Home() {
   return (
     <div className="min-h-screen flex flex-col">
       <main className="flex-1 container mx-auto px-4 py-16 flex flex-col items-center justify-center text-center gap-8">
         {/* Hero Section */}
+        <Link className="border-border bg-background hover:bg-muted flex w-fit items-center gap-2 rounded-full border px-4 py-1.5 shadow-xs" aria-label="Learn more about new Pro Blocks update" href="/auth/signin">
+          <LogIn className="size-4 shrink-0" />
+          <span className="text-sm" id="update-description">
+            <span className="font-semibold">Live demo </span>
+            <span className="text-muted-foreground">· Test the boilerplate</span>
+          </span>
+          <ChevronRight className="text-muted-foreground size-4 shrink-0" />
+        </Link>
         <div className="w-full max-w-3xl space-y-4">
+
           <Image
             src="https://www.harvide.com/logo/small-dark-white.svg"
             alt="Harvide Logo"

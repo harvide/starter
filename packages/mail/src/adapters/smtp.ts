@@ -1,13 +1,14 @@
-import { MailAdapter, MailOptions } from "../index";
+import { type MailAdapter, type MailOptions } from "../index";
 import nodemailer from "nodemailer";
-import { config } from "@repo/config";
 import { formatEmailAddress } from "../utils";
+import { MailBase } from "../base";
 
-export class SMTPAdapter implements MailAdapter {
+export class SMTPAdapter extends MailBase implements MailAdapter {
   private transporter: any;
 
   constructor(
   ) {
+    super();
     const host = process.env.SMTP_HOST;
     const port = parseInt(process.env.SMTP_PORT || "587", 10);
     const secure = process.env.SMTP_SECURE === "true";

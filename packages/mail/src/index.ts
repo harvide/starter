@@ -1,9 +1,10 @@
 import { SMTPAdapter } from "./adapters/smtp";
 import { ResendAdapter } from "./adapters/resend";
+import { MailBase } from "./base";
 import { type EmailAddress } from "../../config/src/schema";
 import { config } from "@repo/config";
 
-export interface MailAdapter {
+export interface MailAdapter extends MailBase {
   // Send an email using the mail adapter
   send(mailOptions: MailOptions): Promise<void>;
   // Check if the mail adapter is properly configured

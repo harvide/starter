@@ -1,12 +1,13 @@
-import { MailAdapter, MailOptions } from "../index";
+import { type MailAdapter, type MailOptions } from "../index";
 import { Resend } from "resend";
-import { EmailAddress } from "../../../config/src/schema";
 import { formatEmailAddress } from "../utils";
+import { MailBase } from "../base";
 
-export class ResendAdapter implements MailAdapter {
+export class ResendAdapter extends MailBase implements MailAdapter {
   private resend: Resend;
 
   constructor() {
+    super();
     const apiKey =  process.env.RESEND_API_KEY;
     if (!apiKey) {
       throw new Error("RESEND_API_KEY environment variable is not set");

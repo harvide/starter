@@ -15,6 +15,10 @@ export class ResendAdapter implements MailAdapter {
     this.resend = new Resend(apiKey);
   }
 
+  isProperlyConfigured(): boolean {
+    return !!process.env.RESEND_API_KEY;
+  }
+
   async send(mailOptions: MailOptions): Promise<void> {
     const { from, to, subject, body, ...rest } = mailOptions;
 

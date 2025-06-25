@@ -4,7 +4,10 @@ import { EmailAddress } from "../../config/src/schema";
 import { config } from "@repo/config";
 
 export interface MailAdapter {
+  // Send an email using the mail adapter
   send(mailOptions: MailOptions): Promise<void>;
+  // Check if the mail adapter is properly configured
+  isProperlyConfigured(): boolean;
 }
 
 export interface MailOptions {

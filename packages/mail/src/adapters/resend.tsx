@@ -1,4 +1,5 @@
-import { type MailAdapter, type MailOptions } from "../index";
+import React from "react";
+import { type MailAdapter, type MailOptions, type MailOptionsWithTemplate } from "../index";
 import { Resend } from "resend";
 import { formatEmailAddress } from "../utils";
 import { MailBase } from "../base";
@@ -8,7 +9,7 @@ export class ResendAdapter extends MailBase implements MailAdapter {
 
   constructor() {
     super();
-    const apiKey =  process.env.RESEND_API_KEY;
+    const apiKey = process.env.RESEND_API_KEY;
     if (!apiKey) {
       throw new Error("RESEND_API_KEY environment variable is not set");
     }
@@ -28,6 +29,23 @@ export class ResendAdapter extends MailBase implements MailAdapter {
       from: formatEmailAddress(from),
       subject: subject,
       html: body,
+      ...rest,
+    });
+  }
+
+  async sendTemplate(mailOptions: MailOptionsWithTemplate): Promise<void> {
+    const { from, to, subject, template, variant, context = {}, ...rest } = mailOptions;
+
+    const EmailTemplate = this.getTemplate(template, variant) as React.FC<any>;
+    if (!EmailTemplate) {
+      throw new Error(`Email template "${template}" not found`);
+    }
+
+    await this.resend.emails.send({
+      to: Array.isArray(to) ? to : [to],
+      from: formatEmailAddress(from),
+      subject: subject,
+      react: EmailTemplate ? <EmailTemplate {...context} /> : null,
       ...rest,
     });
   }

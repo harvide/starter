@@ -5,6 +5,7 @@ import { admin, emailOTP, openAPI, phoneNumber } from "better-auth/plugins";
 import { config } from "@repo/config";
 import { schema } from "@repo/db"
 import { nextCookies } from "better-auth/next-js";
+import { mail } from "@repo/mail";
 
 let plugins: BetterAuthPlugin[] = [
   nextCookies(),
@@ -40,7 +41,7 @@ let plugins: BetterAuthPlugin[] = [
       // Implement sending OTP code via SMS
     },
     sendPasswordResetOTP: ({ phoneNumber, code }, request) => {
-      
+
     },
     signUpOnVerification: {
       getTempEmail: (phoneNumber) => {
@@ -91,11 +92,18 @@ export const auth = betterAuth({
       if (!config.auth.emailAndPassword.requireEmailVerification) {
         throw new Error("Sending verification emails is disabled in the configuration");
       }
-      // await sendEmail({
-      //   to: user.email,
-      //   subject: "Verify your email address",
-      //   text: `Click the link to verify your email: ${url}`,
-      // });
+      await mail.sendTemplate({
+        from: config.email.from.noReply,
+        to: user.email,
+        subject: "Verify your email address",
+        template: "email-verification",
+        variant: "basic",
+        context: {
+          user,
+          url,
+          token,
+        },
+      });
     },
   },
 

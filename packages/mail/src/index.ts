@@ -7,6 +7,8 @@ import { config } from "@repo/config";
 export interface MailAdapter extends MailBase {
   // Send an email using the mail adapter
   send(mailOptions: MailOptions): Promise<void>;
+  // Send from a template using the mail adapter
+  sendTemplate(mailOptions: Omit<MailOptions, "body"> & { template: string; context?: Record<string, any>; },): Promise<void>;
   // Check if the mail adapter is properly configured
   isProperlyConfigured(): boolean;
 }
@@ -19,12 +21,18 @@ export interface MailOptions {
   [key: string]: any;
 }
 
+export interface MailOptionsWithTemplate extends MailOptions {
+  template: string;
+  variant: string;
+  context?: Record<string, any>;
+}
+
 export function createMailAdapter(
   adapter: "smtp" | "resend",
 ): MailAdapter {
   switch (adapter) {
-    case "smtp":
-      return new SMTPAdapter();
+    // case "smtp":
+    //   return new SMTPAdapter();
     case "resend":
       return new ResendAdapter();
     default:

@@ -1,6 +1,6 @@
 import { SMTPAdapter } from "./adapters/smtp";
 import { ResendAdapter } from "./adapters/resend";
-import { EmailAddress } from "../../config/src/schema";
+import { type EmailAddress } from "../../config/src/schema";
 import { config } from "@repo/config";
 
 export interface MailAdapter {

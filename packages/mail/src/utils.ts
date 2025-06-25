@@ -1,4 +1,4 @@
-import { EmailAddress } from "../../config/src/schema";
+import { type EmailAddress } from "../../config/src/schema";
 
 export function formatEmailAddress(email: EmailAddress | string) {
     if (typeof email === "string") {

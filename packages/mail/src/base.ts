@@ -11,9 +11,6 @@ export class MailBase {
     template: EmailTemplate
   ) {
     if (!this.templates[name]) {
-      throw new Error(`Template "${name}" not registered`);
-    }
-    if (!this.templates[name]) {
       this.templates[name] = {};
     }
     this.templates[name][variant] = template;

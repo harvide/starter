@@ -3,6 +3,7 @@ import { type MailAdapter, type MailOptions, type MailOptionsWithTemplate } from
 import { Resend } from "resend";
 import { formatEmailAddress } from "../utils";
 import { MailBase } from "../base";
+import { pretty, render } from "@react-email/render";
 
 export class ResendAdapter extends MailBase implements MailAdapter {
   private resend: Resend;
@@ -45,7 +46,7 @@ export class ResendAdapter extends MailBase implements MailAdapter {
       to: Array.isArray(to) ? to : [to],
       from: formatEmailAddress(from),
       subject: subject,
-      react: EmailTemplate ? <EmailTemplate {...context} /> : null,
+      html: await pretty(await render(EmailTemplate(context))),
       ...rest,
     });
   }

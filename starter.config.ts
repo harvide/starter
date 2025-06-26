@@ -273,7 +273,7 @@ export default {
          * @default "You have been banned from this application. Please contact support if you believe this is an error."
          */
         bannedUserMessage: "You have been banned from this application. Please contact support if you believe this is an error.",
-    
+
         /** Admin panel UI configuration */
         dashboard: {
             /** 
@@ -284,7 +284,7 @@ export default {
                 {
                     label: "GitHub",
                     href: "https://github.com/harvide/starter",
-                    icon: (await import("lucide-react")).Github
+                    icon: (require("lucide-react")).Github
                 },
                 {
                     label: "Harvide",
@@ -310,7 +310,7 @@ export default {
                 {
                     type: "active_sessions_now"
                 }
-                
+
             ]
         }
     },

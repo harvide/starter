@@ -3,16 +3,30 @@
   "ui": "tui",
   "tasks": {
     "build": {
-      "dependsOn": ["^build"],
-      "inputs": ["$TURBO_DEFAULT$", ".env*"],
-      "outputs": [".next/**", "!.next/cache/**"],
-      "env": ["NEXT_PUBLIC_*"]
+      "dependsOn": [
+        "^build"
+      ],
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        ".env*"
+      ],
+      "outputs": [
+        ".next/**",
+        "!.next/cache/**"
+      ],
+      "env": [
+        "NEXT_PUBLIC_*"
+      ]
     },
     "lint": {
-      "dependsOn": ["^lint"]
+      "dependsOn": [
+        "^lint"
+      ]
     },
     "check-types": {
-      "dependsOn": ["^check-types"]
+      "dependsOn": [
+        "^check-types"
+      ]
     },
     "dev": {
       "cache": false,
@@ -20,6 +34,12 @@
     }
   },
   "globalEnv": [
-    "DATABASE_URL"
+    "DATABASE_URL",
+    "SMTP_HOST",
+    "SMTP_PORT",
+    "SMTP_USER",
+    "SMTP_PASSWORD",
+    "SMTP_SECURE",
+    "RESEND_API_KEY"
   ]
 }

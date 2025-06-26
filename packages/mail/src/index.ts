@@ -1,5 +1,6 @@
-import { SMTPAdapter } from "./adapters/smtp";
+// import { SMTPAdapter } from "./adapters/smtp";
 import { ResendAdapter } from "./adapters/resend";
+import BaseEmailVerificationVariant from "./transactional/emails/email-verification/variants/basic";
 import { MailBase } from "./base";
 import { type EmailAddress } from "../../config/src/schema";
 import { config } from "@repo/config";
@@ -41,3 +42,9 @@ export function createMailAdapter(
 }
 
 export const mail = createMailAdapter(config.email.provider);
+
+mail.registerTemplate(
+  "email-verification",
+  "basic",
+  BaseEmailVerificationVariant
+)

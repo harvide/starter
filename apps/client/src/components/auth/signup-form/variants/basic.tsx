@@ -3,6 +3,8 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
+import { Loader2 } from "lucide-react";
+import { motion } from "framer-motion";
 
 import { Button } from "@repo/ui/components/button";
 import { Card, CardContent } from "@repo/ui/components/card";
@@ -27,6 +29,7 @@ export function BasicSignupForm({
 }: React.ComponentProps<"div">) {
   const router = useRouter();
   const [error, setError] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   function buildFlowProps(): flows.SignupFlowProps {
     return {
@@ -35,7 +38,7 @@ export function BasicSignupForm({
         if (config.auth.emailAndPassword.requireEmailVerification) {
           showToast.info(<>Please check your email to verify your account.</>);
         }
-        router.push("/app");
+        router.push("/auth/signin");
       },
     };
   }
@@ -43,6 +46,7 @@ export function BasicSignupForm({
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setError(null);
+    setIsLoading(true);
 
     const data = new FormData(e.currentTarget);
     const email = data.get("email") as string;
@@ -53,16 +57,19 @@ export function BasicSignupForm({
 
     if (!email || !password || !firstName || !lastName) {
       setError("Please fill in all fields");
+      setIsLoading(false);
       return;
     }
 
     if (password !== confirmPassword) {
       setError("Passwords do not match");
+      setIsLoading(false);
       return;
     }
 
     if (password.length < config.auth.emailAndPassword.minPasswordLength) {
       setError(`Password must be at least ${config.auth.emailAndPassword.minPasswordLength} characters`);
+      setIsLoading(false);
       return;
     }
 
@@ -73,14 +80,28 @@ export function BasicSignupForm({
       lastName,
       buildFlowProps()
     );
+    setIsLoading(false);
   }
 
   async function handleOAuth(provider: string) {
+    setIsLoading(true);
     await flows.handleOAuthSignup(provider, buildFlowProps());
+    setIsLoading(false);
   }
 
+  const animation = {
+    initial: { opacity: 0, x: -20 },
+    animate: { opacity: 1, x: 0 },
+    exit: { opacity: 0, x: 20 },
+  };
+
   return (
-    <div className={cn("flex flex-col gap-6", className)} {...props}>
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      className={cn("flex flex-col gap-6", className)}
+      {...props}
+    >
       {!SIGNUP_ENABLED ? (
         <Card className="overflow-hidden h-full">
           <CardContent className="p-6 md:p-8">
@@ -98,7 +119,14 @@ export function BasicSignupForm({
       ) : (
         <Card className="overflow-hidden h-full">
           <CardContent className="grid p-0 md:grid-cols-2">
-            <form className="p-6 md:p-8" onSubmit={handleSubmit}>
+            <motion.form
+              key="signup"
+              initial={animation.initial}
+              animate={animation.animate}
+              exit={animation.exit}
+              className="p-6 md:p-8"
+              onSubmit={handleSubmit}
+            >
               <div className="flex flex-col gap-6">
                 <div className="flex flex-col items-center text-center">
                   <h1 className="text-2xl font-bold">Create an account</h1>
@@ -128,7 +156,7 @@ export function BasicSignupForm({
                       />
                     </div>
                   </div>
-                  
+
                   <div className="grid gap-2">
                     <Label htmlFor="email">Email</Label>
                     <Input
@@ -167,7 +195,8 @@ export function BasicSignupForm({
                   </div>
                 </div>
 
-                <Button type="submit" className="w-full">
+                <Button type="submit" className="w-full" disabled={isLoading}>
+                  {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                   Sign up
                 </Button>
 
@@ -188,6 +217,7 @@ export function BasicSignupForm({
                             variant="outline"
                             className="w-full cursor-pointer"
                             onClick={() => handleOAuth(provider)}
+                            disabled={isLoading}
                           >
                             {Icon ? (
                               <Icon className="w-5 h-5" />
@@ -218,9 +248,15 @@ export function BasicSignupForm({
                   <p className="text-red-500 text-sm text-center">{error}</p>
                 )}
               </div>
-            </form>
+            </motion.form>
 
-            <div className="relative hidden bg-muted border-border border rounded-md md:block mr-2">
+            <motion.div
+              key="image"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="relative hidden bg-muted border-border border rounded-md md:block mr-2"
+            >
               <img
                 src="https://www.harvide.com/logo/small-dark-white.svg"
                 alt="Image"
@@ -228,7 +264,7 @@ export function BasicSignupForm({
                 height={400}
                 className="absolute inset-0 h-full w-full object-cover dark:brightness-[0.2] dark:grayscale rounded-md"
               />
-            </div>
+            </motion.div>
           </CardContent>
         </Card>
       )}
@@ -238,6 +274,6 @@ export function BasicSignupForm({
         <Link href="/legal/terms-of-service">Terms of Service</Link> and{" "}
         <Link href="/legal/privacy-policy">Privacy Policy</Link>.
       </div>
-    </div>
+    </motion.div>
   );
 }

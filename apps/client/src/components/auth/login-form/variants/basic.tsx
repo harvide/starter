@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
+import { Loader2, Mail } from "lucide-react";
 
 import { Button } from "@repo/ui/components/button";
 import { Card, CardContent } from "@repo/ui/components/card";
@@ -32,7 +33,8 @@ type Step =
   | "email-link-sent"
   | "enter-otp-code"
   | "prompt-email"
-  | "reset-password-link-sent";
+  | "reset-password-link-sent"
+  | "email-not-verified";
 
 interface SubmittedValue {
   value: string;
@@ -53,6 +55,7 @@ export function BasicLoginForm({
   const [step, setStep] = useState<Step>("login");
   const [submitted, setSubmitted] = useState<SubmittedValue | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const FORCE_EMAIL_PASSWORD_ONLY = forceEmailAndPasswordOnly === true;
 
@@ -72,7 +75,14 @@ export function BasicLoginForm({
   function buildFlowProps(): flows.LoginFlowProps {
     return {
       callbackUrl,
-      onError: setError,
+      onError: (err) => {
+        const errorCode = err.split(":")[0];
+        if (errorCode === "EMAIL_NOT_VERIFIED") {
+          setStep("email-not-verified");
+        } else {
+          setError(err);
+        }
+      },
       onSuccess: () => router.push(callbackUrl),
       onOtpRequired: (value, type) => {
         setSubmitted({ value, type });
@@ -84,6 +94,7 @@ export function BasicLoginForm({
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setError(null);
+    setIsLoading(true);
 
     const data = new FormData(e.currentTarget);
     const email = data.get("email") as string | null;
@@ -92,31 +103,40 @@ export function BasicLoginForm({
 
     if (EMAIL_OTP_ENABLED && email) {
       await flows.handleEmailOtpRequest(email, buildFlowProps());
+      setIsLoading(false);
       return;
     }
 
     if (PHONE_OTP_ENABLED && phone) {
       await flows.handlePhoneOtpRequest(phone, buildFlowProps());
+      setIsLoading(false);
       return;
     }
 
     if (email && password) {
+      setSubmitted({ value: email, type: "email" });
       await flows.handleEmailPasswordLogin(email, password, buildFlowProps());
+      setIsLoading(false);
       return;
     }
 
     if (phone && password) {
+      setSubmitted({ value: phone, type: "phone" });
       await flows.handlePhonePasswordLogin(phone, password, buildFlowProps());
+      setIsLoading(false);
       return;
     }
 
     setError("Please provide a valid email or phone number.");
+    setIsLoading(false);
   }
 
   async function handleVerifyOtp(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    setIsLoading(true);
     if (!submitted) {
       setError("No submitted value found. Please try again.");
+      setIsLoading(false);
       return;
     }
     const code = new FormData(e.currentTarget).get("code") as string;
@@ -126,19 +146,24 @@ export function BasicLoginForm({
       submitted.type,
       buildFlowProps(),
     );
+    setIsLoading(false);
   }
 
   async function handleOAuth(provider: string) {
+    setIsLoading(true);
     await flows.handleOAuthSignIn(provider, buildFlowProps());
+    setIsLoading(false);
   }
 
   async function handleResetPassword(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setError(null);
+    setIsLoading(true);
 
     const email = new FormData(e.currentTarget).get("email") as string;
     if (!email) {
       setStep("prompt-email");
+      setIsLoading(false);
       return;
     }
 
@@ -147,6 +172,7 @@ export function BasicLoginForm({
       setSubmitted({ value: email, type: "email" });
       setStep("reset-password-link-sent");
     }
+    setIsLoading(false);
   }
 
   const showPasswordField =
@@ -253,7 +279,8 @@ export function BasicLoginForm({
                   </div>
                 )}
 
-                <Button type="submit" className="w-full">
+                <Button type="submit" className="w-full" disabled={isLoading}>
+                  {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                   Login
                 </Button>
                 {error && <p className="text-red-700 text-xs -mt-4 tracking-tighter">{error}</p>}
@@ -275,6 +302,7 @@ export function BasicLoginForm({
                             variant="outline"
                             className="w-full cursor-pointer"
                             onClick={() => handleOAuth(provider)}
+                            disabled={isLoading}
                           >
                             {Icon ? (
                               <Icon className="w-5 h-5" />
@@ -304,6 +332,37 @@ export function BasicLoginForm({
                 )}
               </div>
             </form>
+          )}
+
+          {step === "email-not-verified" && (
+            <div className="text-center p-6 md:p-8 flex flex-col items-center">
+              <h2 className="text-xl font-semibold">Email not verified</h2>
+              <p className="text-sm text-muted-foreground mt-2">
+                Your email <b>{submitted?.value}</b> is not verified. Please check your inbox for a verification link.
+              </p>
+              <Button className="mt-4 w-full" onClick={() => {
+                if (submitted?.value) {
+                  const domain = submitted.value.split('@')[1];
+                  if (domain) {
+                    const mailServices: { [key: string]: string } = {
+                      'gmail.com': 'https://mail.google.com',
+                      'outlook.com': 'https://outlook.live.com',
+                      'yahoo.com': 'https://mail.yahoo.com',
+                      'protonmail.com': 'https://mail.proton.me',
+                    };
+                    const mailUrl = mailServices[domain] || `https://${domain}`;
+                    window.open(mailUrl, '_blank');
+                  }
+                }
+              }}>
+                Open Mailbox
+                <Mail className="ml-2 h-4 w-4" />
+              </Button>
+              <Button className="mt-4 w-full" onClick={() => setStep("login")} variant="outline">
+                Back to login
+              </Button>
+              {error && <p className="text-red-700 text-xs -mt-4 tracking-tighter">{error}</p>}
+            </div>
           )}
 
           {step === "email-link-sent" && (
@@ -348,7 +407,8 @@ export function BasicLoginForm({
                   <InputOTPSlot index={5} />
                 </InputOTPGroup>
               </InputOTP>
-              <Button type="submit" className="mt-4">
+              <Button type="submit" className="mt-4" disabled={isLoading}>
+                {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                 Verify
               </Button>
               {error && <p className="text-red-700 text-xs -mt-4 tracking-tighter">{error}</p>}
@@ -365,7 +425,8 @@ export function BasicLoginForm({
                 <Label htmlFor="email-prompt">Email</Label>
                 <Input id="email-prompt" type="email" name="email" required />
               </div>
-              <Button type="submit" className="w-full">
+              <Button type="submit" className="w-full" disabled={isLoading}>
+                {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                 Send reset link
               </Button>
               {error && <p className="text-red-700 text-xs -mt-4 tracking-tighter">{error}</p>}

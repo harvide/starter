@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { Loader2, Mail } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 
 import { Button } from "@repo/ui/components/button";
 import { Card, CardContent } from "@repo/ui/components/card";
@@ -41,6 +42,8 @@ interface SubmittedValue {
   type: "email" | "phone";
 }
 
+const IMAGE_URL = "https://www.harvide.com/logo/small-dark-white.svg";
+
 export function BasicLoginForm({
   className,
   callbackUrl = "/app",
@@ -76,11 +79,11 @@ export function BasicLoginForm({
     return {
       callbackUrl,
       onError: (err) => {
-        const errorCode = err.split(":")[0];
+        const errorCode = err.code;
         if (errorCode === "EMAIL_NOT_VERIFIED") {
           setStep("email-not-verified");
         } else {
-          setError(err);
+          setError(err.message || "An unexpected error occurred.");
         }
       },
       onSuccess: () => router.push(callbackUrl),
@@ -184,7 +187,11 @@ export function BasicLoginForm({
       <Tabs
         defaultValue="email"
         value={tab}
-        onValueChange={(v) => setTab(v as Tab)}
+        onValueChange={(v) => {
+          setError(null);
+          setTab(v as Tab);
+          setStep("login");
+        }}
       >
         <TabsList className="grid w-full grid-cols-2 mb-4">
           <TabsTrigger value="email">Email</TabsTrigger>
@@ -239,217 +246,269 @@ export function BasicLoginForm({
       </div>
     ) : null;
 
+  const animation = {
+    initial: { opacity: 0, x: -20 },
+    animate: { opacity: 1, x: 0 },
+    exit: { opacity: 0, x: 20 },
+  };
+
   return (
-    <div className={cn("flex flex-col gap-6", className)} {...props}>
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      className={cn("flex flex-col gap-6", className)}
+      {...props}
+    >
       <Card className="overflow-hidden h-full">
         <CardContent className="grid p-0 md:grid-cols-2">
-          {step === "login" && (
-            <form className="p-6 md:p-8" onSubmit={handleSubmit}>
-              <div className="flex flex-col gap-6">
-                <div className="flex flex-col items-center text-center">
-                  <h1 className="text-2xl font-bold">{header}</h1>
-                  <p className="text-balance text-sm text-muted-foreground">
-                    {subtitle}
-                  </p>
-                </div>
-
-                {CredentialsSwitch}
-
-                {showPasswordField && (
-                  <div className="grid gap-2">
-                    <div className="flex items-center">
-                      <Label htmlFor="password">Password</Label>
-                      {SHOW_FORGOT_PASSWORD && (
-                        <button
-                          type="button"
-                          className="ml-auto text-sm underline-offset-2 hover:underline"
-                          onClick={() => setStep("prompt-email")}
-                        >
-                          Forgot your password?
-                        </button>
-                      )}
-                    </div>
-                    <Input
-                      id="password"
-                      type="password"
-                      name="password"
-                      required
-                      placeholder="••••••••"
-                    />
+          <AnimatePresence mode="wait">
+            {step === "login" && (
+              <motion.form
+                key="login"
+                initial={animation.initial}
+                animate={animation.animate}
+                exit={animation.exit}
+                className="p-6 md:p-8"
+                onSubmit={handleSubmit}
+              >
+                <div className="flex flex-col gap-6">
+                  <div className="flex flex-col items-center text-center">
+                    <h1 className="text-2xl font-bold">{header}</h1>
+                    <p className="text-balance text-sm text-muted-foreground">
+                      {subtitle}
+                    </p>
                   </div>
-                )}
 
-                <Button type="submit" className="w-full" disabled={isLoading}>
-                  {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                  Login
+                  {CredentialsSwitch}
+
+                  {showPasswordField && (
+                    <div className="grid gap-2">
+                      <div className="flex items-center">
+                        <Label htmlFor="password">Password</Label>
+                        {SHOW_FORGOT_PASSWORD && (
+                          <button
+                            type="button"
+                            className="ml-auto text-sm underline-offset-2 hover:underline"
+                            onClick={() => setStep("prompt-email")}
+                          >
+                            Forgot your password?
+                          </button>
+                        )}
+                      </div>
+                      <Input
+                        id="password"
+                        type="password"
+                        name="password"
+                        required
+                        placeholder="••••••••"
+                      />
+                    </div>
+                  )}
+
+                  <Button type="submit" className="w-full" disabled={isLoading}>
+                    {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                    Login
+                  </Button>
+                  {error && <p className="text-red-700 text-xs -mt-4 tracking-tighter">{error}</p>}
+
+                  {SOCIAL_PROVIDERS.length > 0 && (
+                    <>
+                      <div className="relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t after:border-border">
+                        <span className="relative z-10 bg-background px-2 text-muted-foreground">
+                          Or continue with
+                        </span>
+                      </div>
+                      <div className="grid grid-cols-3 gap-4">
+                        {SOCIAL_PROVIDERS.map(([provider]) => {
+                          const Icon = oauthIconsMap[provider];
+                          return (
+                            <Button
+                              type="button"
+                              key={provider}
+                              variant="outline"
+                              className="w-full cursor-pointer"
+                              onClick={() => handleOAuth(provider)}
+                              disabled={isLoading}
+                            >
+                              {Icon ? (
+                                <Icon className="w-5 h-5" />
+                              ) : (
+                                <span className="text-sm capitalize">
+                                  {provider}
+                                </span>
+                              )}
+                              <span className="sr-only">Login with {provider}</span>
+                            </Button>
+                          );
+                        })}
+                      </div>
+                    </>
+                  )}
+
+                  {SHOW_SIGNUP_LINK && (
+                    <div className="text-center text-sm">
+                      Don't have an account?{" "}
+                      <Link
+                        href="/auth/signup"
+                        className="underline underline-offset-4"
+                      >
+                        Sign up
+                      </Link>
+                    </div>
+                  )}
+                </div>
+              </motion.form>
+            )}
+
+            {step === "email-not-verified" && (
+              <motion.div
+                key="email-not-verified"
+                initial={animation.initial}
+                animate={animation.animate}
+                exit={animation.exit}
+                className="text-center p-6 md:p-8 flex flex-col items-center"
+              >
+                <h2 className="text-xl font-semibold">Email not verified</h2>
+                <p className="text-sm text-muted-foreground mt-2">
+                  Your email <b>{submitted?.value}</b> is not verified. Please check your inbox for a verification link.
+                </p>
+                <Button className="mt-4 w-full" onClick={() => {
+                  if (submitted?.value) {
+                    const domain = submitted.value.split('@')[1];
+                    if (domain) {
+                      const mailServices: { [key: string]: string } = {
+                        'gmail.com': 'https://mail.google.com',
+                        'outlook.com': 'https://outlook.live.com',
+                        'yahoo.com': 'https://mail.yahoo.com',
+                        'protonmail.com': 'https://mail.proton.me',
+                      };
+                      const mailUrl = mailServices[domain] || `https://${domain}`;
+                      window.open(mailUrl, '_blank');
+                    }
+                  }
+                }}>
+                  Open Mailbox
+                  <Mail className="ml-2 h-4 w-4" />
+                </Button>
+                <Button className="mt-4 w-full" onClick={() => setStep("login")} variant="outline">
+                  Back to login
                 </Button>
                 {error && <p className="text-red-700 text-xs -mt-4 tracking-tighter">{error}</p>}
+              </motion.div>
+            )}
 
-                {SOCIAL_PROVIDERS.length > 0 && (
-                  <>
-                    <div className="relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t after:border-border">
-                      <span className="relative z-10 bg-background px-2 text-muted-foreground">
-                        Or continue with
-                      </span>
-                    </div>
-                    <div className="grid grid-cols-3 gap-4">
-                      {SOCIAL_PROVIDERS.map(([provider]) => {
-                        const Icon = oauthIconsMap[provider];
-                        return (
-                          <Button
-                            type="button"
-                            key={provider}
-                            variant="outline"
-                            className="w-full cursor-pointer"
-                            onClick={() => handleOAuth(provider)}
-                            disabled={isLoading}
-                          >
-                            {Icon ? (
-                              <Icon className="w-5 h-5" />
-                            ) : (
-                              <span className="text-sm capitalize">
-                                {provider}
-                              </span>
-                            )}
-                            <span className="sr-only">Login with {provider}</span>
-                          </Button>
-                        );
-                      })}
-                    </div>
-                  </>
-                )}
-
-                {SHOW_SIGNUP_LINK && (
-                  <div className="text-center text-sm">
-                    Don&apos;t have an account?{" "}
-                    <Link
-                      href="/auth/signup"
-                      className="underline underline-offset-4"
-                    >
-                      Sign up
-                    </Link>
-                  </div>
-                )}
-              </div>
-            </form>
-          )}
-
-          {step === "email-not-verified" && (
-            <div className="text-center p-6 md:p-8 flex flex-col items-center">
-              <h2 className="text-xl font-semibold">Email not verified</h2>
-              <p className="text-sm text-muted-foreground mt-2">
-                Your email <b>{submitted?.value}</b> is not verified. Please check your inbox for a verification link.
-              </p>
-              <Button className="mt-4 w-full" onClick={() => {
-                if (submitted?.value) {
-                  const domain = submitted.value.split('@')[1];
-                  if (domain) {
-                    const mailServices: { [key: string]: string } = {
-                      'gmail.com': 'https://mail.google.com',
-                      'outlook.com': 'https://outlook.live.com',
-                      'yahoo.com': 'https://mail.yahoo.com',
-                      'protonmail.com': 'https://mail.proton.me',
-                    };
-                    const mailUrl = mailServices[domain] || `https://${domain}`;
-                    window.open(mailUrl, '_blank');
-                  }
-                }
-              }}>
-                Open Mailbox
-                <Mail className="ml-2 h-4 w-4" />
-              </Button>
-              <Button className="mt-4 w-full" onClick={() => setStep("login")} variant="outline">
-                Back to login
-              </Button>
-              {error && <p className="text-red-700 text-xs -mt-4 tracking-tighter">{error}</p>}
-            </div>
-          )}
-
-          {step === "email-link-sent" && (
-            <div className="text-center p-6 md:p-8">
-              <h2 className="text-xl font-semibold">Check your inbox</h2>
-              <p className="text-sm text-muted-foreground mt-2">
-                We&apos;ve sent a login link to <b>{submitted?.value}</b>.
-              </p>
-              {error && <p className="text-red-700 text-xs -mt-4 tracking-tighter">{error}</p>}
-            </div>
-          )}
-
-          {step === "reset-password-link-sent" && (
-            <div className="text-center p-6 md:p-8">
-              <h2 className="text-xl font-semibold">Check your inbox</h2>
-              <p className="text-sm text-muted-foreground mt-2">
-                We&apos;ve sent a password reset link to <b>{submitted?.value}</b>.
-              </p>
-              <p className="text-sm text-muted-foreground mt-2">
-                If you don&apos;t see it, check your spam folder.
-              </p>
-              <Button className="mt-4" onClick={() => setStep("login")}>
-                Back to login
-              </Button>
-              {error && <p className="text-red-700 text-xs -mt-4 tracking-tighter">{error}</p>}
-            </div>
-          )}
-
-          {step === "enter-otp-code" && (
-            <form
-              onSubmit={handleVerifyOtp}
-              className="p-6 md:p-8 flex flex-col gap-4"
-            >
-              <Label htmlFor="code">Enter the code</Label>
-              <InputOTP maxLength={6} id="code" name="code">
-                <InputOTPGroup>
-                  <InputOTPSlot index={0} />
-                  <InputOTPSlot index={1} />
-                  <InputOTPSlot index={2} />
-                  <InputOTPSlot index={3} />
-                  <InputOTPSlot index={4} />
-                  <InputOTPSlot index={5} />
-                </InputOTPGroup>
-              </InputOTP>
-              <Button type="submit" className="mt-4" disabled={isLoading}>
-                {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                Verify
-              </Button>
-              {error && <p className="text-red-700 text-xs -mt-4 tracking-tighter">{error}</p>}
-            </form>
-          )}
-
-          {step === "prompt-email" && (
-            <form
-              onSubmit={handleResetPassword}
-              className="p-6 md:p-8 space-y-4"
-            >
-              <h2 className="text-xl font-semibold">Reset password</h2>
-              <div className="grid gap-2">
-                <Label htmlFor="email-prompt">Email</Label>
-                <Input id="email-prompt" type="email" name="email" required />
-              </div>
-              <Button type="submit" className="w-full" disabled={isLoading}>
-                {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                Send reset link
-              </Button>
-              {error && <p className="text-red-700 text-xs -mt-4 tracking-tighter">{error}</p>}
-              <Button
-                type="button"
-                className="w-full"
-                onClick={() => setStep("login")}
-                variant="outline"
+            {step === "email-link-sent" && (
+              <motion.div
+                key="email-link-sent"
+                initial={animation.initial}
+                animate={animation.animate}
+                exit={animation.exit}
+                className="text-center p-6 md:p-8"
               >
-                Back to login
-              </Button>
-            </form>
-          )}
+                <h2 className="text-xl font-semibold">Check your inbox</h2>
+                <p className="text-sm text-muted-foreground mt-2">
+                  We've sent a login link to <b>{submitted?.value}</b>.
+                </p>
+                {error && <p className="text-red-700 text-xs -mt-4 tracking-tighter">{error}</p>}
+              </motion.div>
+            )}
 
-          <div className="relative hidden bg-muted border-border border rounded-md md:block mr-2">
+            {step === "reset-password-link-sent" && (
+              <motion.div
+                key="reset-password-link-sent"
+                initial={animation.initial}
+                animate={animation.animate}
+                exit={animation.exit}
+                className="text-center p-6 md:p-8"
+              >
+                <h2 className="text-xl font-semibold">Check your inbox</h2>
+                <p className="text-sm text-muted-foreground mt-2">
+                  We've sent a password reset link to <b>{submitted?.value}</b>.
+                </p>
+                <p className="text-sm text-muted-foreground mt-2">
+                  If you don't see it, check your spam folder.
+                </p>
+                <Button className="mt-4" onClick={() => setStep("login")}>
+                  Back to login
+                </Button>
+                {error && <p className="text-red-700 text-xs -mt-4 tracking-tighter">{error}</p>}
+              </motion.div>
+            )}
+
+            {step === "enter-otp-code" && (
+              <motion.form
+                key="enter-otp-code"
+                initial={animation.initial}
+                animate={animation.animate}
+                exit={animation.exit}
+                onSubmit={handleVerifyOtp}
+                className="p-6 md:p-8 flex flex-col gap-4"
+              >
+                <Label htmlFor="code">Enter the code</Label>
+                <InputOTP maxLength={6} id="code" name="code">
+                  <InputOTPGroup>
+                    <InputOTPSlot index={0} />
+                    <InputOTPSlot index={1} />
+                    <InputOTPSlot index={2} />
+                    <InputOTPSlot index={3} />
+                    <InputOTPSlot index={4} />
+                    <InputOTPSlot index={5} />
+                  </InputOTPGroup>
+                </InputOTP>
+                <Button type="submit" className="mt-4" disabled={isLoading}>
+                  {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                  Verify
+                </Button>
+                {error && <p className="text-red-700 text-xs -mt-4 tracking-tighter">{error}</p>}
+              </motion.form>
+            )}
+
+            {step === "prompt-email" && (
+              <motion.form
+                key="prompt-email"
+                initial={animation.initial}
+                animate={animation.animate}
+                exit={animation.exit}
+                onSubmit={handleResetPassword}
+                className="p-6 md:p-8 space-y-4"
+              >
+                <h2 className="text-xl font-semibold">Reset password</h2>
+                <div className="grid gap-2">
+                  <Label htmlFor="email-prompt">Email</Label>
+                  <Input id="email-prompt" type="email" name="email" required />
+                </div>
+                <Button type="submit" className="w-full" disabled={isLoading}>
+                  {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                  Send reset link
+                </Button>
+                {error && <p className="text-red-700 text-xs -mt-4 tracking-tighter">{error}</p>}
+                <Button
+                  type="button"
+                  className="w-full"
+                  onClick={() => setStep("login")}
+                  variant="outline"
+                >
+                  Back to login
+                </Button>
+              </motion.form>
+            )}
+          </AnimatePresence>
+
+          <motion.div
+            key="image"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="relative hidden bg-muted border-border border rounded-md md:block mr-2"
+          >
             <img
-              src="https://www.harvide.com/logo/small-dark-white.svg"
+              src={IMAGE_URL}
               alt="Image"
               width={400}
               height={400}
               className="absolute inset-0 h-full w-full object-cover dark:brightness-[0.2] dark:grayscale rounded-md"
             />
-          </div>
+          </motion.div>
         </CardContent>
       </Card>
 
@@ -462,6 +521,6 @@ export function BasicLoginForm({
           </div>
         )
       }
-    </div>
+    </motion.div>
   );
 }

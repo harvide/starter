@@ -4,7 +4,7 @@ import { showToast } from "@/lib/toast";
 export type LoginFlowProps = {
   callbackUrl?: string;
 
-  onError: (error: string) => void;
+  onError: (error: { code?: string | undefined; message?: string | undefined; status: number; statusText: string; }) => void;
   onSuccess: () => void;
   onOtpRequired: (value: string, type: "email" | "phone") => void;
 };
@@ -22,7 +22,7 @@ export async function handleEmailPasswordLogin(
   });
 
   if (data.error) {
-    props.onError(`${data.error.code}: ${data.error.message}`);
+    props.onError(data.error);
     return;
   }
 
@@ -44,7 +44,7 @@ export async function handlePhonePasswordLogin(
   });
 
   if (data.error) {
-    props.onError(`${data.error.code}: ${data.error.message}`);
+    props.onError(data.error);
     return;
   }
 
@@ -64,7 +64,7 @@ export async function handleEmailOtpRequest(
   });
 
   if (data.error) {
-    props.onError(`${data.error.code}: ${data.error.message}`);
+    props.onError(data.error);
     return;
   }
 
@@ -80,7 +80,7 @@ export async function handlePhoneOtpRequest(
   });
 
   if (data.error) {
-    props.onError(`${data.error.code}: ${data.error.message}`);
+    props.onError(data.error);
     return;
   }
 
@@ -100,7 +100,7 @@ export async function handleOtpVerification(
     });
 
     if (data.error) {
-      props.onError(`${data.error.code}: ${data.error.message}`);
+      props.onError(data.error);
       return;
     }
 
@@ -115,7 +115,7 @@ export async function handleOtpVerification(
     });
 
     if (data.error) {
-      props.onError(`${data.error.code}: ${data.error.message}`);
+      props.onError(data.error);
       return;
     }
 
@@ -156,7 +156,7 @@ export async function handleOAuthSignIn(
   });
 
   if (data.error) {
-    props.onError(`${data.error.code}: ${data.error.message}`);
+    props.onError(data.error);
     return;
   }
 

@@ -43,9 +43,9 @@ export default async function RootLayout({ children }: {
         <div style={{
           display: 'flex',
           flexDirection: 'row',
-          alignItems: 'end',
+          alignItems: 'center',
           gap: '0.5rem',
-          fontSize: '1.25rem',
+          fontSize: '1rem',
         }}>
           <Image
             src="https://www.harvide.com/logo/small-dark-white.svg"
@@ -62,13 +62,11 @@ export default async function RootLayout({ children }: {
               backgroundColor: '#fff',
             }}
           />
-          <b>@harvide/starter</b>{' '}
-          <span style={{ opacity: '60%', fontSize: '0.875rem', fontWeight: '300' }}>
-            Never handle flows manually again.
-          </span>
+          <span>@harvide/starter</span>
         </div>
       }
       projectLink='https://github.com/harvide/starter'
+      chatLink='https://discord.gg/jmm8PMCn9W'
     />
   )
   const pageMap = await getPageMap()
@@ -79,7 +77,7 @@ export default async function RootLayout({ children }: {
         <Layout
           // banner={<Banner storageKey="Starter Pro">Starter Pro is out!</Banner>}
           navbar={navbar}
-          footer={<Footer>MIT {new Date().getFullYear()} © Nextra.</Footer>}
+          footer={<Footer>MIT {new Date().getFullYear()} © Harvide.</Footer>}
           editLink="Edit this page on GitHub"
           docsRepositoryBase="https://github.com/harvide/starter/blob/master/apps/docs"
           sidebar={{ defaultMenuCollapseLevel: 1 }}

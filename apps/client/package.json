@@ -19,6 +19,7 @@
     "@repo/ui": "workspace:*",
     "@tabler/icons-react": "^3.34.0",
     "@tanstack/react-table": "^8.21.3",
+    "framer-motion": "^12.19.2",
     "next": "^15.3.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",

@@ -1,0 +1,28 @@
+# Email Verification Templates
+
+This section outlines the conventions for developing and extending email verification templates in Harvide Starter.
+
+## Overview
+
+Email verification is a critical part of the authentication process, ensuring user emails are valid. Harvide Starter provides a system for creating different email template variants, which can be configured.
+
+## Structure
+
+Email verification templates are located in `packages/mail/src/transactional/emails/email-verification/variants/`. Each file within this directory represents a different variant (e.g., `basic.tsx`).
+
+Each variant should:
+
+*   Be a React component that renders HTML.
+*   Accept `EmailVerificationProps` as its props.
+*   Utilize the `EmailBase` component for consistent styling and branding.
+
+## Adding a New Email Verification Template Variant
+
+To add a new email verification template variant, follow these steps:
+
+1.  **Create a new file**: For example, `packages/mail/src/transactional/emails/email-verification/variants/my-custom-template.tsx`.
+2.  **Implement your component**: Export a React component that takes `EmailVerificationProps` and renders the email HTML. You can use an existing variant like `basic.tsx` as a starting point.
+3.  **Register the variant**: Update the relevant registration mechanism (e.g., a map or enum) that `starter.config.ts` uses to select email templates.
+4.  **Configure in `starter.config.ts`**: Set the appropriate email template configuration in your `starter.config.ts` to the name of your new variant.
+
+For more detailed instructions on adding new variants, refer to the [Adding New Variants](/adding-new-variants) documentation.

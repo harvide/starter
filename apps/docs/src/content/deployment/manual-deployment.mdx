@@ -1,0 +1,47 @@
+# Manual Deployment
+
+This guide outlines the steps for manually deploying your Harvide Starter application to a custom server or environment.
+
+## Prerequisites
+
+*   A server with Node.js (v18.x or later) and Git installed.
+*   A running PostgreSQL database.
+*   SSH access to your server.
+
+## Steps
+
+1.  **Clone your repository**:
+    ```bash
+    git clone <your-repo-url>
+    cd <your-project-directory>
+    ```
+
+2.  **Install dependencies**:
+    ```bash
+    bun install --production
+    ```
+
+3.  **Configure Environment Variables**:
+    Create a `.env` file on your server. Ensure all necessary environment variables are set, including `DATABASE_URL`, `NEXT_PUBLIC_CLIENT_URL`, `BETTER_AUTH_SECRET`, and any mail service credentials.
+
+4.  **Run Database Migrations**:
+    ```bash
+    bun run db:migrate
+    ```
+
+5.  **Build the application**:
+    ```bash
+    bun run build
+    ```
+
+6.  **Start the application**:
+    You can use a process manager like PM2 or Systemd to keep your application running.
+    ```bash
+    bun run start
+    ```
+    Or with PM2:
+    ```bash
+    pm2 start "bun run start" --name "harvide-starter-app"
+    ```
+
+Ensure your server's firewall rules allow access to your application's port (default 3000). You might also want to set up a reverse proxy with Nginx or Apache for proper domain handling and SSL.

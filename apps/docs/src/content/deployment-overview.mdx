@@ -1,0 +1,22 @@
+# Deployment Overview
+
+This section provides an overview of deploying your Harvide Starter application to various environments and platforms.
+
+Harvide Starter applications are standard Next.js applications, which means they can be deployed to any platform that supports Node.js applications, such as Vercel, Netlify, or a custom server. The application also includes a Drizzle ORM for database interactions, typically with PostgreSQL.
+
+## Key Considerations
+
+*   **Environment Variables**: Ensure all necessary environment variables (e.g., `DATABASE_URL`, `NEXT_PUBLIC_CLIENT_URL`, `BETTER_AUTH_SECRET`, mail provider keys) are correctly configured in your deployment environment.
+*   **Database Migrations**: Run database migrations on your production database before deploying your application updates.
+*   **Mail Service**: If you're using email verification, password resets, or other email-dependent features, ensure your chosen mail provider is correctly configured and its API keys are set.
+
+## Deployment Options
+
+We provide guides for the following deployment methods:
+
+*   [Manual Deployment](/deployment/manual-deployment)
+*   [Vercel](/deployment/vercel)
+*   [Docker Compose](/deployment/docker-compose)
+*   [Coolify](/deployment/coolify)
+
+Choose the method that best suits your infrastructure and workflow.

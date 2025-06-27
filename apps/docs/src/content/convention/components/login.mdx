@@ -1,0 +1,30 @@
+# Login Forms
+
+This section details the conventions for developing and extending login form components in Harvide Starter.
+
+## Overview
+
+Login forms are crucial for user authentication. Harvide Starter provides a flexible system for creating different login form variants, which can be configured via `starter.config.ts`.
+
+## Structure
+
+Login form components are located in `apps/client/src/components/auth/login-form/variants/`. Each file within this directory represents a different variant (e.g., `basic.tsx`).
+
+Each variant should:
+
+*   Be a React component.
+*   Accept `LoginFormProps` as its props.
+*   Handle various login flows (email/password, OTP, social) by utilizing the provided flow functions.
+*   **Leverage Existing Flows**: It's highly recommended to reuse the authentication flow logic provided in `apps/client/src/components/auth/login-form/flows.ts`. These functions abstract away the complex authentication interactions with the backend.
+*   **Utilize Default Props**: The `LoginFormProps` interface defines common properties like `header`, `subtitle`, `callbackUrl`, etc. Use these props to ensure consistency and configurability of your variant.
+
+## Adding a New Login Form Variant
+
+To add a new login form variant, follow these steps:
+
+1.  **Create a new file**: For example, `apps/client/src/components/auth/login-form/variants/my-custom-login.tsx`.
+2.  **Implement your component**: Export a React component that takes `LoginFormProps`. You can use an existing variant like `basic.tsx` as a starting point.
+3.  **Register the variant**: Update the `LoginFormVariants` map in `apps/client/src/components/auth/login-form/index.ts` to include your new component.
+4.  **Configure in `starter.config.ts`**: Set `ui.loginForm` in your `starter.config.ts` to the name of your new variant.
+
+For more detailed instructions on adding new variants, refer to the [Adding New Variants](/adding-new-variants) documentation.

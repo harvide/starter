@@ -10,16 +10,7 @@ export default {
         type: "separator",
         title: "Configuration"
     },
-    convention: {
-        title: "Convention",
-        type: "menu",
-        items: {
-            overview: {
-                title: "Overview",
-                href: "/docs/deployment/overview"
-            }
-        }
-    },
+    convention: "Convention",
     configuration: "Configuration",
     "ai-separator": {
         type: "separator",
@@ -30,31 +21,9 @@ export default {
         type: "separator",
         title: "Deployment"
     },
+    "deployment-overview": "Overview",
     deployment: {
-        title: "Deployment",
-        type: "menu",
-        items: {
-            overview: {
-                title: "Overview",
-                href: "/docs/deployment/overview"
-            },
-            "Manual Deployment": {
-                title: "Manual Deployment",
-                href: "/docs/deployment/manual-deployment"
-            },
-            "Vercel": {
-                title: "Vercel",
-                href: "/docs/deployment/vercel"
-            },
-            "docker-compose": {
-                title: "Docker Compose",
-                href: "/docs/deployment/docker-compose"
-            },
-            "Coolify": {
-                title: "Coolify",
-                href: "/docs/deployment/coolify"
-            }
-        }
+        title: "Deployment"
     },
     "contributing-separator": {
         type: "separator",

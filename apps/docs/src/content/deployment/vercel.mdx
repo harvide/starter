@@ -1,0 +1,95 @@
+# Deploying to Vercel
+
+Vercel is a popular platform for deploying Next.js applications. Harvide Starter, being a Turborepo, requires specific configurations for optimal deployment on Vercel.
+
+## Prerequisites
+
+*   A Vercel account.
+*   Your Harvide Starter project pushed to a Git repository (GitHub, GitLab, or Bitbucket).
+*   A **managed cloud database service** (e.g., Neon, Supabase, Render PostgreSQL) for your production environment. Avoid using local databases for Vercel deployments.
+
+## Steps
+
+1.  **Import Your Project**:
+    Go to your [Vercel Dashboard](https://vercel.com/dashboard) and click "Add New... Project".
+    Import your Git repository.
+
+2.  **Configure Project Settings**:
+    Vercel will automatically detect that it's a Next.js project.
+    *   **Root Directory**: Set this to `apps/client`. This tells Vercel to build and deploy the Next.js application located within your Turborepo.
+    *   **Build Command**: Vercel should automatically detect `next build`, but if you face issues in a monorepo setup, you might need to explicitly set it to:
+        ```bash
+        bun run build --filter=./apps/client
+        ```
+    *   **Install Command**: If using Bun, ensure it's set to `bun install`.
+    *   **Environment Variables**: Add all necessary environment variables as defined in your `.env.example` file. This includes:
+        *   `DATABASE_URL` (your production cloud database URL)
+        *   `NEXT_PUBLIC_CLIENT_URL` (set this to your Vercel deployment URL, e.g., `https://your-app.vercel.app`)
+        *   `BETTER_AUTH_SECRET` (a strong, unique secret for production)
+        *   Any mail provider keys (e.g., `RESEND_API_KEY`, `SMTP_HOST`, etc.)
+
+3.  **Deploy**:
+    Click "Deploy". Vercel will build and deploy your application.
+
+## Database Migrations on Vercel
+
+Since Vercel is serverless, running database migrations directly is not straightforward. You have a few robust options:
+
+### 1. Vercel Serverless Function (API Route) for Manual Trigger
+
+Create a dedicated API route that handles database migrations. This route should be protected and triggered manually after a successful deployment.
+
+Example `pages/api/migrate.ts` or `app/api/migrate/route.ts`:
+```typescript
+// pages/api/migrate.ts (for Pages Router) or app/api/migrate/route.ts (for App Router)
+import { NextApiRequest, NextApiResponse } from 'next';
+import { db } from '@/packages/db'; // Adjust path to your Drizzle DB instance
+import { migrate } from 'drizzle-orm/postgres-js/migrator';
+
+// For increased security, use a secret token
+const MIGRATION_SECRET = process.env.MIGRATION_SECRET;
+
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+  // Only allow POST requests
+  if (req.method !== 'POST') {
+    return res.status(405).json({ message: 'Method Not Allowed' });
+  }
+
+  // Basic authentication using a secret token
+  if (req.headers.authorization !== `Bearer ${MIGRATION_SECRET}`) {
+    return res.status(401).json({ message: 'Unauthorized' });
+  }
+
+  try {
+    // Ensure your Drizzle migrations folder is correctly configured
+    await migrate(db, { migrationsFolder: './packages/db/drizzle' }); 
+    console.log('Migrations applied successfully');
+    res.status(200).json({ message: 'Migrations applied successfully' });
+  } catch (error) {
+    console.error('Migration failed:', error);
+    res.status(500).json({ message: 'Migration failed', error: (error as Error).message });
+  }
+}
+```
+**Usage**: After deployment, send a `POST` request to `YOUR_VERCEL_APP_URL/api/migrate` (or `/api/migrate` for App Router) with an `Authorization: Bearer YOUR_MIGRATION_SECRET` header. Ensure `MIGRATION_SECRET` is set as an environment variable in Vercel.
+
+### 2. Managed Database Migration Services
+
+Many cloud database providers (like Neon, Supabase) offer built-in tools or integrations for running migrations. Consult your chosen provider's documentation for their recommended approach.
+
+### 3. Vercel Build Step (for simple cases)
+
+For very simple projects or initial setup, you *could* potentially run migrations as part of your Vercel build step. However, this is generally **not recommended for production** as it runs on every build, can cause issues with concurrent deployments, and is less controllable.
+
+Example `package.json` script:
+```json
+// package.json (in your root or apps/client)
+{
+  "scripts": {
+    "postbuild": "bun run db:migrate" // This will run after Next.js build
+  }
+}
+```
+If you choose this method, ensure your `DATABASE_URL` is available during the build phase on Vercel.
+
+Vercel provides excellent documentation for deploying Next.js applications. Refer to their official guides for the latest best practices and security considerations.

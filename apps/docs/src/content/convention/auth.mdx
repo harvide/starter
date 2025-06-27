@@ -1,0 +1,27 @@
+# Authentication Convention
+
+This section outlines the conventions and best practices for managing authentication flows within Harvide Starter.
+
+## Overview
+
+Harvide Starter provides a robust authentication system that is highly configurable via `starter.config.ts`. When extending or customizing authentication, adhere to the following principles:
+
+*   **Centralized Configuration**: All authentication-related settings should primarily be managed through the `auth` object in `starter.config.ts`.
+*   **Variant-Based UI**: Authentication UI components (login, signup) are designed to be variant-based. When creating new UI components for authentication, follow the variant pattern.
+*   **Secure by Default**: Always prioritize security. Handle sensitive data (passwords, tokens) with care and ensure proper validation and encryption.
+
+## Key Areas
+
+*   **Login and Signup Forms**: Located in `apps/client/src/components/auth/login-form/variants/` and `apps/client/src/components/auth/signup-form/variants/`. New variants should extend the base `LoginFormProps` or `SignupFormProps`.
+*   **Authentication Flows**: The core logic for handling authentication (login, signup, password reset, OTP verification) is encapsulated in dedicated flow functions.
+*   **Social Providers**: Integration with OAuth providers is managed through `starter.config.ts` and requires corresponding environment variables.
+
+## Customization
+
+When customizing authentication flows or UI, consider:
+
+*   **Extending, not Modifying**: Prefer extending existing components or flows rather than directly modifying core files, to simplify future updates.
+*   **Type Safety**: Ensure all new components and configurations are type-safe and align with existing TypeScript definitions.
+*   **Error Handling**: Implement comprehensive error handling and user feedback for all authentication steps.
+
+For detailed instructions on adding new UI variants for authentication, refer to the [Adding New Variants](/adding-new-variants) documentation.

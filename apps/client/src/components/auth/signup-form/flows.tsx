@@ -17,7 +17,6 @@ export async function handleEmailPasswordSignup(
     email,
     password,
     name: `${firstName} ${lastName}`,
-    callbackURL: '/app'
   });
 
   if (data.error) {

@@ -1,0 +1,74 @@
+# Adding New Variants
+
+Harvide Starter is designed to be highly customizable and extensible. A key part of this extensibility is the ability to add new "variants" for certain UI components (like login and signup forms) and email templates. This guide will walk you through the process of creating and integrating your own custom variants.
+
+## Understanding Variants
+
+Variants allow you to provide different implementations or designs for specific parts of the application without altering the core logic. For example, you might want a "basic" login form and a "social-only" login form.
+
+Current areas where variants are used:
+
+*   **Authentication Forms**:
+    *   Login Forms: `apps/client/src/components/auth/login-form/variants/`
+    *   Signup Forms: `apps/client/src/components/auth/signup-form/variants/`
+*   **Email Templates**:
+    *   Email Verification: `packages/mail/src/transactional/emails/email-verification/variants/`
+
+## Steps to Add a New Variant
+
+Let's assume you want to add a new login form variant called `modern.tsx`.
+
+### 1. Create the Variant File
+
+Navigate to the appropriate `variants` directory. For a login form, this would be `apps/client/src/components/auth/login-form/variants/`.
+
+Create your new variant file (e.g., `modern.tsx`) and implement your React component within it. Ensure it adheres to the expected props and structure of other variants in that directory.
+
+```tsx
+// apps/client/src/components/auth/login-form/variants/modern.tsx
+import React from 'react';
+import { LoginFormProps } from '../types'; // Adjust path as needed
+
+export function ModernLoginForm({ header, subtitle }: LoginFormProps) {
+  return (
+    <div>
+      <h2>{header}</h2>
+      <p>{subtitle}</p>
+      {/* Your modern login form UI goes here */}
+      <p>This is a modern login form!</p>
+    </div>
+  );
+}
+```
+
+### 2. Register the New Variant
+
+For UI components, you typically need to register your new variant so that the application can use it based on the `starter.config.ts` setting.
+
+Locate the `variants` registration file. For login forms, this might be within `apps/client/src/components/auth/login-form/index.ts` (or a similar file that aggregates variants).
+
+You'll need to import your new variant and add it to a map or object that the `ui.loginForm` configuration uses.
+
+```typescript
+// Example: apps/client/src/components/auth/login-form/index.ts
+import { BasicLoginForm } from './variants/basic';
+import { ModernLoginForm } from './variants/modern'; // Your new variant
+
+export const LoginFormVariants = {
+  basic: BasicLoginForm,
+  modern: ModernLoginForm, // Register your new variant here
+  // Add other variants as needed
+};
+
+export type LoginFormVariant = keyof typeof LoginFormVariants;
+```
+
+For email templates, the registration might be slightly different, possibly directly in the mail service configuration.
+
+### 3. Add Documentation for the New Variant
+
+Finally, add a new section or page in the `apps/docs` directory to describe your new variant. Explain its purpose, how to use it, and any specific configurations it might require. This ensures other developers can easily discover and utilize your contribution.
+
+You might add a new `.mdx` file like `apps/docs/src/content/login-forms/modern-variant.mdx` and link it from a main "Authentication Forms" documentation page.
+
+By following these steps, you can successfully contribute new variants to Harvide Starter, making it even more versatile.

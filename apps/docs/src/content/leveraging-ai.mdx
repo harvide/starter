@@ -1,0 +1,38 @@
+# Leveraging AI for Development
+
+Harvide Starter is designed to work seamlessly with various AI code assistants and Large Language Models (LLMs) to enhance your development workflow. We provide specific configuration files to help your AI tools understand the project structure, conventions, and key files, leading to more accurate and helpful suggestions.
+
+## How Harvide Starter Supports AI
+
+During the project creation process using `create-harvide-starter`, you have the option to select your preferred LLM/editor. Based on your selection, the CLI automatically copies specific configuration files to your new project. These files typically contain:
+
+*   **Project Context**: Information about the core configuration file (`starter.config.ts`), its purpose, and key objects within it (e.g., `ui`, `auth`, `admin`, `branding`, `preferences`).
+*   **Coding Conventions**: Reminders about specific coding standards and best practices relevant to the project.
+*   **Important Areas**: Pointers to critical parts of the codebase that your AI should be aware of.
+
+This helps your AI tool "understand" the project faster and provide more relevant assistance, whether it's generating new code, refactoring existing code, or debugging.
+
+## Supported AI Tools
+
+Currently, Harvide Starter provides specific rule configurations for the following AI tools:
+
+*   **Claude Code** (e.g., Anthropic Claude models via various interfaces)
+    *   Configuration file: `.claude/CLAUDE.md`
+*   **Cursor** (e.g., Cursor IDE, OpenAI models)
+    *   Configuration file: `.cursor/rules/ultracite.mdc`
+*   **Windsurf** (e.g., Windsurf IDE)
+    *   Configuration file: `.windsurf/rules/ultracite.md`
+*   **GitHub Copilot** (VSCode extension)
+    *   Configuration file: `.github/copilot-instructions.md`
+*   **Zed** (e.g., Zed editor)
+    *   Configuration file: `.rules`
+*   **OpenAI Codex** (e.g., used by various tools and interfaces)
+    *   Configuration file: `AGENTS.md`
+
+## How to Get Started with AI Assistance
+
+1.  **Select Your LLM during Project Creation**: When running `bunx create-harvide-starter`, choose your primary LLM/editor from the "Which editor rules do you want to enable?" prompt.
+2.  **Integrate Your AI Tool**: Ensure your chosen AI tool is correctly set up in your development environment (e.g., VS Code extension for Copilot, Cursor IDE installed, etc.).
+3.  **Start Coding**: Your AI tool should now have better context and provide more intelligent suggestions tailored to the Harvide Starter project.
+
+If your preferred AI tool is not listed, you can still use it, but you might need to manually configure it or provide context about `starter.config.ts` and the project structure. Consider contributing a new LLM rule configuration!

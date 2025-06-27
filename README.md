@@ -41,8 +41,8 @@ Ready to kickstart your project?
 For detailed installation steps and customization options, refer to our official documentation:
 
 *   **[Documentation](https://starter.harvide.com/docs)**
-*   **[Getting Started Guide](/docs/getting-started)**
-*   **[Configuration Reference](/docs/configuration)**
+*   **[Getting Started Guide](https://starter.harvide.com/docs/getting-started)**
+*   **[Configuration Reference](https://starter.harvide.com/docs/configuration)**
 
 ## Configuration
 
@@ -54,10 +54,24 @@ Harvide Starter is designed for extensive customization primarily through a sing
 *   **Admin Panel Settings**: Configure impersonation, user banning, and dashboard metrics.
 *   **Email Service**: Define email provider and sender details.
 
-For a complete overview of all configurable options, please see the [Configuration Reference](/docs/configuration) in our documentation.
+For a complete overview of all configurable options, please see the [Configuration Reference](https://starter.harvide.com/docs/configuration) in our documentation.
+
+## New Variants
+
+Harvide Starter is designed to be highly extensible, allowing you to easily add new variants for UI components (like login/signup forms) and email templates. This involves:
+1.  Creating a new variant file (e.g., `apps/client/src/components/auth/login-form/variants/my-custom-variant.tsx`).
+2.  Registering the new variant in the appropriate registry or configuration.
+3.  Adding documentation for your new variant in the `apps/docs` directory.
+
+For more detailed instructions, please refer to the [Adding New Variants](https://starter.harvide.com/docs/adding-new-variants) section in our documentation.
+
+## Contributing
+
+We welcome contributions! Whether you're fixing a bug, implementing a new feature, or adding a new variant, your input is valuable. Please see our [Contributing Guide](CONTRIBUTING.md) for more details.
 
 ## License
 
-Harvide Starter is available under the MIT license, making it free for both personal and commercial use. For additional features, enhanced support, and exclusive components, consider upgrading to [Starter Pro](https://starter.harvide.com/pro).
+Harvide Starter is available under the MIT license, making it free for both personal and commercial use. 
+<!-- For additional features, enhanced support, and exclusive components, consider upgrading to [Starter Pro](https://starter.harvide.com/pro). -->
 
 ## Contributors

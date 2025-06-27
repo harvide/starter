@@ -99,7 +99,7 @@ export default {
              * Automatically sign in user after email verification.
              * @default false
              */
-            autoSignIn: false,
+            autoSignIn: true,
 
             /**
              * Disable new user registration via email.

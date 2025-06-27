@@ -1,5 +1,7 @@
 # Starter
 
+![Hero](static/hero.png)
+
 **Never handle authentication flows, user management, or email notifications manually again.**
 
 Starter is a production-ready, highly customizable boilerplate for your next application. It provides a solid foundation with pre-configured authentication, UI components, and best practices baked in, allowing you to focus on what matters most: your product.

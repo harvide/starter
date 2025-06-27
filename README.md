@@ -1,46 +1,55 @@
 # Starter
 
-Starter is a simple and idiomatic starter kit for building SaaS applications.
+**Never handle authentication flows, user management, or email notifications manually again.**
 
-You'll never have to worry about boring stuff like authorization, authentication, database, mailing or other common features. Starter provides you with a solid foundation to build your application on top of.
+Starter is a production-ready, highly customizable boilerplate for your next application. It provides a solid foundation with pre-configured authentication, UI components, and best practices baked in, allowing you to focus on what matters most: your product.
 
-> Starter is a free version on MIT license, which means you can use it for personal and commercial projects without any restrictions.
-> There is also a paid version with additional features, better support, early access to new features and a lot of ready to use components. [Starter Pro](https://starter.harvide.com/pro) is available for purchase on our website.
+## Key Features
 
-# Features
+-   **Comprehensive Authentication**: Supports email/password, phone, magic links, and social logins (Google, GitHub, etc.). Includes advanced features like multi-tenancy, multi-session management, 2FA, and OTP.
+-   **Flexible Mailing System**: Send verification, password reset, and other notifications with customizable email templates and support for various providers.
+-   **Rich User Experience**: Comes with reactive, beautiful UI components, smooth user flows, animations, and responsive design out of the box.
+-   **Robust Data Layer**: Utilizes Drizzle ORM for flexible database access, supporting multiple databases and custom schema definitions.
+-   **Powerful Admin Panel**: A fully functional admin interface to manage users, roles, and permissions, easily extensible to fit your needs.
+-   **Modern Tech Stack**: Built with Next.js, tRPC for API calls, Tailwind CSS with Shadcn UI components, and Zod for schema validation.
+-   **CLI for Quick Setup**: Get started in minutes with `npx create-harvide-starter`, which guides you through project setup and feature selection.
 
-- **Authentication** - Starter comes with a fully functional authentication system that supports email/password, phone authentication, magic links, and social logins (Google, GitHub, etc.). You can easily add or remove authentication methods. This includes:
-  - **Multi-tenacy** - Turnable organizations system that allows you to create and manage organizations, invite users, and assign roles. You can easily customize the organization model and add your own features.
-  - **Multi-session** - Support for multiple sessions per user. You can easily manage user sessions and revoke them if needed.
-  - **2FA** - Support for two-factor authentication using TOTP (Time-based One-Time Password) or WebAuthn. You can easily enable or disable 2FA for your users.
-  - **OTP** - Support for one-time passwords (OTP) for email and phone authentication. You can easily customize the OTP generation and validation logic.
-  - **Magic Links** - Support for magic links that allow users to log in without a password. You can easily customize the magic link generation and validation logic.
-  - **Social Logins** - Support for social logins using OAuth providers like Google, GitHub, Facebook, etc. You can easily add or remove social login providers.
-  - And multiple ready to use Login and Signup components adapted to your flow and design system!
-- **Mailing** - Starter includes a mailing system that allows you to send emails for verification, password reset, and other notifications. You can customize the email templates and use any email provider.
-- **User Experience** - Customizable user experience with reactive component out of box, beatiful user flows, animations and responsive design.
-- **Database** - Starter uses Drizzle ORM for database access. It supports multiple databases and allows you to easily switch between them. You can also customize the database schema and add your own models.
-- **API** - Starter provides a fully functional API that allows you to access your data and perform CRUD operations. You can easily extend the API with your own endpoints and logic.
-- **Admin Panel** - Starter includes a fully functional admin panel that allows you to manage your users, roles, and permissions. You can easily customize the admin panel and add your own features.
-- **Localization** - Starter supports multiple languages out of the box. You can easily add new languages and translations.
+## Getting Started
 
-# Configuration
+Ready to kickstart your project?
 
-Starter is meant to be very customizable. Basic stack is:
-- **Trpc** used for API and RPC calls.
-- **Next.js** used for the frontend and server-side rendering.
-- **Drizzle** used for database access.
-  * You can customize the database provider and use any database supported by Drizzle.
-- **Tailwind CSS** used for styling with **Shadcn UI** components.
-- **Zod** used for schema validation.
-- **Better Auth** used for authentication and authorization.
-  * Starter is designed to automatically detect additional plugins you use with better auth. Seamlessly integrate phone authentication, magic links, social logins, and more.
+1.  **Create a new project**:
+    ```bash
+    npx create-harvide-starter my-app
+    ```
+    Follow the prompts to configure your application, select features, and choose authentication methods.
 
-## Customization
-Starter is meant to be one-file customizable. You can change the configuration in the `packages/config/src/config.ts` file. Here you can:
-- Change your app's entire branding - name, logo, descriptions. It's adjusted for SEO and social media sharing.
-- Change auth behavior - you can enable or disable email verification, phone authentication, magic links, and more.
+2.  **Navigate to your project and start the development server**:
+    ```bash
+    cd my-app
+    npm run dev
+    ```
 
+For detailed installation steps and customization options, refer to our official documentation:
 
-# Contributors
+*   **[Documentation](https://starter.harvide.com/docs)**
+*   **[Getting Started Guide](/docs/getting-started)**
+*   **[Configuration Reference](/docs/configuration)**
 
+## Configuration
+
+Harvide Starter is designed for extensive customization primarily through a single configuration file: `starter.config.ts`, located at the root of your project. This file allows you to define:
+
+*   **Branding**: Application name, description, and logo for consistent identity across UI and emails.
+*   **Authentication Behavior**: Enable/disable various authentication methods, set password policies, and manage account linking.
+*   **UI Variants**: Choose different login and signup form implementations.
+*   **Admin Panel Settings**: Configure impersonation, user banning, and dashboard metrics.
+*   **Email Service**: Define email provider and sender details.
+
+For a complete overview of all configurable options, please see the [Configuration Reference](/docs/configuration) in our documentation.
+
+## License
+
+Harvide Starter is available under the MIT license, making it free for both personal and commercial use. For additional features, enhanced support, and exclusive components, consider upgrading to [Starter Pro](https://starter.harvide.com/pro).
+
+## Contributors

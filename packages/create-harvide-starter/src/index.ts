@@ -93,8 +93,7 @@ async function main() {
         message: 'Select features to include',
         options: [
           { value: 'web' as const, label: 'Web Application', hint: 'Next.js' },
-          { value: 'docs' as const, label: 'Documentation Site', hint: 'Nextra' },
-          { value: 'admin' as const, label: 'Admin Panel', hint: 'Next.js' },
+          { value: 'admin' as const, label: 'Admin Panel', hint: 'Enable admin panel' },
         ],
         required: true,
       }),
@@ -177,15 +176,26 @@ async function main() {
       throw new Error('Failed to create project');
     }
 
-    outro(`
+    let nextSteps = `
 ✨ ${chalk.green('Project created successfully!')}
 
 ${chalk.blue('Next steps:')}
   ${chalk.cyan(`cd ${result.projectPath}`)}
   ${chalk.cyan(`${result.packageManager} dev`)}
+`;
 
+    if (projectOptions.features.includes('admin')) {
+      nextSteps += `
+${chalk.yellow('Important: Configure your Admin Panel!')}
+  Head to ${chalk.cyan('http://localhost:3000/admin/signin')} immediately to create your admin user before someone else does!
+`;
+    }
+
+    nextSteps += `
 To learn more, see the docs: ${chalk.cyan('https://starter.harvide.com')}
-`);
+`;
+
+    outro(nextSteps);
   } catch (error) {
     outro(chalk.red(`Failed to create project: ${(error as Error).message}`));
     process.exit(1);

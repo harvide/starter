@@ -1,14 +1,59 @@
 import fs from 'fs-extra';
 import path from 'path';
 import { execa } from 'execa';
-import type { CreateAppOptions } from './types.js';
+import type { CreateAppOptions, LLMType } from './types.js';
 import { ensurePackageManager, getPackageManagerVersion, installDependencies } from './utils.js';
 import { createSpinner } from './spinner.js';
 import { updateAuthConfig } from './auth-config.js';
 import { generateConfig } from './config.js';
 
+async function copyLLMRules(projectPath: string, templatePath: string, llm: LLMType) {
+  const llmRuleMap = {
+    claude: [
+      { source: '.claude/CLAUDE.md', target: '.claude/CLAUDE.md' },
+    ],
+    cursor: [
+      { source: '.cursor/rules/ultracite.mdc', target: '.cursor/rules/ultracite.mdc' },
+    ],
+    windsurf: [
+      { source: '.windsurf/rules/ultracite.md', target: '.windsurf/rules/ultracite.md' },
+    ],
+    copilot: [
+      { source: '.github/copilot-instructions.md', target: '.github/copilot-instructions.md' },
+    ],
+    zed: [
+      { source: '.rules', target: '.rules' },
+    ],
+    codex: [
+      { source: 'AGENTS.md', target: 'AGENTS.md' },
+    ],
+    none: []
+  };
+
+  const rulesToCopy = llmRuleMap[llm];
+
+  if (rulesToCopy.length > 0) {
+    const spin = createSpinner(`Copying ${llm} LLM rules`);
+    try {
+      for (const rule of rulesToCopy) {
+        const sourcePath = path.join(templatePath, rule.source);
+        const targetPath = path.join(projectPath, rule.target);
+        await fs.ensureDir(path.dirname(targetPath)); // Ensure target directory exists
+        await fs.copy(sourcePath, targetPath);
+      }
+      spin.success(`${llm} LLM rules copied`);
+    } catch (error) {
+      spin.error(`Failed to copy ${llm} LLM rules`);
+      if (error instanceof Error) {
+        throw new Error(`Failed to copy LLM rules: ${error.message}`);
+      }
+      throw error;
+    }
+  }
+}
+
 export async function createApp(options: CreateAppOptions) {
-  const { projectPath, appName, description, features, auth, packageManager } = options;
+  const { projectPath, appName, description, features, auth, packageManager, llm } = options;
   const templatePath = path.resolve(
     path.dirname(new URL(import.meta.url).pathname),
     '../../..'
@@ -42,11 +87,11 @@ export async function createApp(options: CreateAppOptions) {
     for (const file of filesToCopy) {
       const sourcePath = path.join(templatePath, file);
       const targetPath = path.join(projectPath, file);
-      
+
       if (!await fs.pathExists(sourcePath)) {
         throw new Error(`Source file not found: ${sourcePath}`);
       }
-      
+
       await fs.copy(sourcePath, targetPath, { filter: filterFunc });
     }
     spin.success('Base files copied');
@@ -58,15 +103,15 @@ export async function createApp(options: CreateAppOptions) {
     throw error;
   }
 
-    // Generate and write the starter config
-    const configContent = await generateConfig(options);
-    await fs.writeFile(path.join(projectPath, 'starter.config.ts'), configContent);
+  // Generate and write the starter config
+  const configContent = await generateConfig(options);
+  await fs.writeFile(path.join(projectPath, 'starter.config.ts'), configContent);
 
   spin = createSpinner('Setting up selected features');
 
   if (features.includes('web')) {
     await fs.copy(
-      path.join(templatePath, 'apps/client'), 
+      path.join(templatePath, 'apps/client'),
       path.join(projectPath, 'apps/client'),
       { filter: filterFunc }
     );
@@ -74,12 +119,17 @@ export async function createApp(options: CreateAppOptions) {
 
   if (features.includes('docs')) {
     await fs.copy(
-      path.join(templatePath, 'apps/docs'), 
+      path.join(templatePath, 'apps/docs'),
       path.join(projectPath, 'apps/docs'),
       { filter: filterFunc }
     );
   }
-  
+
+  // Copy LLM specific rules
+  if (llm && llm !== 'none') {
+    await copyLLMRules(projectPath, templatePath, llm);
+  }
+
   spin.success('Features set up successfully');
 
   if (auth?.includes('social') && options.socialProviders?.length) {
@@ -92,7 +142,7 @@ export async function createApp(options: CreateAppOptions) {
   spin = createSpinner('Configuring project');
   try {
     const pkgPath = path.join(projectPath, 'package.json');
-    
+
     const pkg = await fs.readJson(pkgPath);
     if (!pkg) {
       throw new Error('Failed to read package.json - file is empty or invalid');
@@ -123,7 +173,7 @@ export async function createApp(options: CreateAppOptions) {
     // Update packageManager field
     const version = await getPackageManagerVersion(packageManager);
     pkg.packageManager = `${packageManager}@${version}`;
-    
+
     await fs.writeJson(pkgPath, pkg, { spaces: 2 });
     spin.success('Project configured');
   } catch (error) {

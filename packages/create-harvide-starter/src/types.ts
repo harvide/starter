@@ -3,7 +3,7 @@ export type PackageManager = 'npm' | 'pnpm' | 'yarn' | 'bun';
 export type Feature = 'web' | 'docs' | 'admin';
 export type AuthMethod = 'email' | 'phone' | 'social';
 
-export type SocialProvider = 
+export type SocialProvider =
   | 'facebook'
   | 'apple'
   | 'discord'
@@ -11,6 +11,8 @@ export type SocialProvider =
   | 'google'
   | 'twitter'
   | 'linkedin';
+
+export type LLMType = 'claude' | 'cursor' | 'windsurf' | 'copilot' | 'zed' | 'codex' | 'none';
 
 export interface CliAnswers {
   isStarter: StarterType;
@@ -21,6 +23,7 @@ export interface CliAnswers {
   features: Feature[];
   auth: AuthMethod[] | null;
   socialProviders?: SocialProvider[];
+  llm?: LLMType;
 }
 
 export interface CreateAppOptions {
@@ -31,6 +34,7 @@ export interface CreateAppOptions {
   features: Feature[];
   auth?: AuthMethod[];
   socialProviders?: SocialProvider[];
+  llm?: LLMType;
 }
 
 export interface SocialProviderConfig {

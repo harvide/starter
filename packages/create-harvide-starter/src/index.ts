@@ -22,19 +22,19 @@ async function main() {
   intro(chalk.bold('Create Harvide Starter Project'));
 
   const [directory] = program.args;
-  
+
   // Determine package manager from flags
   const packageManagerFlag = program.opts();
-  const selectedPackageManager = 
+  const selectedPackageManager =
     packageManagerFlag['useNpm'] ? 'npm' :
-    packageManagerFlag['usePnpm'] ? 'pnpm' :
-    packageManagerFlag['useYarn'] ? 'yarn' :
-    packageManagerFlag['useBun'] ? 'bun' :
-    undefined;
+      packageManagerFlag['usePnpm'] ? 'pnpm' :
+        packageManagerFlag['useYarn'] ? 'yarn' :
+          packageManagerFlag['useBun'] ? 'bun' :
+            undefined;
 
   const answers = await group({
-      isStarter: () =>
-        select({
+    isStarter: () =>
+      select({
         message: 'Would you like to use Starter Pro?',
         options: [
           { value: 'basic', label: 'No, use basic starter' },
@@ -42,7 +42,7 @@ async function main() {
         ],
         initialValue: 'basic',
       }),
-    
+
     projectPath: () =>
       text({
         message: 'Where would you like to create your project?',
@@ -103,14 +103,14 @@ async function main() {
       const features = (results as any).features;
       return features?.includes('web')
         ? multiselect({
-            message: 'Select authentication methods',
-            options: [
-              { value: 'email' as const, label: 'Email/Password', hint: 'recommended' },
-              { value: 'phone' as const, label: 'Phone Number' },
-              { value: 'social' as const, label: 'Social Providers', hint: 'Google, GitHub, etc.' },
-            ],
-            required: true,
-          })
+          message: 'Select authentication methods',
+          options: [
+            { value: 'email' as const, label: 'Email/Password', hint: 'recommended' },
+            { value: 'phone' as const, label: 'Phone Number' },
+            { value: 'social' as const, label: 'Social Providers', hint: 'Google, GitHub, etc.' },
+          ],
+          required: true,
+        })
         : null;
     },
 
@@ -118,20 +118,35 @@ async function main() {
       const auth = (results as any).auth;
       return auth?.includes('social')
         ? multiselect({
-            message: 'Select social providers',
-            options: [
-              { value: 'google' as const, label: 'Google' },
-              { value: 'github' as const, label: 'GitHub' },
-              { value: 'facebook' as const, label: 'Facebook' },
-              { value: 'apple' as const, label: 'Apple' },
-              { value: 'twitter' as const, label: 'Twitter' },
-              { value: 'discord' as const, label: 'Discord' },
-              { value: 'linkedin' as const, label: 'LinkedIn' },
-            ],
-            required: true,
-          })
+          message: 'Select social providers',
+          options: [
+            { value: 'google' as const, label: 'Google' },
+            { value: 'github' as const, label: 'GitHub' },
+            { value: 'facebook' as const, label: 'Facebook' },
+            { value: 'apple' as const, label: 'Apple' },
+            { value: 'twitter' as const, label: 'Twitter' },
+            { value: 'discord' as const, label: 'Discord' },
+            { value: 'linkedin' as const, label: 'LinkedIn' },
+          ],
+          required: true,
+        })
         : null;
     },
+
+    llm: () =>
+      select({
+        message: 'Which editor rules do you want to enable (optional)?',
+        options: [
+          { value: 'claude', label: 'Claude Code' },
+          { value: 'cursor', label: 'Cursor' },
+          { value: 'windsurf', label: 'Windsurf' },
+          { value: 'copilot', label: 'GitHub Copilot (VSCode)' },
+          { value: 'zed', label: 'Zed' },
+          { value: 'codex', label: 'OpenAI Codex' },
+          { value: 'none', label: 'None / I will configure manually' },
+        ],
+        initialValue: 'none',
+      }),
   } as const);
 
   if (isCancel(answers)) {
@@ -153,14 +168,15 @@ async function main() {
       features: (answers as any).features,
       auth: (answers as any).auth,
       socialProviders: (answers as any).socialProviders,
+      llm: (answers as any).llm,
     };
 
     const result = await createApp(projectOptions);
-    
+
     if (!result) {
       throw new Error('Failed to create project');
     }
-    
+
     outro(`
 ✨ ${chalk.green('Project created successfully!')}
 

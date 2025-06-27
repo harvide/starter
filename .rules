@@ -275,3 +275,11 @@ alwaysApply: true
 - Use the namespace keyword instead of the module keyword to declare TypeScript namespaces.
 - Make sure to use the digits argument with Number#toFixed().
 - Make sure to use the "use strict" directive in script files.
+- **Understand the core of the project**: The main configuration for the Harvide Starter project is `starter.config.ts`. Always refer to this file for any configuration-related questions or changes.
+- **UI Configuration**: The `ui` object in `starter.config.ts` controls the UI components. It has `loginForm` and `signupForm` properties.
+- **Email Configuration**: The `email` object in `starter.config.ts` handles email-related settings, including the provider and sender details.
+- **Authentication**: The `auth` object is the most critical part of the configuration. It's divided into `phone`, `emailAndPassword`, `socialProviders`, and `account`.
+- **Admin Panel**: The `admin` object configures the admin panel, including impersonation, banning, and dashboard settings.
+- **Branding**: The `branding` object is for customizing the application's name, description, and logo.
+- **Preferences**: The `preferences` object, specifically `showToasts`, controls the display of notifications.
+- **CLI**: The project is created using `npx create-harvide-starter`, which guides the user through the initial setup.

@@ -14,13 +14,13 @@
 
 ## Key Features
 
--   **Comprehensive Authentication**: Supports email/password, phone, magic links, and social logins (Google, GitHub, etc.). Includes advanced features like multi-tenancy, multi-session management, 2FA, and OTP.
--   **Flexible Mailing System**: Send verification, password reset, and other notifications with customizable email templates and support for various providers.
--   **Rich User Experience**: Comes with reactive, beautiful UI components, smooth user flows, animations, and responsive design out of the box.
--   **Robust Data Layer**: Utilizes Drizzle ORM for flexible database access, supporting multiple databases and custom schema definitions.
--   **Powerful Admin Panel**: A fully functional admin interface to manage users, roles, and permissions, easily extensible to fit your needs.
--   **Modern Tech Stack**: Built with Next.js, tRPC for API calls, Tailwind CSS with Shadcn UI components, and Zod for schema validation.
--   **CLI for Quick Setup**: Get started in minutes with `npx create-harvide-starter`, which guides you through project setup and feature selection.
+-   **Authentication**: Robust, customizable user authentication.
+-   **Mailing**: Integrated email notifications and templates.
+-   **User Experience**: Beautiful, responsive UI components.
+-   **Data Management**: Flexible database with Drizzle ORM.
+-   **Admin Panel**: Powerful user management.
+-   **Modern Stack**: Next.js, tRPC, Tailwind CSS.
+-   **CLI Tooling**: Fast project setup and feature selection.
 
 ## Getting Started
 

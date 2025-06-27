@@ -1,10 +1,16 @@
-# Starter
+<br />
+<p align="center">
+    <a href="https://starter.harvide.com" target="_blank"><img src="./static/images/harvide-starter-banner.png" alt="Harvide Starter banner, with logo and text." width="800"></a>
+    <br />
+    <br />
+    <b>Starter is a production-ready, highly customizable boilerplate for your next application. It provides a solid foundation with pre-configured authentication, UI components, and best practices baked in, allowing you to focus on what matters most: your product.</b>
+    <br />
+    <br />
+</p>
 
-![Hero](static/hero.png)
-
-**Never handle authentication flows, user management, or email notifications manually again.**
-
-Starter is a production-ready, highly customizable boilerplate for your next application. It provides a solid foundation with pre-configured authentication, UI components, and best practices baked in, allowing you to focus on what matters most: your product.
+[![Documentation](https://img.shields.io/badge/Documentation-starter.harvide.com/docs-blue?style=flat-square)](https://starter.harvide.com/docs)
+[![Harvide Agency](https://img.shields.io/badge/Harvide_Agency-harvide.com-purple?style=flat-square)](https://harvide.com)
+[![Discord](https://img.shields.io/discord/123456789012345678?label=Discord&style=flat-square)](https://discord.gg/jmm8PMCn9W)
 
 ## Key Features
 

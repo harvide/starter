@@ -95,6 +95,15 @@ export async function createApp(options: CreateAppOptions) {
 
       await fs.copy(sourcePath, targetPath, { filter: filterFunc });
     }
+
+    // Rename gitignore to .gitignore if it exists
+    const gitignorePath = path.join(projectPath, 'gitignore');
+    const dotGitignorePath = path.join(projectPath, '.gitignore');
+
+    if (await fs.pathExists(gitignorePath)) {
+      await fs.rename(gitignorePath, dotGitignorePath);
+    }
+
     spin.success('Base files copied');
   } catch (error) {
     spin.error('Failed to copy base files');

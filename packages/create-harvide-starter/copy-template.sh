@@ -12,7 +12,6 @@ mkdir -p "$DEST_ROOT"
 # List of files/directories to copy, relative to SOURCE_DIR
 # For directories, ensure a trailing slash in the FILES_TO_COPY array for SOURCE_PATH
 declare -a FILES_TO_COPY=(
-    ".gitignore"
     "turbo.json"
     "bun.lock"
     "package.json"
@@ -33,7 +32,17 @@ declare -a FILES_TO_COPY=(
     "apps/client/"
 )
 
-# Copy files/directories
+# Explicitly copy .gitignore as gitignore to avoid npm stripping
+GITIGNORE_SOURCE="${SOURCE_DIR}.gitignore"
+GITIGNORE_DEST="${DEST_ROOT}/gitignore"
+if [ -e "$GITIGNORE_SOURCE" ]; then
+    echo "Copying .gitignore as gitignore"
+    cp "$GITIGNORE_SOURCE" "$GITIGNORE_DEST"
+else
+    echo "Warning: .gitignore not found. Skipping."
+fi
+
+# Copy remaining files/directories
 for file in "${FILES_TO_COPY[@]}"; do
     SOURCE_PATH="${SOURCE_DIR}${file}"
     DEST_PATH="${DEST_ROOT}/${file}" # DEST_PATH should not have trailing slash here
@@ -48,12 +57,9 @@ for file in "${FILES_TO_COPY[@]}"; do
         ".github/")
             EXCLUDE_ARGS+=" --exclude='workflows/publish.yml'"
             ;;
-        # Add more cases for other directories with specific exclusions if needed
     esac
 
     if [ -e "$SOURCE_PATH" ]; then
-        # If SOURCE_PATH ends with a slash, rsync copies contents.
-        # If SOURCE_PATH does not end with a slash, rsync copies the directory itself.
         rsync -a --exclude 'node_modules' --exclude '.next' $EXCLUDE_ARGS "$SOURCE_PATH" "$DEST_PATH"
     else
         echo "Warning: $SOURCE_PATH does not exist. Skipping."

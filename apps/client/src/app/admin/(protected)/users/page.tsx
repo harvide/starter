@@ -1,4 +1,3 @@
-import React from 'react';
 import { UserTable } from "@/components/admin/dashboard/users/user-table";
 import { AppSidebar } from '@/components/admin/app-sidebar';
 import { SiteHeader } from '@/components/admin/site-header';

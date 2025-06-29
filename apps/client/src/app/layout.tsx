@@ -39,18 +39,7 @@ export const metadata: Metadata = {
     ] : [],
     locale: "en_US",
     type: "website",
-  },
-  icons: {
-    icon: config.seo.favicons.default,
-    shortcut: config.seo.favicons.default,
-    apple: config.seo.favicons.appleTouchIcon,
-    other: config.seo.favicons.svg ? {
-      rel: config.seo.favicons.svg.rel || "icon",
-      url: config.seo.favicons.svg.url,
-      color: config.seo.favicons.svg.color
-    } : undefined,
-  },
-  manifest: `${config.branding.url}/site.webmanifest`,
+  }
 };
 
 

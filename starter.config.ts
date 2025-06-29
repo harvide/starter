@@ -484,20 +484,6 @@ export default {
             baseUrl: "https://starter.harvide.com",
         },
         /**
-         * Favicon configuration
-         * This section allows you to configure favicons for your application.
-         * Favicons are used in browser tabs, bookmarks, and other places.
-         */
-        favicons: {
-            default: "/favicon.ico",
-            appleTouchIcon: "/apple-icon.png",
-            svg: {
-                rel: "icon",
-                url: "/favicon.svg",
-                color: "#000000" // Default color for the SVG favicon
-            }
-        },
-        /**
          * Open Graph configuration
          * This section allows you to configure Open Graph metadata for social media sharing.
          * It is used to enhance link previews on platforms like Facebook, Twitter, etc.

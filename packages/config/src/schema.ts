@@ -195,22 +195,9 @@ export interface BaseConfig {
       baseUrl?: string;
     };
 
-    /** Favicon configuration */
-    favicons?: {
-      /** Path to the default favicon */
-      default?: string;
-      /** Path to the Apple Touch Icon */
-      appleTouchIcon?: string;
-      /** Path to the SVG favicon */
-      svg?: {
-        /** URL to the SVG favicon */
-        url: string;
-        /** Color for the SVG favicon */
-        color?: string;
-        /** Rel attribute for the SVG favicon */
-        rel?: string;
-      };
-    };
+    /** Favicon configuration 
+     * Use https://realfavicongenerator.net/ to generate favicons
+    */
 
     /** OpenGraph configuration */
     openGraph?: {

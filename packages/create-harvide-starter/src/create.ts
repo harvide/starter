@@ -85,6 +85,14 @@ export async function createApp(options: CreateAppOptions) {
   };
 
   try {
+    // Rename gitignore to .gitignore if it exists
+    const gitignorePath = path.join(projectPath, 'gitignore');
+    const dotGitignorePath = path.join(projectPath, '.gitignore');
+
+    if (await fs.pathExists(gitignorePath)) {
+      await fs.rename(gitignorePath, dotGitignorePath);
+    }
+
     for (const file of filesToCopy) {
       const sourcePath = path.join(templatePath, file);
       const targetPath = path.join(projectPath, file);
@@ -94,14 +102,6 @@ export async function createApp(options: CreateAppOptions) {
       }
 
       await fs.copy(sourcePath, targetPath, { filter: filterFunc });
-    }
-
-    // Rename gitignore to .gitignore if it exists
-    const gitignorePath = path.join(projectPath, 'gitignore');
-    const dotGitignorePath = path.join(projectPath, '.gitignore');
-
-    if (await fs.pathExists(gitignorePath)) {
-      await fs.rename(gitignorePath, dotGitignorePath);
     }
 
     spin.success('Base files copied');

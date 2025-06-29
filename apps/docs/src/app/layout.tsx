@@ -27,8 +27,8 @@ export const metadata = {
     creator: '@harvide',
     images: [
       {
-        url: 'https://www.harvide.com/logo/small-dark-white.svg',
-        alt: 'Harvide Logo',
+        url: 'https://starter.harvide.com/images/harvide-starter-banner.png',
+        alt: 'Harvide Starter Banner',
       },
     ],
   }

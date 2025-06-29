@@ -1,187 +1,120 @@
 import { Button } from "@repo/ui/components/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@repo/ui/components/card";
+import {
+    Tooltip,
+    TooltipContent,
+    TooltipTrigger,
+} from "@repo/ui/components/tooltip";
 import Image from "next/image";
-import Link from "next/link";
 import '@repo/ui/globals.css';
-import { CheckCircle, Feather, GitMerge, BookOpen, Shield, Zap } from 'lucide-react';
-
-const FeatureCard = ({ icon, title, description }: { icon: React.ReactNode; title: string; description: string; }) => (
-    <Card className="text-left">
-        <CardHeader className="flex flex-row items-center gap-4">
-            {icon}
-            <CardTitle className="text-lg font-semibold">{title}</CardTitle>
-        </CardHeader>
-        <CardContent>
-            <p className="text-muted-foreground">{description}</p>
-        </CardContent>
-    </Card>
-);
 
 export default function IndexPage() {
     return (
-        <div className="min-h-screen flex flex-col bg-background text-foreground">
-            {/* Header */}
-            <header className="container mx-auto px-4 py-4 flex justify-between items-center">
-                <div className="flex items-center gap-2">
+        <div className="min-h-screen flex flex-col">
+            <main className="flex-1 container mx-auto px-4 py-4 flex flex-col items-center justify-start text-center gap-8">
+                {/* Hero Section */}
+                <div className="w-full max-w-3xl space-y-4">
                     <Image
                         src="https://www.harvide.com/logo/small-dark-white.svg"
                         alt="Harvide Logo"
-                        width={32}
-                        height={32}
+                        width={80}
+                        height={80}
                         priority
-                        className="dark:brightness-[0.2] dark:grayscale"
+                        className="mx-auto mb-8 dark:brightness-[0.2] dark:grayscale p-4 rounded-md border border-border select-none"
                     />
-                    <span className="text-xl font-bold tracking-tight">@harvide/starter</span>
+                    <h1 className="text-4xl sm:text-5xl font-semibold tracking-tight">
+                        @harvide/starter
+                    </h1>
+                    <p className="text-lg text-muted-foreground max-w-2xl mx-auto font-extralight leading-relaxed">
+                        Never handle flows manually again. Kickstart your next project with pre-configured authentication,
+                        UI components, and best practices baked in.
+                    </p>
                 </div>
-                <nav className="flex items-center gap-4">
-                    <Button variant="ghost" asChild>
-                        <Link href="https://github.com/harvide/starter">GitHub</Link>
+
+                {/* Action Buttons */}
+                <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                    <Button
+                        asChild
+                        variant="default"
+                        size="lg"
+                        className="gap-2"
+                    >
+                        <a
+                            href="https://github.com/harvide/starter"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        >
+                            <svg
+                                className="w-5 h-5"
+                                fill="currentColor"
+                                viewBox="0 0 24 24"
+                                aria-hidden="true"
+                            >
+                                <path
+                                    fillRule="evenodd"
+                                    d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"
+                                    clipRule="evenodd"
+                                />
+                            </svg>
+                            GitHub
+                        </a>
                     </Button>
-                    <Button asChild>
-                        <Link href="/docs">Documentation</Link>
+                    <Button
+                        asChild
+                        variant="outline"
+                        size="lg"
+                        className="gap-2"
+                    >
+                        <a
+                            href="https://starter.harvide.com/docs"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        >
+                            <svg
+                                className="w-5 h-5"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                                aria-hidden="true"
+                            >
+                                <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth={2}
+                                    d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"
+                                />
+                            </svg>
+                            Documentation
+                        </a>
                     </Button>
-                </nav>
-            </header>
-
-            <main className="flex-1">
-                {/* Hero Section */}
-                <section className="text-center py-20 sm:py-32">
-                    <div className="container mx-auto px-4">
-                        <h1 className="text-4xl sm:text-6xl font-bold tracking-tighter mb-4">
-                            Build Your Next App Faster Than Ever
-                        </h1>
-                        <p className="max-w-3xl mx-auto text-lg sm:text-xl text-muted-foreground mb-8">
-                            An opinionated starter kit with everything you need to build a modern web application. Authentication, UI components, and best practices included.
-                        </p>
-                        <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                            <Button size="lg" asChild className="gap-2">
-                                <Link href="/docs/getting-started">
-                                    <Zap className="w-5 h-5" />
-                                    Get Started
-                                </Link>
+                    <Tooltip>
+                        <TooltipTrigger>
+                            <Button
+                                variant="secondary"
+                                size="lg"
+                                className="gap-2"
+                                disabled
+                            >
+                                <svg
+                                    className="w-5 h-5"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    viewBox="0 0 24 24"
+                                    aria-hidden="true"
+                                >
+                                    <path
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        strokeWidth={2}
+                                        d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"
+                                    />
+                                </svg>
+                                Pro
                             </Button>
-                            <Button size="lg" variant="outline" asChild className="gap-2">
-                                <a href="https://github.com/harvide/starter" target="_blank" rel="noopener noreferrer">
-                                    <GitMerge className="w-5 h-5" />
-                                    View on GitHub
-                                </a>
-                            </Button>
-                        </div>
-                    </div>
-                </section>
-
-                {/* Features Section */}
-                <section id="features" className="py-20 sm:py-32 bg-secondary/50">
-                    <div className="container mx-auto px-4">
-                        <div className="text-center mb-12">
-                            <h2 className="text-3xl sm:text-4xl font-bold tracking-tight">Powerful Features Out of the Box</h2>
-                            <p className="max-w-2xl mx-auto text-muted-foreground mt-4">
-                                Save weeks of development time with a fully-featured starter kit.
-                            </p>
-                        </div>
-                        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                            <FeatureCard
-                                icon={<Shield className="w-8 h-8 text-primary" />}
-                                title="Authentication"
-                                description="Secure, pre-configured authentication flows for email, password, and social providers."
-                            />
-                            <FeatureCard
-                                icon={<Feather className="w-8 h-8 text-primary" />}
-                                title="UI Components"
-                                description="A rich set of customizable and accessible UI components built with Radix and Tailwind CSS."
-                            />
-                            <FeatureCard
-                                icon={<BookOpen className="w-8 h-8 text-primary" />}
-                                title="Best Practices"
-                                description="Leverage a well-structured codebase with best practices for scalability and maintenance."
-                            />
-                            <FeatureCard
-                                icon={<Zap className="w-8 h-8 text-primary" />}
-                                title="Type-Safe"
-                                description="End-to-end type safety with TypeScript, ensuring a robust and error-free developer experience."
-                            />
-                            <FeatureCard
-                                icon={<GitMerge className="w-8 h-8 text-primary" />}
-                                title="Monorepo Ready"
-                                description="Organized as a Turborepo monorepo, making it easy to manage shared packages and applications."
-                            />
-                            <FeatureCard
-                                icon={<CheckCircle className="w-8 h-8 text-primary" />}
-                                title="Ready to Deploy"
-                                description="Deploy your application to your favorite hosting provider with minimal configuration."
-                            />
-                        </div>
-                    </div>
-                </section>
-
-                {/* Testimonials */}
-                <section className="py-20 sm:py-32">
-                    <div className="container mx-auto px-4">
-                        <div className="text-center mb-12">
-                            <h2 className="text-3xl sm:text-4xl font-bold tracking-tight">Loved by Developers</h2>
-                        </div>
-                        <div className="grid lg:grid-cols-3 gap-8 max-w-5xl mx-auto">
-                            <Card>
-                                <CardContent className="pt-6">
-                                    <p className="italic">"This starter kit is a game-changer. I was able to launch my MVP in a weekend."</p>
-                                    <div className="flex items-center gap-4 mt-4">
-                                        <Image src="https://avatars.githubusercontent.com/u/1?v=4" alt="User" width={40} height={40} className="rounded-full" />
-                                        <div>
-                                            <p className="font-semibold">Developer Dave</p>
-                                            <p className="text-sm text-muted-foreground">Indie Hacker</p>
-                                        </div>
-                                    </div>
-                                </CardContent>
-                            </Card>
-                            <Card>
-                                <CardContent className="pt-6">
-                                    <p className="italic">"The documentation is clear and the codebase is a pleasure to work with. Highly recommended!"</p>
-                                    <div className="flex items-center gap-4 mt-4">
-                                        <Image src="https://avatars.githubusercontent.com/u/2?v=4" alt="User" width={40} height={40} className="rounded-full" />
-                                        <div>
-                                            <p className="font-semibold">Startup Sarah</p>
-                                            <p className="text-sm text-muted-foreground">CTO, TechCorp</p>
-                                        </div>
-                                    </div>
-                                </CardContent>
-                            </Card>
-                            <Card>
-                                <CardContent className="pt-6">
-                                    <p className="italic">"I've tried many starter kits, but this one is by far the most complete and well-thought-out."</p>
-                                    <div className="flex items-center gap-4 mt-4">
-                                        <Image src="https://avatars.githubusercontent.com/u/3?v=4" alt="User" width={40} height={40} className="rounded-full" />
-                                        <div>
-                                            <p className="font-semibold">Engineer Emily</p>
-                                            <p className="text-sm text-muted-foreground">Software Engineer</p>
-                                        </div>
-                                    </div>
-                                </CardContent>
-                            </Card>
-                        </div>
-                    </div>
-                </section>
-
-                {/* CTA Section */}
-                <section className="py-20 sm:py-32 bg-secondary/50">
-                    <div className="container mx-auto px-4 text-center">
-                        <h2 className="text-3xl sm:text-4xl font-bold tracking-tight mb-4">Ready to Start Building?</h2>
-                        <p className="text-muted-foreground max-w-xl mx-auto mb-8">
-                            Clone the repository and start your next project in minutes.
-                        </p>
-                        <Button size="lg" asChild className="gap-2">
-                            <a href="https://github.com/harvide/starter" target="_blank" rel="noopener noreferrer">
-                                <GitMerge className="w-5 h-5" />
-                                Clone on GitHub
-                            </a>
-                        </Button>
-                    </div>
-                </section>
+                        </TooltipTrigger>
+                        <TooltipContent>Coming soon ✨</TooltipContent>
+                    </Tooltip>
+                </div>
             </main>
-
-            {/* Footer */}
-            <footer className="container mx-auto px-4 py-8 text-center text-muted-foreground">
-                <p>&copy; {new Date().getFullYear()} Harvide. All rights reserved.</p>
-            </footer>
         </div>
-    );
+    )
 }

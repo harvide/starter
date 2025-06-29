@@ -1,0 +1,13 @@
+@import "nextra-theme-docs/style.css";
+@import "tailwindcss";
+
+@variant dark (&:where(.dark *));
+
+@theme {}
+
+body {
+    --x-color-nextra-bg: #191919;
+    --x-color-primary-400: #d7d7d7;
+    --x-color-primary-600: #f0f0f0;
+    background: #191919;
+}

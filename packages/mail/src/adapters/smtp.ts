@@ -1,7 +1,8 @@
-import { type MailAdapter, type MailOptions } from "../index";
+import { MailOptionsWithTemplate, type MailAdapter, type MailOptions } from "../index";
 import nodemailer from "nodemailer";
 import { formatEmailAddress } from "../utils";
 import { MailBase } from "../base";
+import { render } from "@react-email/components";
 
 export class SMTPAdapter extends MailBase implements MailAdapter {
   private transporter: any;
@@ -50,6 +51,23 @@ export class SMTPAdapter extends MailBase implements MailAdapter {
       to: Array.isArray(to) ? to.join(', ') : to,
       subject: subject,
       html: body,
+      ...rest,
+    });
+  }
+
+  async sendTemplate(mailOptions: MailOptionsWithTemplate): Promise<void> {
+    const { from, to, subject, template, variant, context = {}, ...rest } = mailOptions;
+
+    const EmailTemplate = this.getTemplate(template, variant) as React.FC<any>;
+    if (!EmailTemplate) {
+      throw new Error(`Email template "${template}" not found`);
+    }
+
+    await this.transporter.sendMail({
+      to: Array.isArray(to) ? to : [to],
+      from: formatEmailAddress(from),
+      subject: subject,
+      html: await render(EmailTemplate(context)),
       ...rest,
     });
   }

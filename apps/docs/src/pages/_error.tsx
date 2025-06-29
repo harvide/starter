@@ -1,3 +1,5 @@
+// this is weird, but without this file build was failing. 
+// TODO; it is so f weird because we are using app-router but adding this files resolves the issue xdddd
 import React from 'react';
 import { NextPage } from 'next';
 

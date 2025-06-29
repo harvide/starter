@@ -23,17 +23,17 @@ export async function generateConfig(options: CreateAppOptions) {
   config.auth.emailAndPassword.enabled = auth.includes('email');
 
   // Handle social providers
-  const socialProviderConfig: Record<string, { enabled: boolean; clientId?: string; clientSecret?: string; [key: string]: any }> = {};
-  
+  const socialProviderConfig: Record<string, { enabled: boolean; clientId?: string; clientSecret?: string;[key: string]: any }> = {};
+
   if (auth.includes('social') && socialProviders.length > 0) {
     for (const provider of socialProviders) {
-      socialProviderConfig[provider] = { 
+      socialProviderConfig[provider] = {
         enabled: true,
         ...SocialProviderConfigs[provider]
       };
     }
   }
-  
+
   config.auth.socialProviders = socialProviderConfig;
 
   config.admin.enabled = features.includes('admin');
@@ -50,7 +50,9 @@ export async function generateConfig(options: CreateAppOptions) {
 
   // Generate and write .env file
   const envContent = generateEnvContent(auth.includes('social') ? socialProviders : []);
-  await fs.writeFile(path.join(projectPath, '.env'), envContent);
+  const envFilePath = path.join(projectPath, '.env');
+  await fs.ensureDir(path.dirname(envFilePath)); // Ensure directory exists
+  await fs.writeFile(envFilePath, envContent);
   // Custom object stringifier that produces clean JS object literals
 
   return `/** 

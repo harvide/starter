@@ -155,5 +155,10 @@ export interface BaseConfig {
       warning: boolean;
       debug: boolean;
     };
+
+    placeholders: {
+      email: string;
+      password: string;
+    }
   };
 }

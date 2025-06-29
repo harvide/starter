@@ -122,7 +122,7 @@ export function BasicSignupForm({
                   id="email"
                   type="email"
                   name="email"
-                  placeholder="example@example.com"
+                  placeholder={config.preferences.placeholders.email}
                   required
                 />
               </div>

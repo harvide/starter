@@ -410,6 +410,11 @@ export default {
              * @default true
              */
             debug: true,
+        },
+
+        placeholders: {
+            email: "starter@harvide.com",
+            password: "••••••••"
         }
     },
 

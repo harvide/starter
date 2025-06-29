@@ -216,7 +216,7 @@ export function BasicLoginForm({
               id="email"
               type="email"
               name="email"
-              placeholder="starter@harvide.com"
+              placeholder={config.preferences.placeholders.email}
               required
             />
           </div>
@@ -241,7 +241,7 @@ export function BasicLoginForm({
           id="email"
           type="email"
           name="email"
-          placeholder="example@example.com"
+          placeholder={config.preferences.placeholders.email}
           required
         />
       </div>
@@ -508,7 +508,7 @@ export function BasicLoginForm({
                 <h2 className="text-xl font-semibold">Reset password</h2>
                 <div className="grid gap-2">
                   <Label htmlFor="email-prompt">Email</Label>
-                  <Input id="email-prompt" type="email" name="email" required />
+                  <Input id="email-prompt" type="email" name="email" placeholder={config.preferences.placeholders.email} required />
                 </div>
                 <Button type="submit" className="w-full" disabled={isLoading}>
                   {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}

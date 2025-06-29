@@ -4,55 +4,75 @@
  * Customize authentication flows, branding, and preferences.
  */
 export default {
-    /** UI Component configuration */
-    ui: {
-        /** 
-         * Login form variant to use.
-         * Choose which login form implementation to display.
-         * @default "basic"
-         */
-        loginForm: "basic",
-        /** 
-         * Signup form variant to use.
-         * Choose which signup form implementation to display.
-         * @default "basic"
-         */
-        signupForm: "basic",
-    },
-
-    /** Mail service configuration */
-    email: {
-        /** Enable or disable email service */
+    /** Admin panel configuration */
+    admin: {
+        /** Enable or disable the admin panel */
         enabled: true,
-        /** Email provider to use */
-        provider: "resend", // Options: "resend", "mailgun", "smtp"
-        /** Default sender email address */
-        from: {
-            admin: {
-                email: "admin@harvide.com",
-                name: "Harvide Admin"
-            },
-            support: {
-                email: "contact@harvide.com",
-                name: "Harvide Support"
-            },
-            noReply: {
-                email: "no-reply@harvide.com",
-            }
-        },
+        // defaultRole: "user",
+        /** The roles that are considered admin roles. Defaults to ["admin"].
+         * @default ["admin"]
+         */
+        // adminRoles: [],
+        /** You can pass an array of userIds that should be considered as admin.
+          * @default []
+         */
+        // adminUserIds: [],
+        /**
+         * The duration of the impersonation session in seconds. Defaults to 1 hour.
+         * @default 86400 (24 hours)
+         */
+        impersonationSessionDuration: 60 * 60 * 24,
+        /** The default ban reason for a user created by the admin. Defaults to No reason.
+         * @default "No reason"
+         */
+        defaultBanReason: "No reason",
+        /** The default ban duration in seconds. Defaults to 1 day.
+         * @default 86400 (24 hours)
+         */
+        defaultBanExpiresIn: 60 * 60 * 24,
+        /**The message to show when a banned user tries to sign in. 
+         * @default "You have been banned from this application. Please contact support if you believe this is an error."
+         */
+        bannedUserMessage: "You have been banned from this application. Please contact support if you believe this is an error.",
 
-        /** Email templates configuration */
-        templates: {
-            /** Email verification template */
-            verification: {
-                subject: "Verify your email address",
-                variant: "basic",
-            },
-            /** Password reset template */
-            resetPassword: {
-                subject: "Reset your password",
-                variant: "basic",
-            }
+        /** Admin panel UI configuration */
+        dashboard: {
+            /** 
+             * Shortcuts shown in top navigation bar.
+             * Order matters, first item is the first shown.
+             */
+            shortcuts: [
+                {
+                    label: "GitHub",
+                    href: "https://github.com/harvide/starter",
+                    icon: (require("lucide-react")).Github
+                },
+                {
+                    label: "Harvide",
+                    href: "https://harvide.com",
+                    icon: "https://harvide.com/logo/small-dark-white.svg"
+                },
+                {
+                    label: "Documentation",
+                    href: "https://starter.harvide.com/docs"
+                }
+            ],
+            /** Metrics displayed on the admin dashboard */
+            metrics: [
+                {
+                    type: "total_users",
+                },
+                {
+                    type: "new_users_month",
+                },
+                {
+                    type: "active_users_month"
+                },
+                {
+                    type: "active_sessions_now"
+                }
+
+            ]
         }
     },
 
@@ -265,78 +285,6 @@ export default {
         }
     },
 
-    /** Admin panel configuration */
-    admin: {
-        /** Enable or disable the admin panel */
-        enabled: true,
-        // defaultRole: "user",
-        /** The roles that are considered admin roles. Defaults to ["admin"].
-         * @default ["admin"]
-         */
-        // adminRoles: [],
-        /** You can pass an array of userIds that should be considered as admin.
-          * @default []
-        */
-        // adminUserIds: [],
-        /**
-         * The duration of the impersonation session in seconds. Defaults to 1 hour.
-         * @default 86400 (24 hours)
-         */
-        impersonationSessionDuration: 60 * 60 * 24,
-        /** The default ban reason for a user created by the admin. Defaults to No reason.
-         * @default "No reason"
-         */
-        defaultBanReason: "No reason",
-        /** The default ban duration in seconds. Defaults to 1 day.
-         * @default 86400 (24 hours)
-         */
-        defaultBanExpiresIn: 60 * 60 * 24,
-        /**The message to show when a banned user tries to sign in. 
-         * @default "You have been banned from this application. Please contact support if you believe this is an error."
-         */
-        bannedUserMessage: "You have been banned from this application. Please contact support if you believe this is an error.",
-
-        /** Admin panel UI configuration */
-        dashboard: {
-            /** 
-             * Shortcuts shown in top navigation bar.
-             * Order matters, first item is the first shown.
-             */
-            shortcuts: [
-                {
-                    label: "GitHub",
-                    href: "https://github.com/harvide/starter",
-                    icon: (require("lucide-react")).Github
-                },
-                {
-                    label: "Harvide",
-                    href: "https://harvide.com",
-                    icon: "https://harvide.com/logo/small-dark-white.svg"
-                },
-                {
-                    label: "Documentation",
-                    href: "https://starter.harvide.com/docs"
-                }
-            ],
-            /** Metrics displayed on the admin dashboard */
-            metrics: [
-                {
-                    type: "total_users",
-                },
-                {
-                    type: "new_users_month",
-                },
-                {
-                    type: "active_users_month"
-                },
-                {
-                    type: "active_sessions_now"
-                }
-
-            ]
-        }
-    },
-
     /** Application branding configuration */
     branding: {
         /**
@@ -377,6 +325,43 @@ export default {
             altText: "Harvide Logo",
         },
     },
+
+    /** Mail service configuration */
+    email: {
+        /** Enable or disable email service */
+        enabled: true,
+        /** Email provider to use */
+        provider: "resend", // Options: "resend", "mailgun", "smtp"
+        /** Default sender email address */
+        from: {
+            admin: {
+                email: "admin@harvide.com",
+                name: "Harvide Admin"
+            },
+            support: {
+                email: "contact@harvide.com",
+                name: "Harvide Support"
+            },
+            noReply: {
+                email: "no-reply@harvide.com",
+            }
+        },
+
+        /** Email templates configuration */
+        templates: {
+            /** Email verification template */
+            verification: {
+                subject: "Verify your email address",
+                variant: "basic",
+            },
+            /** Password reset template */
+            resetPassword: {
+                subject: "Reset your password",
+                variant: "basic",
+            }
+        }
+    },
+
     /** User interface preferences */
     preferences: {
         /** Toast notification settings */
@@ -493,5 +478,21 @@ export default {
             imageUrl: "https://starter.harvide.com/harvide-starter-banner.png",
             imageAlt: "Harvide Starter Banner",
         },
+    },
+
+    /** UI Component configuration */
+    ui: {
+        /** 
+         * Login form variant to use.
+         * Choose which login form implementation to display.
+         * @default "basic"
+         */
+        loginForm: "basic",
+        /** 
+         * Signup form variant to use.
+         * Choose which signup form implementation to display.
+         * @default "basic"
+         */
+        signupForm: "basic",
     }
 } satisfies import('./packages/config/src/index').BaseConfig;

@@ -21,36 +21,28 @@ export type EmailAddress = {
 
 /** Base configuration type for the starter project */
 export interface BaseConfig {
-  /** UI Component configuration */
-  ui: {
-    /** Login form variant to use */
-    loginForm: import("../../../apps/client/src/components/auth/login-form").LoginFormVariant;
-    /** Signup form variant to use */
-    signupForm: import("../../../apps/client/src/components/auth/signup-form").SignupFormVariant;
-  };
-
-  email: {
+  /** Admin configuration */
+  admin: {
     enabled: boolean;
-    /** Email provider to use */
-    provider: EmailProvider;
-    /** Default sender email address */
-    from: {
-      admin: EmailAddress;
-      support: EmailAddress;
-      noReply: EmailAddress;
-    } | EmailAddress | string;
+    defaultRole?: string;
+    adminRoles?: string[];
+    adminUserIds?: string[];
+    impersonationSessionDuration?: number;
+    defaultBanReason?: string;
+    defaultBanExpiresIn?: number;
+    bannedUserMessage?: string;
 
-    templates: {
-      /** Email verification template */
-      verification: {
-        subject: string;
-        variant: import("../../mail/src/transactional").TemplateVariant<"email-verification">;
-      };
-      /** Password reset template */
-      resetPassword: {
-        subject: string;
-        variant: import("../../mail/src/transactional").TemplateVariant<"reset-password">;
-      };
+    /** Admin Panel configuration */
+    dashboard: {
+      shortcuts: {
+        label: string;
+        icon?: string | React.ComponentType<any>;
+        href: string;
+      }[];
+      /** Metrics displayed on the admin dashboard */
+      metrics: {
+        type: import("../../../apps/client/src/components/admin/dashboard/metric-card").MetricType;
+      }[];
     }
   };
 
@@ -107,31 +99,6 @@ export interface BaseConfig {
     }
   };
 
-  /** Admin configuration */
-  admin: {
-    enabled: boolean;
-    defaultRole?: string;
-    adminRoles?: string[];
-    adminUserIds?: string[];
-    impersonationSessionDuration?: number;
-    defaultBanReason?: string;
-    defaultBanExpiresIn?: number;
-    bannedUserMessage?: string;
-
-    /** Admin Panel configuration */
-    dashboard: {
-      shortcuts: {
-        label: string;
-        icon?: string | React.ComponentType<any>;
-        href: string;
-      }[];
-      /** Metrics displayed on the admin dashboard */
-      metrics: {
-        type: import("../../../apps/client/src/components/admin/dashboard/metric-card").MetricType;
-      }[];
-    }
-  };
-
   /** Branding configuration */
   branding: {
     name: string;
@@ -142,6 +109,31 @@ export interface BaseConfig {
       icon: string;
       altText: string;
     };
+  };
+
+  email: {
+    enabled: boolean;
+    /** Email provider to use */
+    provider: EmailProvider;
+    /** Default sender email address */
+    from: {
+      admin: EmailAddress;
+      support: EmailAddress;
+      noReply: EmailAddress;
+    } | EmailAddress | string;
+
+    templates: {
+      /** Email verification template */
+      verification: {
+        subject: string;
+        variant: import("../../mail/src/transactional").TemplateVariant<"email-verification">;
+      };
+      /** Password reset template */
+      resetPassword: {
+        subject: string;
+        variant: import("../../mail/src/transactional").TemplateVariant<"reset-password">;
+      };
+    }
   };
 
   /** UI preferences */
@@ -208,5 +200,13 @@ export interface BaseConfig {
       /** Alt text for the OpenGraph image */
       imageAlt?: string;
     };
+  };
+
+  /** UI Component configuration */
+  ui: {
+    /** Login form variant to use */
+    loginForm: import("../../../apps/client/src/components/auth/login-form").LoginFormVariant;
+    /** Signup form variant to use */
+    signupForm: import("../../../apps/client/src/components/auth/signup-form").SignupFormVariant;
   };
 }

@@ -1,14 +1,18 @@
-import * as emailVerification from "./emails/email-verification/variants";
-import * as resetPassword from "./emails/reset-password/variants";
+import emailVerificationBasic from "./emails/email-verification/variants/basic";
+import resetPasswordBasic from "./emails/reset-password/variants/basic";
 
 export const templates = {
     "email-verification": {
-        variants: emailVerification,
+        variants: {
+            basic: emailVerificationBasic,
+        },
     },
     "reset-password": {
-        variants: resetPassword,
+        variants: {
+            basic: resetPasswordBasic,
+        },
     },
 } as const;
 
 export type TemplateName = keyof typeof templates;
-export type TemplateVariant<T extends TemplateName> = Lowercase<Extract<keyof typeof templates[T]["variants"], string>>;
+export type TemplateVariant<T extends TemplateName> = keyof typeof templates[T]["variants"];

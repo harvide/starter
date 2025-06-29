@@ -9,6 +9,7 @@ import { authClient } from "@/lib/auth";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { showToast } from "@/lib/toast";
+import { config } from "@repo/config";
 
 export default function ResetPasswordPage() {
   const router = useRouter();

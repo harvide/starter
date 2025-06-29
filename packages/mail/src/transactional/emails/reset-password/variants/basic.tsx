@@ -3,7 +3,7 @@ import { Html, Button, Head, Text, Body, Container, Heading, Section } from "@re
 import { type ResetPasswordProps } from "../props";
 import { EmailBase } from "../../base";
 
-export function Basic({
+export default function Basic({
     user,
     url,
     token

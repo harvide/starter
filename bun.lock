@@ -46,6 +46,7 @@
       "name": "docs",
       "version": "0.1.0",
       "dependencies": {
+        "@repo/config": "workspace:*",
         "@repo/ui": "workspace:*",
         "next": "15.3.4",
         "nextra": "^4.2.17",
@@ -94,7 +95,7 @@
     },
     "packages/create-harvide-starter": {
       "name": "create-harvide-starter",
-      "version": "0.0.1",
+      "version": "0.0.8",
       "bin": {
         "create-harvide-starter": "./dist/index.js",
       },

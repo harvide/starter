@@ -9,7 +9,6 @@ declare global {
   }
 }
 
-type Environment = "development" | "production" | "test";
 type EmailProvider = "smtp" | "resend" | "mailgun" | "postmark" | "sendgrid" | "ses" | "none";
 
 export type EmailAddress = {

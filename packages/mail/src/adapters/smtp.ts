@@ -67,7 +67,7 @@ export class SMTPAdapter extends MailBase implements MailAdapter {
       to: Array.isArray(to) ? to : [to],
       from: formatEmailAddress(from),
       subject: subject,
-      html: await render(EmailTemplate(context)),
+      html: await render(EmailTemplate(context) as React.ReactNode),
       ...rest,
     });
   }

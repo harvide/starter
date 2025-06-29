@@ -40,7 +40,7 @@ import {
   useSidebar,
 } from "@repo/ui/components/sidebar"
 import { getAcronym } from "@/lib/utils"
-import { authClient } from "@/lib/auth"
+import { authClient } from "@repo/auth/client"
 import { useRouter } from "next/navigation"
 import { useState } from "react"
 

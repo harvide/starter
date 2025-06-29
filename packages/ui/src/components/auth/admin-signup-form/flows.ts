@@ -1,5 +1,5 @@
 "use server";
-import { auth } from "@repo/auth/index";
+import { auth } from "@repo/auth";
 import { config } from "@repo/config";
 
 export interface SignupFlowProps {

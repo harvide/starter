@@ -9,7 +9,7 @@ import { cn } from "@repo/ui/lib/utils";
 import { config } from "@repo/config";
 import { createAdminUser } from "../flows";
 import { AlertTriangle, Loader2 } from "lucide-react";
-import { showToast } from "@/lib/toast";
+import { showToast } from "@repo/ui/lib/toast";
 import { motion } from "framer-motion";
 
 export function BasicSignupForm({

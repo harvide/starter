@@ -1,5 +1,5 @@
-import { authClient } from "@/lib/auth";
-import { showToast } from "@/lib/toast";
+import { authClient } from "@repo/auth/client";
+import { showToast } from "@repo/ui/lib/toast";
 
 export type SignupFlowProps = {
   onError: (error: string) => void;

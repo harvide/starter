@@ -1,7 +1,7 @@
 "use client";
 // Show toast on page load
 import { useEffect } from "react";
-import { showToast } from "@/lib/toast";
+import { showToast } from "@repo/ui/lib/toast";
 import { ExternalToast } from "sonner";
 
 export type ToastOnPageLoadWrapperProps = {

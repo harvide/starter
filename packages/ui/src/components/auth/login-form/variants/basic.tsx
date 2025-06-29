@@ -24,11 +24,11 @@ import {
 import { cn } from "@repo/ui/lib/utils";
 import { config } from "@repo/config";
 
-import { authClient } from "../../../../lib/auth";
+import { authClient } from "@repo/auth/client";
 import { oauthIconsMap } from "../../oauth-icons";
 import * as flows from "../flows";
-import { LoginFormProps } from "../types";
-import { showToast } from "@/lib/toast";
+import { type LoginFormProps } from "../types";
+import { showToast } from "@repo/ui/lib/toast";
 
 type Tab = "email" | "phone";
 type Step =

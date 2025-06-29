@@ -1,4 +1,4 @@
-import { getLoginFormVariant } from "@/components/auth";
+import { getLoginFormVariant } from "@repo/ui/components/auth/login-form";
 import { config } from "@repo/config";
 import { Metadata } from "next";
 

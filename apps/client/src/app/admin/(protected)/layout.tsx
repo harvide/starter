@@ -1,5 +1,5 @@
 import { useAdminUser } from "@/hooks/use-admin-user";
-import { auth } from "@repo/auth/index";
+import { auth } from "@repo/auth";
 import { config } from "@repo/config";
 import { headers } from "next/headers";
 import { notFound, unauthorized } from "next/navigation";

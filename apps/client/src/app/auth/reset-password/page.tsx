@@ -5,10 +5,10 @@ import { Input } from "@repo/ui/components/input";
 import { Label } from "@repo/ui/components/label";
 import { Button } from "@repo/ui/components/button";
 import { cn } from "@repo/ui/lib/utils";
-import { authClient } from "@/lib/auth";
+import { authClient } from "@repo/auth/client";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { showToast } from "@/lib/toast";
+import { showToast } from "@repo/ui/lib/toast";
 import { config } from "@repo/config";
 import { Metadata } from "next";
 

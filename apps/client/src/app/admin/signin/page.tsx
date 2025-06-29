@@ -1,9 +1,9 @@
 import { config } from "@repo/config";
 import { notFound } from "next/navigation";
 import { Metadata } from "next";
-import { getLoginFormVariant } from "@/components/auth";
-import { getAdminSignupFormVariant } from "@/components/auth/admin-signup-form";
-import { checkAdminsExist } from "@/components/auth/admin-signup-form/flows";
+import { getLoginFormVariant } from "@repo/ui/components/auth/login-form";
+import { getAdminSignupFormVariant } from "@repo/ui/components/auth/admin-signup-form";
+import { checkAdminsExist } from "@repo/ui/components/auth/admin-signup-form/flows";
 
 export const metadata: Metadata = {
   title: `Admin Sign in - ${config.branding.name}`,

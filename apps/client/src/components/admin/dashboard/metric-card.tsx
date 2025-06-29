@@ -10,7 +10,7 @@ import { Badge } from "@repo/ui/components/badge"
 import { FaUser } from "react-icons/fa"
 import { Skeleton } from "@repo/ui/components/skeleton";
 import { auth } from "@repo/auth";
-// import { showToast } from "@/lib/toast";
+// import { showToast } from "@repo/ui/lib/toast";
 import { IconTrendingDown, IconTrendingUp } from "@tabler/icons-react";
 
 export type MetricCardData = {

@@ -1,7 +1,7 @@
 import { Metadata } from "next";
 import { config } from "@repo/config";
 
-import { getSignupFormVariant } from "@/components/auth/signup-form";
+import { getSignupFormVariant } from "@repo/ui/components/auth/signup-form";
 import Link from "next/link";
 import { Button } from "@repo/ui/components/button";
 import { ToastOnPageLoadWrapper } from "@/components/wrapper/toast-client-wrapper";

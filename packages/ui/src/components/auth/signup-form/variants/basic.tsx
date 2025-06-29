@@ -11,7 +11,7 @@ import { Card, CardContent } from "@repo/ui/components/card";
 import { Input } from "@repo/ui/components/input";
 import { Label } from "@repo/ui/components/label";
 import { cn } from "@repo/ui/lib/utils";
-import { showToast } from "@/lib/toast";
+import { showToast } from "@repo/ui/lib/toast";
 import { config } from "@repo/config";
 
 import { oauthIconsMap } from "../../oauth-icons";

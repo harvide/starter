@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 import { toast } from "sonner";
-import { checkAdminsExist } from "@/components/auth/admin-signup-form/flows";
+import { checkAdminsExist } from "@repo/ui/components/auth/admin-signup-form/flows";
 import Link from "next/link";
 import { Button } from "@repo/ui/components/button";
 

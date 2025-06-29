@@ -1,5 +1,5 @@
 import React from "react";
-import { type MailAdapter, type MailOptions, type MailOptionsWithTemplate } from "../index";
+import type { MailAdapter, MailOptions, MailOptionsWithTemplate } from "../index";
 import { Resend } from "resend";
 import { formatEmailAddress } from "../utils";
 import { MailBase } from "../base";
@@ -46,7 +46,7 @@ export class ResendAdapter extends MailBase implements MailAdapter {
       to: Array.isArray(to) ? to : [to],
       from: formatEmailAddress(from),
       subject: subject,
-      html: await pretty(await render(EmailTemplate(context))),
+      html: await pretty(await render(EmailTemplate(context) as React.ReactNode)),
       ...rest,
     });
   }

@@ -40,6 +40,25 @@ The email provider to use.
 - **Type**: `object`
 
 An object containing the default sender email addresses for different purposes.
+- `admin`: Default sender for admin-related emails.
+    - `email`: Admin email address.
+    - `name`: Admin sender name.
+- `support`: Default sender for support-related emails.
+    - `email`: Support email address.
+    - `name`: Support sender name.
+- `noReply`: Default sender for no-reply emails.
+    - `email`: No-reply email address.
+
+### `email.templates`
+- **Type**: `object`
+
+Configuration for email templates.
+- `verification`: Email verification template settings.
+    - `subject`: Subject line for the verification email.
+    - `variant`: Variant of the verification email template.
+- `resetPassword`: Password reset template settings.
+    - `subject`: Subject line for the password reset email.
+    - `variant`: Variant of the password reset email template.
 
 ---
 
@@ -66,17 +85,33 @@ This is the core of the configuration, where you can enable, disable, and custom
 - `requireEmailVerification`: Require email verification before allowing account access.
 - `resetPasswordTokenExpiresIn`: Time in seconds before password reset token expires.
 - `verificationTokenExpiresIn`: Time in seconds before email verification token expires.
+- `sendEmailVerificationOnSignup`: Send email verification after user signs up.
 - `sendResetPassword`: Enable password reset functionality.
-- `otp.enabled`: Enable email OTP authentication.
-- `otp.otpLength`: Length of the generated OTP code.
-- `otp.expiresIn`: Time in seconds before OTP expires.
-- `otp.sendVerificationOnSignUp`: Send verification code when user signs up.
-- `otp.disableSignUp`: Disable new user registration via email OTP.
-- `otp.allowedAttempts`: Maximum number of OTP verification attempts before lockout.
+
+### `auth.emailAndPassword.otp`
+- `enabled`: Enable email OTP authentication.
+- `otpLength`: Length of the generated OTP code.
+- `expiresIn`: Time in seconds before OTP expires.
+- `sendVerificationOnSignUp`: Send verification code when user signs up.
+- `disableSignUp`: Disable new user registration via email OTP.
+- `allowedAttempts`: Maximum number of OTP verification attempts before lockout.
 
 ### Social Providers (`auth.socialProviders`)
 
 Configure third-party social login providers like Google, Apple, and LinkedIn. For this to work, you need to provide the `clientId` and `clientSecret` for each enabled provider.
+
+- `apple`: Apple Sign In configuration.
+    - `enabled`: Enable or disable Apple Sign In.
+    - `clientId`: Client ID for Apple.
+    - `clientSecret`: Client Secret for Apple.
+- `google`: Google Sign In configuration.
+    - `enabled`: Enable or disable Google Sign In.
+    - `clientId`: Client ID for Google.
+    - `clientSecret`: Client Secret for Google.
+- `linkedin`: LinkedIn Sign In configuration.
+    - `enabled`: Enable or disable LinkedIn Sign In.
+    - `clientId`: Client ID for LinkedIn.
+    - `clientSecret`: Client Secret for LinkedIn.
 
 Refer to the [Better Auth OAuth docs](https://www.better-auth.com/docs/concepts/oauth) for more details.
 
@@ -115,3 +150,64 @@ Customize your application's name, description, and logo.
 
 ### `showToasts`
 An object to control the visibility of different types of toast notifications (`success`, `error`, `info`, `warning`, `debug`).
+
+### `preferences.placeholders`
+- **Type**: `object`
+
+An object containing placeholder values for various input fields.
+- `email`: Placeholder for email input.
+- `password`: Placeholder for password input.
+- `phone`: Placeholder for phone number input.
+- `firstName`: Placeholder for first name input.
+- `lastName`: Placeholder for last name input.
+- `username`: Placeholder for username input.
+
+---
+
+## SEO and Metadata (`seo`)
+
+Configure SEO and metadata settings for your application.
+
+### `seo.title`
+- **Type**: `string`
+- **Default**: `"Harvide Starter"`
+
+Set the title of the application.
+
+### `seo.description`
+- **Type**: `string`
+- **Default**: `"Never handle flows manually again. Use Harvide Starter to kickstart your next project with pre-configured authentication and UI components."`
+
+Application description, used in meta tags and documentation.
+
+### `seo.keywords`
+- **Type**: `string[]`
+
+An array of keywords for SEO.
+
+### `seo.canonicalUrl`
+- **Type**: `string`
+
+The canonical URL for the application.
+
+### `seo.robots`
+- **Type**: `object`
+
+Robot exclusion standard configuration.
+- `enabled`: Enable or disable robots.txt generation.
+- `rules`: An array of rules for user agents.
+
+### `seo.sitemap`
+- **Type**: `object`
+
+Sitemap configuration.
+- `enabled`: Enable or disable sitemap generation.
+- `baseUrl`: The base URL for the sitemap.
+
+### `seo.openGraph`
+- **Type**: `object`
+
+Open Graph configuration for social media sharing.
+- `enabled`: Enable or disable Open Graph metadata.
+- `imageUrl`: URL to the Open Graph image.
+- `imageAlt`: Alt text for the Open Graph image.

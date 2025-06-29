@@ -30,7 +30,6 @@ Ready to kickstart your project?
     ```bash
     npx create-harvide-starter my-app
     ```
-    Follow the prompts to configure your application, select features, and choose authentication methods.
 
 2.  **Navigate to your project and start the development server**:
     ```bash
@@ -46,24 +45,9 @@ For detailed installation steps and customization options, refer to our official
 
 ## Configuration
 
-Harvide Starter is designed for extensive customization primarily through a single configuration file: `starter.config.ts`, located at the root of your project. This file allows you to define:
-
-*   **Branding**: Application name, description, and logo for consistent identity across UI and emails.
-*   **Authentication Behavior**: Enable/disable various authentication methods, set password policies, and manage account linking.
-*   **UI Variants**: Choose different login and signup form implementations.
-*   **Admin Panel Settings**: Configure impersonation, user banning, and dashboard metrics.
-*   **Email Service**: Define email provider and sender details.
+Harvide Starter is designed for extensive customization primarily through a single configuration file: `starter.config.ts`, located at the root of your project.
 
 For a complete overview of all configurable options, please see the [Configuration Reference](https://starter.harvide.com/docs/configuration) in our documentation.
-
-## New Variants
-
-Harvide Starter is designed to be highly extensible, allowing you to easily add new variants for UI components (like login/signup forms) and email templates. This involves:
-1.  Creating a new variant file (e.g., `apps/client/src/components/auth/login-form/variants/my-custom-variant.tsx`).
-2.  Registering the new variant in the appropriate registry or configuration.
-3.  Adding documentation for your new variant in the `apps/docs` directory.
-
-For more detailed instructions, please refer to the [Adding New Variants](https://starter.harvide.com/docs/adding-new-variants) section in our documentation.
 
 ## Contributing
 

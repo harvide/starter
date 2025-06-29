@@ -101,7 +101,7 @@ export function BasicSignupForm({
                   <Input
                     id="firstName"
                     name="firstName"
-                    placeholder="John"
+                    placeholder={config.preferences.placeholders.firstName}
                     required
                   />
                 </div>
@@ -110,7 +110,7 @@ export function BasicSignupForm({
                   <Input
                     id="lastName"
                     name="lastName"
-                    placeholder="Doe"
+                    placeholder={config.preferences.placeholders.lastName}
                     required
                   />
                 </div>
@@ -134,7 +134,7 @@ export function BasicSignupForm({
                   type="password"
                   name="password"
                   required
-                  placeholder="••••••••"
+                  placeholder={config.preferences.placeholders.password}
                   minLength={config.auth.emailAndPassword.minPasswordLength}
                   maxLength={config.auth.emailAndPassword.maxPasswordLength}
                 />
@@ -147,7 +147,7 @@ export function BasicSignupForm({
                   type="password"
                   name="confirmPassword"
                   required
-                  placeholder="••••••••"
+                  placeholder={config.preferences.placeholders.password}
                   minLength={config.auth.emailAndPassword.minPasswordLength}
                   maxLength={config.auth.emailAndPassword.maxPasswordLength}
                 />

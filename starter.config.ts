@@ -414,7 +414,13 @@ export default {
 
         placeholders: {
             email: "starter@harvide.com",
-            password: "••••••••"
+            password: "••••••••",
+            phone: "+1 234 567 8900",
+
+            firstName: "John",
+            lastName: "Doe",
+
+            username: "johndoe",
         }
     },
 

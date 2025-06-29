@@ -228,7 +228,7 @@ export function BasicLoginForm({
               id="phone"
               type="tel"
               name="phone"
-              placeholder="+1234567890"
+              placeholder={config.preferences.placeholders.phone}
               required
             />
           </div>
@@ -252,7 +252,7 @@ export function BasicLoginForm({
           id="phone"
           type="tel"
           name="phone"
-          placeholder="+1234567890"
+          placeholder={config.preferences.placeholders.phone}
           required
         />
       </div>
@@ -312,7 +312,7 @@ export function BasicLoginForm({
                         type="password"
                         name="password"
                         required
-                        placeholder="••••••••"
+                        placeholder={config.preferences.placeholders.password}
                       />
                     </div>
                   )}

@@ -68,7 +68,7 @@ export default function ResetPasswordPage() {
                   type="password"
                   name="newPassword"
                   required
-                  placeholder="••••••••"
+                  placeholder={config.preferences.placeholders.password}
                 />
               </div>
 
@@ -79,7 +79,7 @@ export default function ResetPasswordPage() {
                   type="password"
                   name="confirmPassword"
                   required
-                  placeholder="••••••••"
+                  placeholder={config.preferences.placeholders.password}
                 />
               </div>
 

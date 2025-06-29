@@ -1,6 +1,6 @@
 import { MetadataRoute } from 'next';
 import { getPageMap } from 'nextra/page-map';
-import config from '../../../../starter.config';
+import { config } from '@repo/config';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function transformPageMapToSitemap(pageMap: any, baseUrl: string): MetadataRoute.Sitemap {

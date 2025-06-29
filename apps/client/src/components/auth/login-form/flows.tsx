@@ -135,7 +135,7 @@ export async function handleResetPasswordRequest(
   });
 
   if (error) {
-    props.onError(`${error.code}: ${error.message}`);
+    props.onError(error);
     return false;
   }
 

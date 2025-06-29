@@ -40,6 +40,20 @@ export default {
                 email: "no-reply@harvide.com",
             }
         },
+
+        /** Email templates configuration */
+        templates: {
+            /** Email verification template */
+            verification: {
+                subject: "Verify your email address",
+                variant: "basic",
+            },
+            /** Password reset template */
+            resetPassword: {
+                subject: "Reset your password",
+                variant: "basic",
+            }
+        }
     },
 
     /** Authentication configuration for all supported methods */

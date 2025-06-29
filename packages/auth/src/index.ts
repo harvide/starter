@@ -79,11 +79,18 @@ export const auth = betterAuth({
       if (!config.auth.emailAndPassword.sendResetPassword) {
         throw new Error("Sending reset password emails is disabled in the configuration");
       }
-      // await sendEmail({
-      //   to: user.email,
-      //   subject: "Reset your password",
-      //   text: `Click the link to reset your password: ${url}`,
-      // });
+      await mail.sendTemplate({
+        from: config.email.from.noReply,
+        to: user.email,
+        subject: config.email.templates.resetPassword.subject,
+        template: "reset-password",
+        variant: config.email.templates.resetPassword.variant,
+        context: {
+          user,
+          url,
+          token,
+        },
+      });
     }
   },
 
@@ -96,9 +103,9 @@ export const auth = betterAuth({
       await mail.sendTemplate({
         from: config.email.from.noReply,
         to: user.email,
-        subject: "Verify your email address",
+        subject: config.email.templates.verification.subject,
         template: "email-verification",
-        variant: "basic",
+        variant: config.email.templates.verification.variant,
         context: {
           user,
           url,

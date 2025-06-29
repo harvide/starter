@@ -42,6 +42,19 @@ export interface BaseConfig {
       support: EmailAddress;
       noReply: EmailAddress;
     } | EmailAddress | string;
+
+    templates: {
+      /** Email verification template */
+      verification: {
+        subject: string;
+        variant: import("../../mail/src/transactional").TemplateVariant<"email-verification">;
+      };
+      /** Password reset template */
+      resetPassword: {
+        subject: string;
+        variant: "default" | "dark";
+      };
+    }
   };
 
   /** Authentication configuration */

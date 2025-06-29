@@ -1,9 +1,9 @@
-import React, { JSX } from "react";
+import React, { type JSX } from "react";
 import { Html, Button, Head, Text, Body, Container, Heading, Section } from "@react-email/components";
-import { EmailVerificationProps } from "../props";
+import { type EmailVerificationProps } from "../props";
 import { EmailBase } from "../../base";
 
-export default function BaseEmailVerificationVariant({
+export function Basic({
     user,
     url,
     token

@@ -21,9 +21,6 @@ export type EmailAddress = {
 
 /** Base configuration type for the starter project */
 export interface BaseConfig {
-  /** Environment configuration */
-  env: Environment;
-
   /** UI Component configuration */
   ui: {
     /** Login form variant to use */

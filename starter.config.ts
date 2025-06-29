@@ -423,8 +423,4 @@ export default {
             username: "johndoe",
         }
     },
-
-    // todo fix
-    /** Environment configuration */
-    env: "development"
 } satisfies import('./packages/config/src/index').BaseConfig;

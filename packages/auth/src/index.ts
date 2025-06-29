@@ -54,7 +54,7 @@ let plugins: BetterAuthPlugin[] = [
     }
   })
 ];
-if (config.env === "development" && !plugins.some(plugin => plugin.id === 'open-api')) {
+if (process.env.NODE_ENV === "development" && !plugins.some(plugin => plugin.id === 'open-api')) {
   // Add OpenAPI plugin only in development mode if not already included
   plugins = [
     ...plugins,

@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { Loader2 } from "lucide-react";
-import { motion } from "framer-motion";
+import { motion, type HTMLMotionProps } from "framer-motion";
 
 import { Button } from "@repo/ui/components/button";
 import { Card, CardContent } from "@repo/ui/components/card";
@@ -23,10 +23,14 @@ const SOCIAL_PROVIDERS = Object.entries(config.auth.socialProviders ?? {}).filte
   ([, provider]) => provider.enabled,
 );
 
+type MotionDivProps = HTMLMotionProps<'div'> & {
+  className?: string;
+};
+
 export function BasicSignupForm({
   className,
   ...props
-}: React.ComponentProps<"div">) {
+}: MotionDivProps) {
   const router = useRouter();
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);

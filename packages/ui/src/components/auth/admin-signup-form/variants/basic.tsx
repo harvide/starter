@@ -10,12 +10,16 @@ import { config } from "@repo/config";
 import { createAdminUser } from "../flows";
 import { AlertTriangle, Loader2 } from "lucide-react";
 import { showToast } from "@repo/ui/lib/toast";
-import { motion } from "framer-motion";
+import { motion, type HTMLMotionProps } from "framer-motion";
+
+type MotionDivProps = HTMLMotionProps<'div'> & {
+  className?: string;
+};
 
 export function BasicSignupForm({
   className,
   ...props
-}: React.ComponentProps<"div">) {
+}: MotionDivProps) {
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 

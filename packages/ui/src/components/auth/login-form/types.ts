@@ -1,4 +1,10 @@
-export type LoginFormProps = React.ComponentProps<"div"> & {
+import type { HTMLMotionProps } from "framer-motion";
+
+type MotionDivProps = HTMLMotionProps<'div'> & {
+    className?: string;
+};
+
+export type LoginFormProps = MotionDivProps & {
     className?: string;
 
     // The URL to redirect to after successful login

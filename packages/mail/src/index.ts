@@ -1,4 +1,4 @@
-// import { SMTPAdapter } from "./adapters/smtp";
+import { SMTPAdapter } from "./adapters/smtp";
 import { ResendAdapter } from "./adapters/resend";
 import { MailBase } from "./base";
 import { type EmailAddress } from "../../config/src/schema";
@@ -32,8 +32,8 @@ export function createMailAdapter(
   adapter: "smtp" | "resend",
 ): MailAdapter {
   switch (adapter) {
-    // case "smtp":
-    //   return new SMTPAdapter();
+    case "smtp":
+      return new SMTPAdapter();
     case "resend":
       return new ResendAdapter();
     default:

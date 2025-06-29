@@ -26,6 +26,7 @@ declare -a FILES_TO_COPY=(
     "packages/typescript-config/"
     "packages/eslint-config/"
     "packages/ui/"
+    "packages/mail/"
     "packages/config/"
     "packages/db/"
     "packages/auth/"

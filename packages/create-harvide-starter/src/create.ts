@@ -75,6 +75,7 @@ export async function createApp(options: CreateAppOptions) {
     'packages/ui',
     'packages/config',
     'packages/db',
+    'packages/mail',
     'packages/auth',
     'starter.config.ts', // Add starter.config.ts to filesToCopy
   ];

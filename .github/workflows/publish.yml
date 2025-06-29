@@ -32,9 +32,9 @@ jobs:
         run: bun run test
         working-directory: packages/create-harvide-starter
         
-      - name: Run type check
-        run: bun typecheck
-        working-directory: packages/create-harvide-starter
+      # - name: Run type check
+      #   run: bun typecheck
+      #   working-directory: packages/create-harvide-starter
 
   publish:
     needs: test

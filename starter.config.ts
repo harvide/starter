@@ -126,6 +126,14 @@ export default {
              * @requires mail.templates.verification - Email verification template must be configured
              */
             requireEmailVerification: true,
+            /**
+             * Send email verification after user signs up.
+             * If enabled, users will receive a verification email with a link to activate their account.
+             * @default true
+             * @requires mail.enabled - Email service must be configured
+             * @requires mail.templates.verification - Email verification template must be configured
+             */
+            sendEmailVerificationOnSignup: true,
 
             /**
              * Time in seconds before password reset token expires.

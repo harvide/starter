@@ -66,6 +66,7 @@ export interface BaseConfig {
       minPasswordLength: number;
       maxPasswordLength: number;
       requireEmailVerification: boolean;
+      sendEmailVerificationOnSignup: boolean;
       resetPasswordTokenExpiresIn: number;
       verificationTokenExpiresIn: number;
       sendResetPassword: boolean;

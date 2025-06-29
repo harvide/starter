@@ -88,6 +88,7 @@ export const auth = betterAuth({
   },
 
   emailVerification: {
+    sendOnSignUp: config.auth.emailAndPassword.sendEmailVerificationOnSignup,
     sendVerificationEmail: async ({ user, url, token }, request) => {
       if (!config.auth.emailAndPassword.requireEmailVerification) {
         throw new Error("Sending verification emails is disabled in the configuration");

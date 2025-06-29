@@ -1,0 +1,34 @@
+import Image from 'next/image'
+
+# Customizing Theme
+
+The Harvide Starter project uses CSS variables defined in `packages/ui/src/styles/globals.css` to manage its theme. You can easily customize the colors, fonts, and other design tokens to match your brand.
+
+## Editing `globals.css`
+
+The `globals.css` file contains a set of CSS variables for both light and dark themes. These variables control the primary colors, background, foreground, and other UI elements.
+
+```css
+:root {
+  --background: oklch(1.00 0 0);
+  --foreground: oklch(0.26 0 0);
+  /* ... other light theme variables ... */
+}
+
+.dark {
+  --background: oklch(0.14 0.00 285.82);
+  --foreground: oklch(0.98 0 0);
+  /* ... other dark theme variables ... */
+}
+```
+
+To customize your theme, you can directly modify these CSS variable values.
+
+## Using Tweakcn.com
+
+For an easier way to generate and preview color palettes, you can use external tools like [tweakcn.com](https://tweakcn.com/). 
+This tool allows you to visually select colors and generate the corresponding HSL or OKLCH values, which you can then copy and paste into your `globals.css` file.
+
+<Image src="/screenshots/tweakcn_1.png" alt="Tweakcn.com landing page" width={1200} height={500} />
+
+After generating your desired color palette, simply replace the existing values in `packages/ui/src/styles/globals.css` with your new values.

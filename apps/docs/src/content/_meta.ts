@@ -6,12 +6,14 @@ export default {
     },
     "getting-started": "Getting Started",
     "setup": "Setup",
+    "project-structure": "Project Structure",
+    convention: "Concepts",
     "configuration-separator": {
         type: "separator",
         title: "Configuration"
     },
-    convention: "Convention",
     configuration: "Configuration",
+    "customizing-theme": "Customizing Theme",
     "ai-separator": {
         type: "separator",
         title: "AI"

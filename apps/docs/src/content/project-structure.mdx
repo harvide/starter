@@ -1,0 +1,49 @@
+# Project Structure
+
+The Harvide Starter project is organized into a monorepo structure, leveraging `turborepo` for efficient management of multiple packages and applications. This structure promotes code reusability, clear separation of concerns, and streamlined development workflows.
+
+## Root Directory
+
+- `apps/`: Contains independent applications, such as the `client` (Next.js frontend) and `docs` (Nextra documentation site).
+- `packages/`: Houses reusable packages that can be shared across applications and other packages.
+  - `auth/`: Authentication utilities and configurations.
+  - `config/`: Shared configurations (e.g., environment variables, `starter.config.ts` schema).
+  - `create-harvide-starter/`: The CLI tool used to scaffold new projects.
+  - `db/`: Database schema and utilities (e.g., Drizzle ORM setup).
+  - `eslint-config/`: Shared ESLint configurations.
+  - `mail/`: Email sending utilities and adapters.
+  - `typescript-config/`: Shared TypeScript configurations.
+  - `ui/`: Reusable UI components (e.g., Shadcn UI components).
+- `starter.config.ts`: The main configuration file for the entire Harvide Starter project. This file centralizes key settings for UI, authentication, admin panel, branding, and more.
+- `package.json`: Defines project dependencies, scripts, and workspaces for the monorepo.
+- `turbo.json`: Turborepo configuration for optimizing builds, tests, and other tasks across packages.
+- `.env.example`: Example environment variables.
+- `.gitignore`: Specifies intentionally untracked files to ignore.
+- `biome.jsonc`: Biome (formatter/linter) configuration.
+
+## `apps` Directory
+
+### `apps/client`
+
+The main Next.js application, serving as the frontend for your project.
+
+- `src/app/`: Next.js App Router structure for pages and API routes.
+  - `(root)/page.tsx`: The main landing page.
+  - `api/`: Backend API routes.
+  - `auth/`: Authentication-related pages (login, signup, etc.).
+  - `admin/`: Admin panel pages.
+- `src/components/`: Reusable React components specific to the client application.
+- `src/lib/`: Client-side utility functions and configurations.
+- `public/`: Static assets.
+
+## `packages` Directory
+
+Each package within the `packages` directory is a self-contained module designed for reusability.
+
+### Example: `packages/config`
+
+- `src/index.ts`: Entry point for the package, exporting its functionalities.
+- `src/schema.ts`: Defines the Zod schema for `starter.config.ts`.
+- `src/load-env.ts`: Utility for loading environment variables based on the schema.
+
+This monorepo structure enhances maintainability, scalability, and collaboration within the project.

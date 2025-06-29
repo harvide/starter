@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "@repo/ui/globals.css";
 import { AdminCheckWrapper } from "@/components/wrapper/admin-check-wrapper";
 import { Toaster } from "@repo/ui/components/sonner";
+import config from "../../../../starter.config";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -15,9 +16,43 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Harvide Starter",
-  description: "Never handle flows manually again. Use Harvide Starter to kickstart your next project with pre-configured authentication and UI components."
+  title: {
+    default: config.seo.title,
+    template: `%s | ${config.branding.name}`,
+  },
+  description: config.seo.description,
+  keywords: config.seo.keywords,
+  authors: [{ name: config.branding.name, url: config.branding.url }],
+  creator: config.branding.name,
+  openGraph: {
+    title: config.seo.openGraph.enabled ? config.seo.title : undefined,
+    description: config.seo.openGraph.enabled ? config.seo.description : undefined,
+    url: config.branding.url,
+    siteName: config.branding.name,
+    images: config.seo.openGraph.enabled ? [
+      {
+        url: config.seo.openGraph.imageUrl,
+        width: 1200,
+        height: 630,
+        alt: config.seo.openGraph.imageAlt,
+      },
+    ] : [],
+    locale: "en_US",
+    type: "website",
+  },
+  icons: {
+    icon: config.seo.favicons.default,
+    shortcut: config.seo.favicons.default,
+    apple: config.seo.favicons.appleTouchIcon,
+    other: config.seo.favicons.svg ? {
+      rel: config.seo.favicons.svg.rel || "icon",
+      url: config.seo.favicons.svg.url,
+      color: config.seo.favicons.svg.color
+    } : undefined,
+  },
+  manifest: `${config.branding.url}/site.webmanifest`,
 };
+
 
 export default function RootLayout({
   children,

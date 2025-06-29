@@ -3,8 +3,7 @@ import { config } from "@repo/config";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: `Sign in - ${config.branding.name}`,
-  description: config.branding.description,
+  title: `Sign in`
 };
 
 export default function SignInPage() {

@@ -135,6 +135,7 @@ export interface BaseConfig {
   /** Branding configuration */
   branding: {
     name: string;
+    url: string;
     description?: string;
     logo: {
       large: string;
@@ -153,13 +154,72 @@ export interface BaseConfig {
       debug: boolean;
     };
 
-    placeholders: {
-      email: string;
-      password: string;
-      username: string;
-      phone: string;
-      firstName: string;
-      lastName: string;
-    }
+    placeholders?: {
+      email?: string;
+      password?: string;
+      username?: string;
+      phone?: string;
+      firstName?: string;
+      lastName?: string;
+    };
+  };
+
+  /** SEO and Metadata configuration */
+  seo?: {
+    /** Default title for the application */
+    title?: string;
+    /** Default description for the application */
+    description?: string;
+    /** Keywords for SEO */
+    keywords?: string[];
+    /** URL to the canonical version of the site */
+    canonicalUrl?: string;
+
+    /** Robots.txt configuration */
+    robots?: {
+      /** Enable or disable robots.txt generation */
+      enabled?: boolean;
+      /** Custom rules for robots.txt */
+      rules?: {
+        userAgent: string | string[];
+        allow?: string | string[];
+        disallow?: string | string[];
+      }[];
+    };
+
+    /** Sitemap configuration */
+    sitemap?: {
+      /** Enable or disable sitemap generation */
+      enabled?: boolean;
+      /** Base URL for the sitemap */
+      baseUrl?: string;
+    };
+
+    /** Favicon configuration */
+    favicons?: {
+      /** Path to the default favicon */
+      default?: string;
+      /** Path to the Apple Touch Icon */
+      appleTouchIcon?: string;
+      /** Path to the SVG favicon */
+      svg?: {
+        /** URL to the SVG favicon */
+        url: string;
+        /** Color for the SVG favicon */
+        color?: string;
+        /** Rel attribute for the SVG favicon */
+        rel?: string;
+      };
+    };
+
+    /** OpenGraph configuration */
+    openGraph?: {
+      /** Enable or disable OpenGraph tags */
+      enabled?: boolean;
+      /** URL to the OpenGraph image */
+      imageUrl?: string;
+      /** Alt text for the OpenGraph image */
+      imageAlt?: string;
+    };
   };
 }

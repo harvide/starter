@@ -7,8 +7,7 @@ import { Button } from "@repo/ui/components/button";
 import { ToastOnPageLoadWrapper } from "@/components/wrapper/toast-client-wrapper";
 
 export const metadata: Metadata = {
-    title: `Sign up - ${config.branding.name}`,
-    description: config.branding.description,
+    title: `Sign up`
 };
 
 export default function SignupPage() {
@@ -20,7 +19,7 @@ export default function SignupPage() {
     if (config.auth.emailAndPassword.disableSignUp) {
         return (
             <>
-                <ToastOnPageLoadWrapper type="error" message={<>Signup is currently disabled.</>} data={{description: <>Please contact support for assistance.</>}} />
+                <ToastOnPageLoadWrapper type="error" message={<>Signup is currently disabled.</>} data={{ description: <>Please contact support for assistance.</> }} />
                 <div className="flex min-h-svh flex-col items-center justify-center bg-background p-6 md:p-10">
                     <div className="w-full max-w-sm md:max-w-3xl">
                         <h1 className="text-2xl font-bold text-center">Signup Disabled</h1>

@@ -346,6 +346,11 @@ export default {
         name: "Starter",
 
         /**
+         * Application URL
+        */
+        url: "https://starter.harvide.com",
+
+        /**
          * Application description.
          * Used in meta tags and documentation.
          */
@@ -423,4 +428,84 @@ export default {
             username: "johndoe",
         }
     },
+
+    /** SEO and Metadata configuration */
+    seo: {
+        /**
+         * Set the title of the application.
+         * This title and description are used in layout.tsx. 
+         * There are few pages (/auth, /admin) that override this meta.
+         * You can customize other pages' titles in their respective components.
+         * @default true
+         */
+        title: "Harvide Starter",
+        description: "Never handle flows manually again. Use Harvide Starter to kickstart your next project with pre-configured authentication and UI components.",
+        keywords: [
+            "authentication",
+            "nextjs",
+            "react",
+            "typescript",
+            "auth",
+            "starter",
+            "template",
+            "boilerplate",
+            "harvide",
+        ],
+        canonicalUrl: "https://starter.harvide.com",
+        robots: {
+            enabled: true,
+            rules: [
+                {
+                    userAgent: '*',
+                    allow: ['/'],
+                    disallow: ['/admin']
+                }
+            ],
+        },
+        /**
+         * Sitemap configuration
+         * This section allows you to configure the sitemap for your application.
+         * It is used to generate a sitemap.xml file for search engines.
+         * This should be adjusted based on your application's structure and routes.
+         * @see apps/client/src/app/sitemap.ts
+         * @see https://nextjs.org/docs/app/api-reference/file-conventions/metadata/sitemap#generating-a-sitemap-using-code-js-ts
+         */
+        sitemap: {
+            /**
+             * Enable or disable sitemap generation.
+             * @default true
+             */
+            enabled: true,
+            /**
+             * The base URL for the sitemap.
+             * This is used to generate absolute URLs in the sitemap.
+             * This corresponds to the root URL of your application.
+             */
+            baseUrl: "https://starter.harvide.com",
+        },
+        /**
+         * Favicon configuration
+         * This section allows you to configure favicons for your application.
+         * Favicons are used in browser tabs, bookmarks, and other places.
+         */
+        favicons: {
+            default: "/favicon.ico",
+            appleTouchIcon: "/apple-icon.png",
+            svg: {
+                rel: "icon",
+                url: "/favicon.svg",
+                color: "#000000" // Default color for the SVG favicon
+            }
+        },
+        /**
+         * Open Graph configuration
+         * This section allows you to configure Open Graph metadata for social media sharing.
+         * It is used to enhance link previews on platforms like Facebook, Twitter, etc.
+         */
+        openGraph: {
+            enabled: true,
+            imageUrl: "https://starter.harvide.com/harvide-starter-banner.png",
+            imageAlt: "Harvide Starter Banner",
+        },
+    }
 } satisfies import('./packages/config/src/index').BaseConfig;

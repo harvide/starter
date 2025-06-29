@@ -10,6 +10,11 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { showToast } from "@/lib/toast";
 import { config } from "@repo/config";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: `Reset Password`,
+};
 
 export default function ResetPasswordPage() {
   const router = useRouter();

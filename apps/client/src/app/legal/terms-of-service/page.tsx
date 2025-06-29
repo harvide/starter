@@ -1,5 +1,10 @@
 import { Card, CardContent } from "@repo/ui/components/card";
+import { Metadata } from "next";
 import Link from "next/link";
+
+export const metadata: Metadata = {
+  title: "Terms of Service",
+}
 
 export default function TermsOfServicePage() {
   return (

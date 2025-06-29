@@ -23,7 +23,7 @@
   },
   "homepage": "https://starter.harvide.com",
   "scripts": {
-    "build": "tsup",
+    "build": "tsup && bash ./copy-template.sh",
     "start": "node dist/index.js",
     "clean": "rm -rf dist",
     "test": "vitest run",

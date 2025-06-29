@@ -56,7 +56,7 @@ export async function createApp(options: CreateAppOptions) {
   const { projectPath, appName, description, features, auth, packageManager, llm } = options;
   const templatePath = path.resolve(
     path.dirname(new URL(import.meta.url).pathname),
-    '../../..'
+    '../template'
   );
 
   let spin = createSpinner('Creating project directory');
@@ -76,6 +76,7 @@ export async function createApp(options: CreateAppOptions) {
     'packages/config',
     'packages/db',
     'packages/auth',
+    'starter.config.ts', // Add starter.config.ts to filesToCopy
   ];
 
   const filterFunc = (src: string) => {

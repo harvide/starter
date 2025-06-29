@@ -25,7 +25,7 @@ export async function ensurePackageManager(packageManager: PackageManager): Prom
     console.log(`${packageManager} not found, installing globally...`);
     try {
       await execa('npm', ['install', '-g', packageManager]);
-      
+
       // Verify installation
       try {
         await execa(packageManager, ['--version']);
@@ -72,17 +72,17 @@ export function stringifyConfig(obj: any, indent = 0): string {
     const items = obj.map(item => `${' '.repeat(indent + 2)}${stringifyConfig(item, indent + 2)}`);
     return `[\n${items.join(',\n')}\n${' '.repeat(indent)}]`;
   }
-  
+
   const entries = Object.entries(obj);
   if (entries.length === 0) return '{}';
-  
+
   const props = entries.map(([key, value]) => {
     // Use string literal only if key contains special characters
     const needsQuotes = !/^[a-zA-Z_$][a-zA-Z0-9_$]*$/.test(key);
     const keyStr = needsQuotes ? JSON.stringify(key) : key;
     return `${' '.repeat(indent + 2)}${keyStr}: ${stringifyConfig(value, indent + 2)}`;
   });
-  
+
   return `{\n${props.join(',\n')}\n${' '.repeat(indent)}}`;
 }
 

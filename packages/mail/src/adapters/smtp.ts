@@ -1,4 +1,4 @@
-import { MailOptionsWithTemplate, type MailAdapter, type MailOptions } from "../index";
+import type { MailOptionsWithTemplate, MailAdapter, MailOptions } from "../index";
 import nodemailer from "nodemailer";
 import { formatEmailAddress } from "../utils";
 import { MailBase } from "../base";

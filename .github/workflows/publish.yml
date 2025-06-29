@@ -56,10 +56,12 @@ jobs:
       - name: Install dependencies
         run: bun install
         
-      - name: Build
+      - name: Build create-harvide-starter
         run: bun run build
+        working-directory: packages/create-harvide-starter
         
-      - name: Publish to npm
-        run: npm publish
+      - name: Publish create-harvide-starter to npm
+        run: npm publish --access public
+        working-directory: packages/create-harvide-starter
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

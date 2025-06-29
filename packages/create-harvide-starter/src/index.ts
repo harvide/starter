@@ -132,6 +132,21 @@ async function main() {
         : null;
     },
 
+    mailProvider: ({ results }) => {
+      const features = (results as any).features;
+      const auth = (results as any).auth;
+      return features?.includes('web') && auth?.includes('email')
+        ? select({
+          message: 'Select email provider',
+          options: [
+            { value: 'resend' as const, label: 'Resend', hint: 'recommended' },
+            { value: 'smtp' as const, label: 'SMTP' },
+          ],
+          initialValue: 'resend',
+        })
+        : null;
+    },
+
     llm: () =>
       select({
         message: 'Which editor rules do you want to enable (optional)?',
@@ -167,6 +182,7 @@ async function main() {
       features: (answers as any).features,
       auth: (answers as any).auth,
       socialProviders: (answers as any).socialProviders,
+      mailProvider: (answers as any).mailProvider, // Pass mailProvider
       llm: (answers as any).llm,
     };
 

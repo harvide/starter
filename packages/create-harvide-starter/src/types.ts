@@ -13,6 +13,7 @@ export type SocialProvider =
   | 'linkedin';
 
 export type LLMType = 'claude' | 'cursor' | 'windsurf' | 'copilot' | 'zed' | 'codex' | 'none';
+export type MailProvider = 'resend' | 'smtp'; // New type for mail providers
 
 export interface CliAnswers {
   isStarter: StarterType;
@@ -24,6 +25,7 @@ export interface CliAnswers {
   auth: AuthMethod[] | null;
   socialProviders?: SocialProvider[];
   llm?: LLMType;
+  mailProvider?: MailProvider; // Add mailProvider to CLI answers
 }
 
 export interface CreateAppOptions {
@@ -35,6 +37,7 @@ export interface CreateAppOptions {
   auth?: AuthMethod[];
   socialProviders?: SocialProvider[];
   llm?: LLMType;
+  mailProvider?: MailProvider; // Add mailProvider to app options
 }
 
 export interface SocialProviderConfig {

@@ -8,10 +8,16 @@ import { checkMissingEnvVars } from './check-env.js';
 import defaultConfig from '../../../starter.config.js';
 
 export async function generateConfig(options: CreateAppOptions) {
-  const { appName, description, auth = [], features, socialProviders = [], projectPath } = options;
+  const { appName, description, auth = [], features, socialProviders = [], projectPath, mailProvider } = options;
 
   // Clone the starter config
   const config = deepClone(defaultConfig) as typeof defaultConfig.default;
+
+  // Update email provider if specified
+  if (mailProvider) {
+    config.email.enabled = true;
+    config.email.provider = mailProvider;
+  }
 
   // Update branding
   config.branding.name = appName;
@@ -49,7 +55,10 @@ export async function generateConfig(options: CreateAppOptions) {
   }
 
   // Generate and write .env file
-  const envContent = generateEnvContent(auth.includes('social') ? socialProviders : []);
+  const envContent = generateEnvContent(
+    auth.includes('social') ? socialProviders : [],
+    mailProvider
+  );
   const envFilePath = path.join(projectPath, '.env');
   await fs.ensureDir(path.dirname(envFilePath)); // Ensure directory exists
   await fs.writeFile(envFilePath, envContent);

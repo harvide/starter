@@ -1,13 +1,31 @@
-import type { SocialProvider } from './types.js';
+import type { SocialProvider, MailProvider } from './types.js';
 import { generateSecretKey } from './utils.js';
 
-export function generateEnvContent(socialProviders: SocialProvider[] = []): string {
+export function generateEnvContent(socialProviders: SocialProvider[] = [], mailProvider?: MailProvider): string {
+  let mailEnv = '';
+  if (mailProvider === 'resend') {
+    mailEnv = `
+# Resend Email Provider
+RESEND_API_KEY=""
+`;
+  } else if (mailProvider === 'smtp') {
+    mailEnv = `
+# SMTP Email Provider
+SMTP_HOST=""
+SMTP_PORT="587"
+SMTP_SECURE="false"
+SMTP_USER=""
+SMTP_PASS=""
+`;
+  }
+
   const baseEnv = `# Database
 DATABASE_URL="postgres://user:password@localhost:5432/database"
 
 # Auth
 AUTH_SECRET="${generateSecretKey(32)}"
 
+${mailEnv}
 `;
 
   const socialEnv = socialProviders.map(provider => {

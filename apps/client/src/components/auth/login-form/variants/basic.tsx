@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Loader2, Mail } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -24,9 +24,11 @@ import {
 import { cn } from "@repo/ui/lib/utils";
 import { config } from "@repo/config";
 
+import { authClient } from "../../../../lib/auth";
 import { oauthIconsMap } from "../../oauth-icons";
 import * as flows from "../flows";
 import { LoginFormProps } from "../types";
+import { showToast } from "@/lib/toast";
 
 type Tab = "email" | "phone";
 type Step =
@@ -59,6 +61,16 @@ export function BasicLoginForm({
   const [submitted, setSubmitted] = useState<SubmittedValue | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [resendCooldown, setResendCooldown] = useState(0);
+
+  useEffect(() => {
+    if (resendCooldown > 0) {
+      const timer = setInterval(() => {
+        setResendCooldown((prev) => prev - 1);
+      }, 1000);
+      return () => clearInterval(timer);
+    }
+  }, [resendCooldown]);
 
   const FORCE_EMAIL_PASSWORD_ONLY = forceEmailAndPasswordOnly === true;
 
@@ -372,6 +384,27 @@ export function BasicLoginForm({
                 <p className="text-sm text-muted-foreground mt-2">
                   Your email <b>{submitted?.value}</b> is not verified. Please check your inbox for a verification link.
                 </p>
+                <Button
+                  className="mt-4 w-full"
+                  variant="outline"
+                  disabled={resendCooldown > 0}
+                  onClick={async () => {
+                    if (submitted?.value) {
+                      const data = await authClient.sendVerificationEmail({
+                        email: submitted.value,
+                        callbackURL: callbackUrl,
+                      });
+                      if (data.error) {
+                        setError(data.error.message || "Failed to resend verification email.");
+                      } else {
+                        showToast.success(<>Email verification link sent to {submitted.value}</>);
+                        setResendCooldown(60);
+                      }
+                    }
+                  }}
+                >
+                  {resendCooldown > 0 ? `Resend in ${resendCooldown}s` : "Resend verification email"}
+                </Button>
                 <Button className="mt-4 w-full" onClick={() => {
                   if (submitted?.value) {
                     const domain = submitted.value.split('@')[1];
@@ -390,7 +423,7 @@ export function BasicLoginForm({
                   Open Mailbox
                   <Mail className="ml-2 h-4 w-4" />
                 </Button>
-                <Button className="mt-4 w-full" onClick={() => setStep("login")} variant="outline">
+                <Button className="mt-4 w-full" onClick={() => setStep("login")} variant="link">
                   Back to login
                 </Button>
                 {error && <p className="text-red-700 text-xs -mt-4 tracking-tighter">{error}</p>}

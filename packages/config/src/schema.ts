@@ -52,7 +52,7 @@ export interface BaseConfig {
       /** Password reset template */
       resetPassword: {
         subject: string;
-        variant: "default" | "dark";
+        variant: import("../../mail/src/transactional").TemplateVariant<"reset-password">;
       };
     }
   };

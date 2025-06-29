@@ -15,16 +15,16 @@ Each variant should:
 *   Be a React component.
 *   Accept `SignupFormProps` as its props.
 *   Handle various signup flows (email/password, OTP, social) by utilizing the provided flow functions.
-*   **Leverage Existing Flows**: It's highly recommended to reuse the authentication flow logic provided in `apps/client/src/components/auth/signup-form/flows.ts`. These functions abstract away the complex authentication interactions with the backend.
+*   **Leverage Existing Flows**: It's highly recommended to reuse the authentication flow logic provided in `packages/ui/src/components/auth/signup-form/flows.ts`. These functions abstract away the complex authentication interactions with the backend.
 *   **Utilize Default Props**: The `SignupFormProps` interface defines common properties like `header`, `subtitle`, `callbackUrl`, etc. Use these props to ensure consistency and configurability of your variant.
 
 ## Adding a New Register Form Variant
 
 To add a new register form variant, follow these steps:
 
-1.  **Create a new file**: For example, `apps/client/src/components/auth/signup-form/variants/my-custom-register.tsx`.
+1.  **Create a new file**: For example, `packages/ui/src/components/auth/signup-form/variants/my-custom-register.tsx`.
 2.  **Implement your component**: Export a React component that takes `SignupFormProps`. You can use an existing variant like `basic.tsx` as a starting point.
-3.  **Register the variant**: Update the `SignupFormVariants` map in `apps/client/src/components/auth/signup-form/index.ts` to include your new component.
+3.  **Register the variant**: Update the `SignupFormVariants` map in `packages/ui/src/components/auth/signup-form/index.ts` to include your new component.
 4.  **Configure in `starter.config.ts`**: Set `ui.signupForm` in your `starter.config.ts` to the name of your new variant.
 
 For more detailed instructions on adding new variants, refer to the [Adding New Variants](/adding-new-variants) documentation.

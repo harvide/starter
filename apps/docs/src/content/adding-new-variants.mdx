@@ -9,10 +9,11 @@ Variants allow you to provide different implementations or designs for specific 
 Current areas where variants are used:
 
 *   **Authentication Forms**:
-    *   Login Forms: `apps/client/src/components/auth/login-form/variants/`
-    *   Signup Forms: `apps/client/src/components/auth/signup-form/variants/`
+*   Login Forms: `packages/ui/src/components/auth/login-form/variants/`
+*   Signup Forms: `packages/ui/src/components/auth/signup-form/variants/`
 *   **Email Templates**:
     *   Email Verification: `packages/mail/src/transactional/emails/email-verification/variants/`
+    *   Password Reset: `packages/mail/src/transactional/emails/reset-password/variants/`
 
 ## Steps to Add a New Variant
 
@@ -20,14 +21,14 @@ Let's assume you want to add a new login form variant called `modern.tsx`.
 
 ### 1. Create the Variant File
 
-Navigate to the appropriate `variants` directory. For a login form, this would be `apps/client/src/components/auth/login-form/variants/`.
+Navigate to the appropriate `variants` directory. For a login form, this would be `packages/ui/src/components/auth/login-form/variants/`.
 
 Create your new variant file (e.g., `modern.tsx`) and implement your React component within it. Ensure it adheres to the expected props and structure of other variants in that directory.
 
 ```tsx
-// apps/client/src/components/auth/login-form/variants/modern.tsx
+// packages/ui/src/components/auth/login-form/variants/modern.tsx
 import React from 'react';
-import { LoginFormProps } from '../types'; // Adjust path as needed
+import { LoginFormProps } from '../types';
 
 export function ModernLoginForm({ header, subtitle }: LoginFormProps) {
   return (
@@ -45,12 +46,12 @@ export function ModernLoginForm({ header, subtitle }: LoginFormProps) {
 
 For UI components, you typically need to register your new variant so that the application can use it based on the `starter.config.ts` setting.
 
-Locate the `variants` registration file. For login forms, this might be within `apps/client/src/components/auth/login-form/index.ts` (or a similar file that aggregates variants).
+Locate the `variants` registration file. For login forms, this might be within `packages/ui/src/components/auth/login-form/index.ts` (or a similar file that aggregates variants).
 
 You'll need to import your new variant and add it to a map or object that the `ui.loginForm` configuration uses.
 
 ```typescript
-// Example: apps/client/src/components/auth/login-form/index.ts
+// Example: packages/ui/src/components/auth/login-form/index.ts
 import { BasicLoginForm } from './variants/basic';
 import { ModernLoginForm } from './variants/modern'; // Your new variant
 

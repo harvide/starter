@@ -8,7 +8,8 @@
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "check-types": "turbo run check-types",
     "db:generate": "cd packages/db && bunx drizzle-kit generate --config ./drizzle.config.js",
-    "db:migrate": "cd packages/db && bunx drizzle-kit migrate --config ./drizzle.config.js"
+    "db:migrate": "cd packages/db && bunx drizzle-kit migrate --config ./drizzle.config.js",
+    "build:docs": "turbo run build --filter=docs"
   },
   "devDependencies": {
     "@biomejs/biome": "2.0.5",
@@ -26,5 +27,10 @@
   "workspaces": [
     "apps/*",
     "packages/*"
-  ]
+  ],
+  "overrides": {
+    "react": "19.0.0",
+    "react-dom": "19.0.0",
+    "next": "15.3.4"
+  }
 }

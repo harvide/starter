@@ -19,7 +19,7 @@ const data = [
   },
 ];
 
-export default async function Page() {
+export default async function AdminDashboardPage() {
   const result = await useAdminUser();
   if (result.error === 'unauthorized') {
     return unauthorized();

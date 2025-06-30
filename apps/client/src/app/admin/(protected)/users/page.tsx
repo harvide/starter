@@ -5,7 +5,7 @@ import { UserTable } from '@/components/admin/dashboard/users/user-table';
 import { SiteHeader } from '@/components/admin/site-header';
 import { useAdminUser } from '@/hooks/use-admin-user';
 
-export async function Page() {
+export default async function AdminUsersPage() {
   const result = await useAdminUser();
   if (result.error === 'unauthorized') {
     return unauthorized();
@@ -47,5 +47,3 @@ export async function Page() {
     </SidebarProvider>
   );
 }
-
-export default Page;

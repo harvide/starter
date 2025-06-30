@@ -202,32 +202,31 @@ export async function resolveMetricCard(
 
       const getAllSessions = async (start: Date, end?: Date) => {
         const limit = 1000;
-        let offset = 0;
-        const allSessions: any[] = [];
+        const whereClause = [
+          { field: 'createdAt', operator: 'gte' as const, value: start },
+          ...(end
+            ? [{ field: 'createdAt', operator: 'lte' as const, value: end }]
+            : []),
+        ];
 
-        while (true) {
-          const whereClause = [
-            { field: 'createdAt', operator: 'gte' as const, value: start },
-            ...(end
-              ? [{ field: 'createdAt', operator: 'lte' as const, value: end }]
-              : []),
-          ];
+        // First call to determine total count
+        const total = await ctx.adapter.count({
+          model: 'session',
+          where: whereClause,
+        });
 
-          const page = await ctx.adapter.findMany({
+        const pageCount = Math.ceil(total / limit);
+        const fetches = Array.from({ length: pageCount }, (_, i) => {
+          return ctx.adapter.findMany({
             model: 'session',
             where: whereClause,
             limit,
-            offset,
+            offset: i * limit,
           });
+        });
 
-          allSessions.push(...page);
-          if (page.length < limit) {
-            break;
-          }
-          offset += limit;
-        }
-
-        return allSessions;
+        const pages = await Promise.all(fetches);
+        return pages.flat();
       };
 
       let thisMonthSessions: any[] = [];
@@ -256,6 +255,16 @@ export async function resolveMetricCard(
           : (deltaRaw / previousCount) * 100;
       const isPositive = deltaPercent >= 0;
 
+      let title: string;
+
+      if (deltaPercent === null) {
+        title = 'No previous data';
+      } else if (isPositive) {
+        title = 'Growth from last month';
+      } else {
+        title = 'Drop from last month';
+      }
+
       return {
         id: 'active_users_month',
         label: 'Active This Month',
@@ -273,12 +282,7 @@ export async function resolveMetricCard(
           positive: isPositive,
         },
         footer: {
-          title:
-            deltaPercent === null
-              ? 'No previous data'
-              : isPositive
-                ? 'Growth from last month'
-                : 'Drop from last month',
+          title: title,
           subtitle: `${previousCount.toLocaleString()} in previous month`,
           icon: isPositive ? <IconTrendingUp /> : <IconTrendingDown />,
         },
@@ -301,7 +305,10 @@ export async function resolveMetricCard(
             },
           ],
         });
-      } catch (_error) {}
+      } catch (_error) {
+        console.error('Failed to fetch active sessions:', _error);
+        // showToast.error("Failed to fetch active sessions. Please try again later.");
+      }
 
       return {
         id: 'active_sessions_now',

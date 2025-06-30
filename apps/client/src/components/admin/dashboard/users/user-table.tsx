@@ -65,7 +65,7 @@ import {
 } from '@tanstack/react-table';
 import { ChevronDownIcon, MoreHorizontal } from 'lucide-react';
 import Link from 'next/link';
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { getAcronym } from '@/lib/utils';
 
 type DialogAction = 'profile' | 'listSession' | 'revokeSession' | 'impersonate';
@@ -298,7 +298,7 @@ export function UserTable() {
     []
   );
 
-  async function fetchUsers(page: number) {
+  const fetchUsers = useCallback(async (page: number) => {
     setIsLoading(true);
     const res = await authClient.admin.listUsers({
       query: {
@@ -310,7 +310,7 @@ export function UserTable() {
     });
     setUsers((res.data?.users as User[]) || []);
     setIsLoading(false);
-  }
+  }, [authClient, pageSize, setUsers, setIsLoading]);
 
   useEffect(() => {
     fetchUsers(pageIndex);
@@ -357,17 +357,17 @@ export function UserTable() {
           {isLoading
             ? Array.from({ length: 8 }).map((_, i) => <SkeletonRow key={i} />)
             : table.getRowModel().rows.map((row) => (
-                <TableRow key={row.id}>
-                  {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
-                      )}
-                    </TableCell>
-                  ))}
-                </TableRow>
-              ))}
+              <TableRow key={row.id}>
+                {row.getVisibleCells().map((cell) => (
+                  <TableCell key={cell.id}>
+                    {flexRender(
+                      cell.column.columnDef.cell,
+                      cell.getContext()
+                    )}
+                  </TableCell>
+                ))}
+              </TableRow>
+            ))}
         </TableBody>
       </Table>
 
@@ -503,11 +503,11 @@ export function UserTable() {
                             return (
                               data < today ||
                               data >
-                                new Date(
-                                  today.getFullYear() + 1,
-                                  today.getMonth(),
-                                  today.getDate()
-                                )
+                              new Date(
+                                today.getFullYear() + 1,
+                                today.getMonth(),
+                                today.getDate()
+                              )
                             );
                           }}
                           mode="single"

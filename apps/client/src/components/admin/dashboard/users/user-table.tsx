@@ -1,4 +1,5 @@
 'use client';
+import { authClient, type User } from '@repo/auth/client';
 import { config } from '@repo/config';
 import {
   AlertDialog,
@@ -66,7 +67,6 @@ import { ChevronDownIcon, MoreHorizontal } from 'lucide-react';
 import Link from 'next/link';
 import { useEffect, useMemo, useState } from 'react';
 import { getAcronym } from '@/lib/utils';
-import { authClient, User } from '@repo/auth/client';
 
 type DialogAction = 'profile' | 'listSession' | 'revokeSession' | 'impersonate';
 type AlertAction = 'promote' | 'revokeAll' | 'ban' | 'delete';
@@ -357,17 +357,17 @@ export function UserTable() {
           {isLoading
             ? Array.from({ length: 8 }).map((_, i) => <SkeletonRow key={i} />)
             : table.getRowModel().rows.map((row) => (
-              <TableRow key={row.id}>
-                {row.getVisibleCells().map((cell) => (
-                  <TableCell key={cell.id}>
-                    {flexRender(
-                      cell.column.columnDef.cell,
-                      cell.getContext()
-                    )}
-                  </TableCell>
-                ))}
-              </TableRow>
-            ))}
+                <TableRow key={row.id}>
+                  {row.getVisibleCells().map((cell) => (
+                    <TableCell key={cell.id}>
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext()
+                      )}
+                    </TableCell>
+                  ))}
+                </TableRow>
+              ))}
         </TableBody>
       </Table>
 
@@ -503,11 +503,11 @@ export function UserTable() {
                             return (
                               data < today ||
                               data >
-                              new Date(
-                                today.getFullYear() + 1,
-                                today.getMonth(),
-                                today.getDate()
-                              )
+                                new Date(
+                                  today.getFullYear() + 1,
+                                  today.getMonth(),
+                                  today.getDate()
+                                )
                             );
                           }}
                           mode="single"
@@ -580,8 +580,8 @@ export function UserTable() {
                         ? undefined
                         : banUntilDate
                           ? Math.floor(
-                            (banUntilDate.getTime() - Date.now()) / 1000
-                          )
+                              (banUntilDate.getTime() - Date.now()) / 1000
+                            )
                           : undefined;
                       await authClient.admin.banUser({
                         userId: actionUser.id,

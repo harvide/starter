@@ -357,17 +357,17 @@ export function UserTable() {
           {isLoading
             ? Array.from({ length: 8 }).map((_, i) => <SkeletonRow key={i} />)
             : table.getRowModel().rows.map((row) => (
-                <TableRow key={row.id}>
-                  {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
-                      )}
-                    </TableCell>
-                  ))}
-                </TableRow>
-              ))}
+              <TableRow key={row.id}>
+                {row.getVisibleCells().map((cell) => (
+                  <TableCell key={cell.id}>
+                    {flexRender(
+                      cell.column.columnDef.cell,
+                      cell.getContext()
+                    )}
+                  </TableCell>
+                ))}
+              </TableRow>
+            ))}
         </TableBody>
       </Table>
 
@@ -503,11 +503,11 @@ export function UserTable() {
                             return (
                               data < today ||
                               data >
-                                new Date(
-                                  today.getFullYear() + 1,
-                                  today.getMonth(),
-                                  today.getDate()
-                                )
+                              new Date(
+                                today.getFullYear() + 1,
+                                today.getMonth(),
+                                today.getDate()
+                              )
                             );
                           }}
                           mode="single"
@@ -576,13 +576,18 @@ export function UserTable() {
                         userId: actionUser.id,
                       });
                     } else {
-                      const expiresIn = banForever
-                        ? undefined
-                        : banUntilDate
-                          ? Math.floor(
-                              (banUntilDate.getTime() - Date.now()) / 1000
-                            )
-                          : undefined;
+                      let expiresIn: number | undefined;
+
+                      if (!banForever) {
+                        if (banUntilDate) {
+                          expiresIn = Math.floor((banUntilDate.getTime() - Date.now()) / 1000);
+                        } else {
+                          expiresIn = undefined;
+                        }
+                      } else {
+                        expiresIn = undefined;
+                      }
+
                       await authClient.admin.banUser({
                         userId: actionUser.id,
                         banReason: banReason || undefined,
@@ -591,9 +596,9 @@ export function UserTable() {
                     }
                     setIsBanning(false);
                     setAlertAction(null);
-                  } catch (err: any) {
+                  } catch (err) {
                     setIsBanning(false);
-                    setBanError(err.message || 'Error processing ban');
+                    setBanError((err as Error).message || 'Error processing ban');
                   }
                 }}
               >
@@ -650,9 +655,9 @@ export function UserTable() {
                     });
                     setIsDeleting(false);
                     setAlertAction(null);
-                  } catch (err: any) {
+                  } catch (err) {
                     setIsDeleting(false);
-                    setDeleteError(err.message || 'Error deleting user');
+                    setDeleteError((err as Error).message || 'Error deleting user');
                   }
                 }}
               >

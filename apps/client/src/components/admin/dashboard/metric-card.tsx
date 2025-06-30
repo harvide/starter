@@ -239,7 +239,10 @@ export async function resolveMetricCard(
           startOfLastMonth,
           endOfLastMonth
         );
-      } catch (_error) { }
+      } catch (_error) {
+        console.error('Failed to fetch sessions:', _error);
+        // showToast.error("Failed to fetch active users. Please try again later.");
+      }
 
       const current = new Set(thisMonthSessions.map((s) => s.userId));
       const previous = new Set(lastMonthSessions.map((s) => s.userId));

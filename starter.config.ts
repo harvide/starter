@@ -496,5 +496,11 @@ export default {
      * @default "basic"
      */
     signupForm: 'basic',
+    /**
+     * Reset password form variant to use.
+     * Choose which reset password form implementation to display.
+     * @default "basic"
+     */
+    resetPasswordForm: 'basic',
   },
 } satisfies import('./packages/config/src/index').BaseConfig;

@@ -220,5 +220,7 @@ export interface BaseConfig {
     loginForm: import('../../ui/src/components/auth/login-form').LoginFormVariant;
     /** Signup form variant to use */
     signupForm: import('../../ui/src/components/auth/signup-form').SignupFormVariant;
+    /** Reset password form variant to use */
+    resetPasswordForm: import('../../ui/src/components/auth/reset-password-form').ResetPasswordFormVariant;
   };
 }

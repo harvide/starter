@@ -1,14 +1,14 @@
-import { config } from "@repo/config";
-import { notFound } from "next/navigation";
+import { config } from '@repo/config';
+import { notFound } from 'next/navigation';
 
 export default function AdminLayout({
-    children,
+  children,
 }: {
-    children: React.ReactNode;
+  children: React.ReactNode;
 }) {
-    if (!config.admin.enabled) {
-        return notFound();
-    }
+  if (!config.admin.enabled) {
+    return notFound();
+  }
 
-    return <>{children}</>;
+  return <>{children}</>;
 }

@@ -1,5 +1,5 @@
-import { authClient } from "@repo/auth/client";
-import { showToast } from "@repo/ui/lib/toast";
+import { authClient } from '@repo/auth/client';
+import { showToast } from '@repo/ui/lib/toast';
 
 export type SignupFlowProps = {
   onError: (error: string) => void;
@@ -25,7 +25,7 @@ export async function handleEmailPasswordSignup(
   }
 
   if (data.data) {
-    showToast.success(<>Account created successfully!</>);
+    showToast.success('Account created successfully!');
     props.onSuccess();
   }
 }
@@ -36,7 +36,7 @@ export async function handleOAuthSignup(
 ) {
   const data = await authClient.signIn.social({
     provider,
-    callbackURL: '/app'
+    callbackURL: '/app',
   });
 
   if (data.error) {

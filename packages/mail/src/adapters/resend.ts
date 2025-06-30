@@ -1,9 +1,13 @@
-import React from "react";
-import type { MailAdapter, MailOptions, MailOptionsWithTemplate } from "../index";
-import { Resend } from "resend";
-import { formatEmailAddress } from "../utils";
-import { MailBase } from "../base";
-import { pretty, render } from "@react-email/render";
+import { pretty, render } from '@react-email/render';
+import type React from 'react';
+import { Resend } from 'resend';
+import { MailBase } from '../base';
+import type {
+  MailAdapter,
+  MailOptions,
+  MailOptionsWithTemplate,
+} from '../index';
+import { formatEmailAddress } from '../utils';
 
 export class ResendAdapter extends MailBase implements MailAdapter {
   private resend: Resend;
@@ -12,7 +16,7 @@ export class ResendAdapter extends MailBase implements MailAdapter {
     super();
     const apiKey = process.env.RESEND_API_KEY;
     if (!apiKey) {
-      throw new Error("RESEND_API_KEY environment variable is not set");
+      throw new Error('RESEND_API_KEY environment variable is not set');
     }
 
     this.resend = new Resend(apiKey);
@@ -28,14 +32,22 @@ export class ResendAdapter extends MailBase implements MailAdapter {
     await this.resend.emails.send({
       to: Array.isArray(to) ? to : [to],
       from: formatEmailAddress(from),
-      subject: subject,
+      subject,
       html: body,
       ...rest,
     });
   }
 
   async sendTemplate(mailOptions: MailOptionsWithTemplate): Promise<void> {
-    const { from, to, subject, template, variant, context = {}, ...rest } = mailOptions;
+    const {
+      from,
+      to,
+      subject,
+      template,
+      variant,
+      context = {},
+      ...rest
+    } = mailOptions;
 
     const EmailTemplate = this.getTemplate(template, variant) as React.FC<any>;
     if (!EmailTemplate) {
@@ -45,8 +57,10 @@ export class ResendAdapter extends MailBase implements MailAdapter {
     await this.resend.emails.send({
       to: Array.isArray(to) ? to : [to],
       from: formatEmailAddress(from),
-      subject: subject,
-      html: await pretty(await render(EmailTemplate(context) as React.ReactNode)),
+      subject,
+      html: await pretty(
+        await render(EmailTemplate(context) as React.ReactNode)
+      ),
       ...rest,
     });
   }

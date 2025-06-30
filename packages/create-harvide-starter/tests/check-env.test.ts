@@ -1,6 +1,6 @@
-import { describe, it, expect, beforeEach, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { checkMissingEnvVars } from '../src/check-env';
-import { SocialProvider } from '../src/types';
+import type { SocialProvider } from '../src/types';
 
 describe('Check Environment Variables', () => {
   const originalEnv = process.env;

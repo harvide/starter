@@ -9,14 +9,21 @@ declare global {
   }
 }
 
-type EmailProvider = "smtp" | "resend" | "mailgun" | "postmark" | "sendgrid" | "ses" | "none";
+type EmailProvider =
+  | 'smtp'
+  | 'resend'
+  | 'mailgun'
+  | 'postmark'
+  | 'sendgrid'
+  | 'ses'
+  | 'none';
 
 export type EmailAddress = {
   /** Email address */
   email: string;
   /** Name of the email address */
   name?: string;
-}
+};
 
 /** Base configuration type for the starter project */
 export interface BaseConfig {
@@ -40,9 +47,9 @@ export interface BaseConfig {
       }[];
       /** Metrics displayed on the admin dashboard */
       metrics: {
-        type: import("../../../apps/client/src/components/admin/dashboard/metric-card").MetricType;
+        type: import('../../../apps/client/src/components/admin/dashboard/metric-card').MetricType;
       }[];
-    }
+    };
   };
 
   /** Authentication configuration */
@@ -56,7 +63,7 @@ export interface BaseConfig {
         expiresIn: number;
         allowedAttempts: number;
         requireVerification: boolean;
-      }
+      };
     };
 
     /** Email and password authentication settings */
@@ -78,14 +85,17 @@ export interface BaseConfig {
         sendVerificationOnSignUp: boolean;
         disableSignUp: boolean;
         allowedAttempts: number;
-      }
+      };
     };
 
     /** Social provider configuration */
-    socialProviders: Record<string, {
-      enabled: boolean;
-      [key: string]: unknown;
-    }>;
+    socialProviders: Record<
+      string,
+      {
+        enabled: boolean;
+        [key: string]: unknown;
+      }
+    >;
 
     /** Account */
     account: {
@@ -94,8 +104,8 @@ export interface BaseConfig {
         enabled: boolean;
         trustedProviders?: string[];
         allowUnlinkingAll?: boolean;
-      }
-    }
+      };
+    };
   };
 
   /** Branding configuration */
@@ -115,24 +125,27 @@ export interface BaseConfig {
     /** Email provider to use */
     provider: EmailProvider;
     /** Default sender email address */
-    from: {
-      admin: EmailAddress;
-      support: EmailAddress;
-      noReply: EmailAddress;
-    } | EmailAddress | string;
+    from:
+      | {
+          admin: EmailAddress;
+          support: EmailAddress;
+          noReply: EmailAddress;
+        }
+      | EmailAddress
+      | string;
 
     templates: {
       /** Email verification template */
       verification: {
         subject: string;
-        variant: import("../../mail/src/transactional").TemplateVariant<"email-verification">;
+        variant: import('../../mail/src/transactional').TemplateVariant<'email-verification'>;
       };
       /** Password reset template */
       resetPassword: {
         subject: string;
-        variant: import("../../mail/src/transactional").TemplateVariant<"reset-password">;
+        variant: import('../../mail/src/transactional').TemplateVariant<'reset-password'>;
       };
-    }
+    };
   };
 
   /** UI preferences */
@@ -186,9 +199,9 @@ export interface BaseConfig {
       baseUrl?: string;
     };
 
-    /** Favicon configuration 
+    /** Favicon configuration
      * Use https://realfavicongenerator.net/ to generate favicons
-    */
+     */
 
     /** OpenGraph configuration */
     openGraph?: {
@@ -204,8 +217,8 @@ export interface BaseConfig {
   /** UI Component configuration */
   ui: {
     /** Login form variant to use */
-    loginForm: import("../../ui/src/components/auth/login-form").LoginFormVariant;
+    loginForm: import('../../ui/src/components/auth/login-form').LoginFormVariant;
     /** Signup form variant to use */
-    signupForm: import("../../ui/src/components/auth/signup-form").SignupFormVariant;
+    signupForm: import('../../ui/src/components/auth/signup-form').SignupFormVariant;
   };
 }

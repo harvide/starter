@@ -1,8 +1,7 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { updateAuthConfig } from '../src/auth-config';
-import type { SocialProvider } from '../src/types';
+import path from 'node:path';
 import fs from 'fs-extra';
-import path from 'path';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { updateAuthConfig } from '../src/auth-config';
 
 vi.mock('fs-extra');
 vi.mock('path');
@@ -51,7 +50,10 @@ describe('Auth Configuration', () => {
 
   it('should correctly handle paths using path.join', async () => {
     await updateAuthConfig(mockProjectPath, ['apple']);
-    expect(path.join).toHaveBeenCalledWith(mockProjectPath, 'packages/auth/src/index.ts');
+    expect(path.join).toHaveBeenCalledWith(
+      mockProjectPath,
+      'packages/auth/src/index.ts'
+    );
   });
 
   it('should read the original file content', async () => {

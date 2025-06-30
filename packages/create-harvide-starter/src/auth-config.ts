@@ -1,8 +1,11 @@
+import path from 'node:path';
 import fs from 'fs-extra';
-import path from 'path';
 import type { SocialProvider } from './types.js';
 
-export async function updateAuthConfig(projectPath: string, socialProviders: SocialProvider[] = []) {
+export async function updateAuthConfig(
+  projectPath: string,
+  socialProviders: SocialProvider[] = []
+) {
   const authIndexPath = path.join(projectPath, 'packages/auth/src/index.ts');
   let content = await fs.readFile(authIndexPath, 'utf-8');
 

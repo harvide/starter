@@ -1,9 +1,9 @@
 export default {
-    index: {
-        display: 'hidden'
-    },
-    docs: {
-        type: 'page',
-        title: 'Documentation'
-    }
-}
+  index: {
+    display: 'hidden',
+  },
+  docs: {
+    type: 'page',
+    title: 'Documentation',
+  },
+};

@@ -1,8 +1,16 @@
 #!/usr/bin/env node
-import { intro, outro, select, group, text, confirm, multiselect, isCancel } from '@clack/prompts';
+import path from 'node:path';
+import {
+  group,
+  intro,
+  isCancel,
+  multiselect,
+  outro,
+  select,
+  text,
+} from '@clack/prompts';
 import chalk from 'chalk';
 import { Command } from 'commander';
-import path from 'path';
 import { createApp } from './create.js';
 import { isPackageManagerInstalled } from './utils.js';
 
@@ -25,12 +33,15 @@ async function main() {
 
   // Determine package manager from flags
   const packageManagerFlag = program.opts();
-  const selectedPackageManager =
-    packageManagerFlag['useNpm'] ? 'npm' :
-      packageManagerFlag['usePnpm'] ? 'pnpm' :
-        packageManagerFlag['useYarn'] ? 'yarn' :
-          packageManagerFlag['useBun'] ? 'bun' :
-            undefined;
+  const selectedPackageManager = packageManagerFlag.useNpm
+    ? 'npm'
+    : packageManagerFlag.usePnpm
+      ? 'pnpm'
+      : packageManagerFlag.useYarn
+        ? 'yarn'
+        : packageManagerFlag.useBun
+          ? 'bun'
+          : undefined;
 
   const answers = await group({
     isStarter: () =>
@@ -38,7 +49,11 @@ async function main() {
         message: 'Would you like to use Starter Pro?',
         options: [
           { value: 'basic', label: 'No, use basic starter' },
-          { value: 'pro', label: 'Yes, use Starter Pro (coming soon)', hint: '✨' },
+          {
+            value: 'pro',
+            label: 'Yes, use Starter Pro (coming soon)',
+            hint: '✨',
+          },
         ],
         initialValue: 'basic',
       }),
@@ -49,25 +64,50 @@ async function main() {
         placeholder: './my-app',
         initialValue: directory || '',
         validate: (value: string) => {
-          if (!value) return 'Please enter a directory name';
+          if (!value) {
+            return 'Please enter a directory name';
+          }
         },
       }),
 
     packageManager: async () => {
-      if (selectedPackageManager) return selectedPackageManager;
+      if (selectedPackageManager) {
+        return selectedPackageManager;
+      }
 
-      const npmInstalled = await isPackageManagerInstalled('npm').catch(() => false);
-      const yarnInstalled = await isPackageManagerInstalled('yarn').catch(() => false);
-      const pnpmInstalled = await isPackageManagerInstalled('pnpm').catch(() => false);
-      const bunInstalled = await isPackageManagerInstalled('bun').catch(() => false);
+      const npmInstalled = await isPackageManagerInstalled('npm').catch(
+        () => false
+      );
+      const yarnInstalled = await isPackageManagerInstalled('yarn').catch(
+        () => false
+      );
+      const pnpmInstalled = await isPackageManagerInstalled('pnpm').catch(
+        () => false
+      );
+      const bunInstalled = await isPackageManagerInstalled('bun').catch(
+        () => false
+      );
 
       return select({
         message: 'Select preferred package manager',
         options: [
-          { value: 'npm' as const, label: `npm ${!npmInstalled ? '(not installed)' : ''}` },
-          { value: 'yarn' as const, label: `yarn ${!yarnInstalled ? '(not installed)' : ''}` },
-          { value: 'pnpm' as const, label: `pnpm ${!pnpmInstalled ? '(not installed)' : ''}` },
-          { value: 'bun' as const, label: `bun ${!bunInstalled ? '(not installed)' : ''}`, hint: 'recommended' },
+          {
+            value: 'npm' as const,
+            label: `npm ${npmInstalled ? '' : '(not installed)'}`,
+          },
+          {
+            value: 'yarn' as const,
+            label: `yarn ${yarnInstalled ? '' : '(not installed)'}`,
+          },
+          {
+            value: 'pnpm' as const,
+            label: `pnpm ${pnpmInstalled ? '' : '(not installed)'}`,
+          },
+          {
+            value: 'bun' as const,
+            label: `bun ${bunInstalled ? '' : '(not installed)'}`,
+            hint: 'recommended',
+          },
         ],
         initialValue: 'bun',
       });
@@ -78,7 +118,9 @@ async function main() {
         message: 'What is your application name?',
         placeholder: 'My Awesome App',
         validate: (value: string) => {
-          if (!value) return 'Please enter an application name';
+          if (!value) {
+            return 'Please enter an application name';
+          }
         },
       }),
 
@@ -93,7 +135,11 @@ async function main() {
         message: 'Select features to include',
         options: [
           { value: 'web' as const, label: 'Web Application', hint: 'Next.js' },
-          { value: 'admin' as const, label: 'Admin Panel', hint: 'Enable admin panel' },
+          {
+            value: 'admin' as const,
+            label: 'Admin Panel',
+            hint: 'Enable admin panel',
+          },
         ],
         required: true,
       }),
@@ -102,14 +148,22 @@ async function main() {
       const features = (results as any).features;
       return features?.includes('web')
         ? multiselect({
-          message: 'Select authentication methods',
-          options: [
-            { value: 'email' as const, label: 'Email/Password', hint: 'recommended' },
-            { value: 'phone' as const, label: 'Phone Number' },
-            { value: 'social' as const, label: 'Social Providers', hint: 'Google, GitHub, etc.' },
-          ],
-          required: true,
-        })
+            message: 'Select authentication methods',
+            options: [
+              {
+                value: 'email' as const,
+                label: 'Email/Password',
+                hint: 'recommended',
+              },
+              { value: 'phone' as const, label: 'Phone Number' },
+              {
+                value: 'social' as const,
+                label: 'Social Providers',
+                hint: 'Google, GitHub, etc.',
+              },
+            ],
+            required: true,
+          })
         : null;
     },
 
@@ -117,18 +171,18 @@ async function main() {
       const auth = (results as any).auth;
       return auth?.includes('social')
         ? multiselect({
-          message: 'Select social providers',
-          options: [
-            { value: 'google' as const, label: 'Google' },
-            { value: 'github' as const, label: 'GitHub' },
-            { value: 'facebook' as const, label: 'Facebook' },
-            { value: 'apple' as const, label: 'Apple' },
-            { value: 'twitter' as const, label: 'Twitter' },
-            { value: 'discord' as const, label: 'Discord' },
-            { value: 'linkedin' as const, label: 'LinkedIn' },
-          ],
-          required: true,
-        })
+            message: 'Select social providers',
+            options: [
+              { value: 'google' as const, label: 'Google' },
+              { value: 'github' as const, label: 'GitHub' },
+              { value: 'facebook' as const, label: 'Facebook' },
+              { value: 'apple' as const, label: 'Apple' },
+              { value: 'twitter' as const, label: 'Twitter' },
+              { value: 'discord' as const, label: 'Discord' },
+              { value: 'linkedin' as const, label: 'LinkedIn' },
+            ],
+            required: true,
+          })
         : null;
     },
 
@@ -137,13 +191,17 @@ async function main() {
       const auth = (results as any).auth;
       return features?.includes('web') && auth?.includes('email')
         ? select({
-          message: 'Select email provider',
-          options: [
-            { value: 'resend' as const, label: 'Resend', hint: 'recommended' },
-            { value: 'smtp' as const, label: 'SMTP' },
-          ],
-          initialValue: 'resend',
-        })
+            message: 'Select email provider',
+            options: [
+              {
+                value: 'resend' as const,
+                label: 'Resend',
+                hint: 'recommended',
+              },
+              { value: 'smtp' as const, label: 'SMTP' },
+            ],
+            initialValue: 'resend',
+          })
         : null;
     },
 
@@ -170,7 +228,9 @@ async function main() {
 
   // Handle Pro version (currently disabled)
   if ((answers as any).isStarter === 'pro') {
-    outro(chalk.yellow('Starter Pro is coming soon! Using basic starter instead.'));
+    outro(
+      chalk.yellow('Starter Pro is coming soon! Using basic starter instead.')
+    );
   }
 
   try {
@@ -218,7 +278,6 @@ To learn more, see the docs: ${chalk.cyan('https://starter.harvide.com')}
   }
 }
 
-main().catch((err) => {
-  console.error(chalk.red('✖'), err.message);
+main().catch((_err) => {
   process.exit(1);
 });

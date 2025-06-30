@@ -1,12 +1,6 @@
-"use client"
+'use client';
 
-import {
-  IconCreditCard,
-  IconDotsVertical,
-  IconLogout,
-  IconNotification,
-  IconUserCircle,
-} from "@tabler/icons-react"
+import { authClient } from '@repo/auth/client';
 
 import {
   AlertDialog,
@@ -16,14 +10,14 @@ import {
   AlertDialogDescription,
   AlertDialogFooter,
   AlertDialogHeader,
-  AlertDialogTitle
-} from "@repo/ui/components/alert-dialog"
+  AlertDialogTitle,
+} from '@repo/ui/components/alert-dialog';
 
 import {
   Avatar,
   AvatarFallback,
   AvatarImage,
-} from "@repo/ui/components/avatar"
+} from '@repo/ui/components/avatar';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -32,29 +26,35 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@repo/ui/components/dropdown-menu"
+} from '@repo/ui/components/dropdown-menu';
 import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
   useSidebar,
-} from "@repo/ui/components/sidebar"
-import { getAcronym } from "@/lib/utils"
-import { authClient } from "@repo/auth/client"
-import { useRouter } from "next/navigation"
-import { useState } from "react"
+} from '@repo/ui/components/sidebar';
+import {
+  IconCreditCard,
+  IconDotsVertical,
+  IconLogout,
+  IconNotification,
+  IconUserCircle,
+} from '@tabler/icons-react';
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
+import { getAcronym } from '@/lib/utils';
 
 export function NavUser({
   user,
 }: {
   user: {
-    name: string
-    email: string
-    avatar?: string
-  }
+    name: string;
+    email: string;
+    avatar?: string;
+  };
 }) {
   const router = useRouter();
-  const { isMobile } = useSidebar()
+  const { isMobile } = useSidebar();
   const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
 
   const handleLogout = async () => {
@@ -62,22 +62,22 @@ export function NavUser({
       await authClient.signOut({
         fetchOptions: {
           onSuccess: () => {
-            router.push("/admin/signin");
+            router.push('/admin/signin');
           },
         },
       });
-    } catch (error) {
-      console.error("Logout failed:", error);
-    }
-  }
+    } catch (_error) {}
+  };
 
   return (
     <>
       {/* Logout Confirmation Dialog */}
-      <AlertDialog open={showLogoutConfirm} onOpenChange={setShowLogoutConfirm}>
+      <AlertDialog onOpenChange={setShowLogoutConfirm} open={showLogoutConfirm}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Are you sure you want to log out?</AlertDialogTitle>
+            <AlertDialogTitle>
+              Are you sure you want to log out?
+            </AlertDialogTitle>
             <AlertDialogDescription>
               This will end your session and redirect you to the sign-in page.
             </AlertDialogDescription>
@@ -85,8 +85,8 @@ export function NavUser({
           <AlertDialogFooter>
             <AlertDialogCancel>Cancel</AlertDialogCancel>
             <AlertDialogAction
+              className="cursor-pointer bg-destructive text-destructive-foreground hover:bg-destructive/90"
               onClick={handleLogout}
-              className="bg-destructive text-destructive-foreground hover:bg-destructive/90 cursor-pointer"
             >
               Log out
             </AlertDialogAction>
@@ -100,16 +100,18 @@ export function NavUser({
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <SidebarMenuButton
-                size="lg"
                 className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
+                size="lg"
               >
                 <Avatar className="h-8 w-8 rounded-lg grayscale">
-                  <AvatarImage src={user.avatar} alt={user.name} />
-                  <AvatarFallback className="rounded-lg">{getAcronym(user.name)}</AvatarFallback>
+                  <AvatarImage alt={user.name} src={user.avatar} />
+                  <AvatarFallback className="rounded-lg">
+                    {getAcronym(user.name)}
+                  </AvatarFallback>
                 </Avatar>
                 <div className="grid flex-1 text-left text-sm leading-tight">
                   <span className="truncate font-medium">{user.name}</span>
-                  <span className="text-muted-foreground truncate text-xs">
+                  <span className="truncate text-muted-foreground text-xs">
                     {user.email}
                   </span>
                 </div>
@@ -117,20 +119,22 @@ export function NavUser({
               </SidebarMenuButton>
             </DropdownMenuTrigger>
             <DropdownMenuContent
-              className="w-(--radix-dropdown-menu-trigger-width) min-w-56 rounded-lg"
-              side={isMobile ? "bottom" : "right"}
               align="end"
+              className="w-(--radix-dropdown-menu-trigger-width) min-w-56 rounded-lg"
+              side={isMobile ? 'bottom' : 'right'}
               sideOffset={4}
             >
               <DropdownMenuLabel className="p-0 font-normal">
                 <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
                   <Avatar className="h-8 w-8 rounded-lg">
-                    <AvatarImage src={user.avatar} alt={user.name} />
-                    <AvatarFallback className="rounded-lg">{getAcronym(user.name)}</AvatarFallback>
+                    <AvatarImage alt={user.name} src={user.avatar} />
+                    <AvatarFallback className="rounded-lg">
+                      {getAcronym(user.name)}
+                    </AvatarFallback>
                   </Avatar>
                   <div className="grid flex-1 text-left text-sm leading-tight">
                     <span className="truncate font-medium">{user.name}</span>
-                    <span className="text-muted-foreground truncate text-xs">
+                    <span className="truncate text-muted-foreground text-xs">
                       {user.email}
                     </span>
                   </div>
@@ -161,5 +165,5 @@ export function NavUser({
         </SidebarMenuItem>
       </SidebarMenu>
     </>
-  )
+  );
 }

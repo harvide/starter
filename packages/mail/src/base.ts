@@ -1,16 +1,13 @@
-import { type JSX } from 'react';
+import type { JSX } from 'react';
 
 // eslint-disable @typescript-eslint/no-explicit-any
 type EmailTemplate = (...args: any[]) => JSX.Element;
 
 export class MailBase {
-  private templates: Record<string, Record<string, EmailTemplate | undefined>> = {};
+  private templates: Record<string, Record<string, EmailTemplate | undefined>> =
+    {};
 
-  registerTemplate(
-    name: string,
-    variant: string,
-    template: EmailTemplate
-  ) {
+  registerTemplate(name: string, variant: string, template: EmailTemplate) {
     if (!this.templates[name]) {
       this.templates[name] = {};
     }

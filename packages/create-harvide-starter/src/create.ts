@@ -1,33 +1,44 @@
-import fs from 'fs-extra';
-import path from 'path';
+import path from 'node:path';
 import { execa } from 'execa';
-import type { CreateAppOptions, LLMType } from './types.js';
-import { ensurePackageManager, getPackageManagerVersion, installDependencies } from './utils.js';
-import { createSpinner } from './spinner.js';
+import fs from 'fs-extra';
 import { updateAuthConfig } from './auth-config.js';
 import { generateConfig } from './config.js';
+import { createSpinner } from './spinner.js';
+import type { CreateAppOptions, LLMType } from './types.js';
+import {
+  ensurePackageManager,
+  getPackageManagerVersion,
+  installDependencies,
+} from './utils.js';
 
-async function copyLLMRules(projectPath: string, templatePath: string, llm: LLMType) {
+async function copyLLMRules(
+  projectPath: string,
+  templatePath: string,
+  llm: LLMType
+) {
   const llmRuleMap = {
-    claude: [
-      { source: '.claude/CLAUDE.md', target: '.claude/CLAUDE.md' },
-    ],
+    claude: [{ source: '.claude/CLAUDE.md', target: '.claude/CLAUDE.md' }],
     cursor: [
-      { source: '.cursor/rules/ultracite.mdc', target: '.cursor/rules/ultracite.mdc' },
+      {
+        source: '.cursor/rules/ultracite.mdc',
+        target: '.cursor/rules/ultracite.mdc',
+      },
     ],
     windsurf: [
-      { source: '.windsurf/rules/ultracite.md', target: '.windsurf/rules/ultracite.md' },
+      {
+        source: '.windsurf/rules/ultracite.md',
+        target: '.windsurf/rules/ultracite.md',
+      },
     ],
     copilot: [
-      { source: '.github/copilot-instructions.md', target: '.github/copilot-instructions.md' },
+      {
+        source: '.github/copilot-instructions.md',
+        target: '.github/copilot-instructions.md',
+      },
     ],
-    zed: [
-      { source: '.rules', target: '.rules' },
-    ],
-    codex: [
-      { source: 'AGENTS.md', target: 'AGENTS.md' },
-    ],
-    none: []
+    zed: [{ source: '.rules', target: '.rules' }],
+    codex: [{ source: 'AGENTS.md', target: 'AGENTS.md' }],
+    none: [],
   };
 
   const rulesToCopy = llmRuleMap[llm];
@@ -53,7 +64,15 @@ async function copyLLMRules(projectPath: string, templatePath: string, llm: LLMT
 }
 
 export async function createApp(options: CreateAppOptions) {
-  const { projectPath, appName, description, features, auth, packageManager, llm } = options;
+  const {
+    projectPath,
+    appName,
+    description,
+    features,
+    auth,
+    packageManager,
+    llm,
+  } = options;
   const templatePath = path.resolve(
     path.dirname(new URL(import.meta.url).pathname),
     './template'
@@ -90,7 +109,7 @@ export async function createApp(options: CreateAppOptions) {
       const sourcePath = path.join(templatePath, file);
       const targetPath = path.join(projectPath, file);
 
-      if (!await fs.pathExists(sourcePath)) {
+      if (!(await fs.pathExists(sourcePath))) {
         throw new Error(`Source file not found: ${sourcePath}`);
       }
 
@@ -116,7 +135,10 @@ export async function createApp(options: CreateAppOptions) {
 
   // Generate and write the starter config
   const configContent = await generateConfig(options);
-  await fs.writeFile(path.join(projectPath, 'starter.config.ts'), configContent);
+  await fs.writeFile(
+    path.join(projectPath, 'starter.config.ts'),
+    configContent
+  );
 
   spin = createSpinner('Setting up selected features');
 
@@ -149,7 +171,6 @@ export async function createApp(options: CreateAppOptions) {
     spin.success('Authentication configured');
   }
 
-
   spin = createSpinner('Configuring project');
   try {
     const pkgPath = path.join(projectPath, 'package.json');
@@ -167,16 +188,22 @@ export async function createApp(options: CreateAppOptions) {
       npm: 'npx',
       pnpm: 'pnpm',
       yarn: 'yarn',
-      bun: 'bunx'
+      bun: 'bunx',
     }[packageManager];
 
     // Update scripts that use package manager specific commands
     if (pkg.scripts) {
-      Object.keys(pkg.scripts).forEach(scriptName => {
+      Object.keys(pkg.scripts).forEach((scriptName) => {
         if (pkg.scripts[scriptName].includes('bunx')) {
-          pkg.scripts[scriptName] = pkg.scripts[scriptName].replace('bunx', execPrefix);
+          pkg.scripts[scriptName] = pkg.scripts[scriptName].replace(
+            'bunx',
+            execPrefix
+          );
         } else if (pkg.scripts[scriptName].includes('npx')) {
-          pkg.scripts[scriptName] = pkg.scripts[scriptName].replace('npx', execPrefix);
+          pkg.scripts[scriptName] = pkg.scripts[scriptName].replace(
+            'npx',
+            execPrefix
+          );
         }
       });
     }
@@ -199,7 +226,7 @@ export async function createApp(options: CreateAppOptions) {
   try {
     await execa('git', ['init'], { cwd: projectPath });
     spin.success('Git repository initialized');
-  } catch (error) {
+  } catch (_error) {
     spin.error('Failed to initialize git repository');
   }
 

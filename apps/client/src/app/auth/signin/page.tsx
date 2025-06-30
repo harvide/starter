@@ -1,9 +1,9 @@
-import { getLoginFormVariant } from "@repo/ui/components/auth/login-form";
-import { config } from "@repo/config";
-import { Metadata } from "next";
+import { config } from '@repo/config';
+import { getLoginFormVariant } from '@repo/ui/components/auth/login-form';
+import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: `Sign in`
+  title: 'Sign in',
 };
 
 export default function SignInPage() {
@@ -17,5 +17,6 @@ export default function SignInPage() {
       <div className="w-full max-w-sm md:max-w-3xl">
         <LoginForm />
       </div>
-    </div>);
+    </div>
+  );
 }

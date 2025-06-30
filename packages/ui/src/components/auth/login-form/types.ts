@@ -1,18 +1,18 @@
-import type { HTMLMotionProps } from "framer-motion";
+import type { HTMLMotionProps } from 'framer-motion';
 
 type MotionDivProps = HTMLMotionProps<'div'> & {
-    className?: string;
+  className?: string;
 };
 
 export type LoginFormProps = MotionDivProps & {
-    className?: string;
+  className?: string;
 
-    // The URL to redirect to after successful login
-    callbackUrl?: string;
+  // The URL to redirect to after successful login
+  callbackUrl?: string;
 
-    header?: React.ReactNode;
-    subtitle?: React.ReactNode;
+  header?: React.ReactNode;
+  subtitle?: React.ReactNode;
 
-    // Used in admin signup flow
-    forceEmailAndPasswordOnly?: boolean;
+  // Used in admin signup flow
+  forceEmailAndPasswordOnly?: boolean;
 };

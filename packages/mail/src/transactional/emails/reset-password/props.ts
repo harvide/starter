@@ -1,3 +1,3 @@
-import type { EmailVerificationProps } from "../email-verification/props";
+import type { EmailVerificationProps } from '../email-verification/props';
 
-export interface ResetPasswordProps extends EmailVerificationProps { }
+export interface ResetPasswordProps extends EmailVerificationProps {}

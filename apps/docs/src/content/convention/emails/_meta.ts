@@ -1,3 +1,3 @@
 export default {
-    "email-verification": "Email Verification",
-}
+  'email-verification': 'Email Verification',
+};

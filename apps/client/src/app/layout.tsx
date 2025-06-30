@@ -1,18 +1,18 @@
-import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
-import "@repo/ui/globals.css";
-import { AdminCheckWrapper } from "@/components/wrapper/admin-check-wrapper";
-import { Toaster } from "@repo/ui/components/sonner";
-import config from "../../../../starter.config";
+import type { Metadata } from 'next';
+import { Geist, Geist_Mono } from 'next/font/google';
+import '@repo/ui/globals.css';
+import { Toaster } from '@repo/ui/components/sonner';
+import { AdminCheckWrapper } from '@/components/wrapper/admin-check-wrapper';
+import config from '../../../../starter.config';
 
 const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
+  variable: '--font-geist-sans',
+  subsets: ['latin'],
 });
 
 const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
+  variable: '--font-geist-mono',
+  subsets: ['latin'],
 });
 
 export const metadata: Metadata = {
@@ -26,22 +26,25 @@ export const metadata: Metadata = {
   creator: config.branding.name,
   openGraph: {
     title: config.seo.openGraph.enabled ? config.seo.title : undefined,
-    description: config.seo.openGraph.enabled ? config.seo.description : undefined,
+    description: config.seo.openGraph.enabled
+      ? config.seo.description
+      : undefined,
     url: config.branding.url,
     siteName: config.branding.name,
-    images: config.seo.openGraph.enabled ? [
-      {
-        url: config.seo.openGraph.imageUrl,
-        width: 1200,
-        height: 630,
-        alt: config.seo.openGraph.imageAlt,
-      },
-    ] : [],
-    locale: "en_US",
-    type: "website",
-  }
+    images: config.seo.openGraph.enabled
+      ? [
+          {
+            url: config.seo.openGraph.imageUrl,
+            width: 1200,
+            height: 630,
+            alt: config.seo.openGraph.imageAlt,
+          },
+        ]
+      : [],
+    locale: 'en_US',
+    type: 'website',
+  },
 };
-
 
 export default function RootLayout({
   children,

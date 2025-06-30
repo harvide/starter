@@ -1,9 +1,9 @@
-import { config } from "@repo/config";
-import { notFound } from "next/navigation";
-import { Metadata } from "next";
-import { getLoginFormVariant } from "@repo/ui/components/auth/login-form";
-import { getAdminSignupFormVariant } from "@repo/ui/components/auth/admin-signup-form";
-import { checkAdminsExist } from "@repo/ui/components/auth/admin-signup-form/flows";
+import { config } from '@repo/config';
+import { getAdminSignupFormVariant } from '@repo/ui/components/auth/admin-signup-form';
+import { checkAdminsExist } from '@repo/ui/components/auth/admin-signup-form/flows';
+import { getLoginFormVariant } from '@repo/ui/components/auth/login-form';
+import type { Metadata } from 'next';
+import { notFound } from 'next/navigation';
 
 export const metadata: Metadata = {
   title: `Admin Sign in - ${config.branding.name}`,
@@ -17,7 +17,6 @@ async function AdminSignInPage() {
 
   const adminsExist = await checkAdminsExist();
   if (adminsExist.error) {
-    console.error("Error checking admin accounts:", adminsExist.error);
     return (
       <div>
         <h1>Error</h1>
@@ -27,10 +26,7 @@ async function AdminSignInPage() {
   }
 
   if (!adminsExist.exists) {
-    console.warn(
-      "No admin account found. Please create an admin account at /admin/signup"
-    );
-    const BasicSignupForm = getAdminSignupFormVariant("basic");
+    const BasicSignupForm = getAdminSignupFormVariant('basic');
     if (!BasicSignupForm) {
       throw new Error(`Signup form variant "basic" not found.`);
     }
@@ -55,16 +51,9 @@ async function AdminSignInPage() {
         <LoginForm
           callbackUrl="/admin/dashboard"
           forceEmailAndPasswordOnly
-          header={
-            <>
-              Admin Sign In
-            </>
-          }
-          subtitle={
-            <>
-              Please sign in to access the admin dashboard.
-            </>
-          } />
+          header={<>Admin Sign In</>}
+          subtitle={<>Please sign in to access the admin dashboard.</>}
+        />
       </div>
     </div>
   );

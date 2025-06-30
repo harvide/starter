@@ -1,11 +1,15 @@
-import { SocialProvider } from './types.js';
+import type { SocialProvider } from './types.js';
 
 function getRequiredEnvVars(provider: SocialProvider): string[] {
   switch (provider) {
     case 'facebook':
       return ['FACEBOOK_CLIENT_ID', 'FACEBOOK_CLIENT_SECRET'];
     case 'apple':
-      return ['APPLE_CLIENT_ID', 'APPLE_CLIENT_SECRET', 'APPLE_APP_BUNDLE_IDENTIFIER'];
+      return [
+        'APPLE_CLIENT_ID',
+        'APPLE_CLIENT_SECRET',
+        'APPLE_APP_BUNDLE_IDENTIFIER',
+      ];
     case 'discord':
       return ['DISCORD_CLIENT_ID', 'DISCORD_CLIENT_SECRET'];
     case 'github':

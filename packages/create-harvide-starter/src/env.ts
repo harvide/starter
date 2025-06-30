@@ -1,7 +1,10 @@
-import type { SocialProvider, MailProvider } from './types.js';
+import type { MailProvider, SocialProvider } from './types.js';
 import { generateSecretKey } from './utils.js';
 
-export function generateEnvContent(socialProviders: SocialProvider[] = [], mailProvider?: MailProvider): string {
+export function generateEnvContent(
+  socialProviders: SocialProvider[] = [],
+  mailProvider?: MailProvider
+): string {
   let mailEnv = '';
   if (mailProvider === 'resend') {
     mailEnv = `
@@ -28,42 +31,45 @@ AUTH_SECRET="${generateSecretKey(32)}"
 ${mailEnv}
 `;
 
-  const socialEnv = socialProviders.map(provider => {
-    switch (provider) {
-      case 'facebook':
-        return `# Facebook OAuth
+  const socialEnv = socialProviders
+    .map((provider) => {
+      switch (provider) {
+        case 'facebook':
+          return `# Facebook OAuth
 FACEBOOK_CLIENT_ID=""
 FACEBOOK_CLIENT_SECRET=""`;
-      case 'apple':
-        return `# Apple OAuth
+        case 'apple':
+          return `# Apple OAuth
 APPLE_CLIENT_ID=""
 APPLE_CLIENT_SECRET=""
 # Optional: if using Apple Sign In for iOS apps using the ID Token.
 APPLE_APP_BUNDLE_IDENTIFIER=""`;
-      case 'discord':
-        return `# Discord OAuth
+        case 'discord':
+          return `# Discord OAuth
 DISCORD_CLIENT_ID=""
 DISCORD_CLIENT_SECRET=""`;
-      case 'github':
-        return `# GitHub OAuth
+        case 'github':
+          return `# GitHub OAuth
 GITHUB_CLIENT_ID=""
 GITHUB_CLIENT_SECRET=""`;
-      case 'google':
-        return `# Google OAuth
+        case 'google':
+          return `# Google OAuth
 GOOGLE_CLIENT_ID=""
 GOOGLE_CLIENT_SECRET=""`;
-      case 'twitter':
-        return `# Twitter OAuth
+        case 'twitter':
+          return `# Twitter OAuth
 TWITTER_CLIENT_ID=""
 TWITTER_CLIENT_SECRET=""`;
-      case 'linkedin':
-        return `# LinkedIn OAuth
+        case 'linkedin':
+          return `# LinkedIn OAuth
 LINKEDIN_CLIENT_ID=""
 LINKEDIN_CLIENT_SECRET=""`;
-      default:
-        return '';
-    }
-  }).filter(Boolean).join('\n\n');
+        default:
+          return '';
+      }
+    })
+    .filter(Boolean)
+    .join('\n\n');
 
-  return `${baseEnv}${socialEnv ? socialEnv + '\n' : ''}`;
+  return `${baseEnv}${socialEnv ? `${socialEnv}\n` : ''}`;
 }

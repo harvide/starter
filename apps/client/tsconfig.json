@@ -5,7 +5,7 @@
     "paths": {
       "@/*": ["./src/*"],
       "@repo/ui/*": ["../../packages/ui/src/*"],
-      "@repo/auth/*": ["../../packages/auth/src/*"],
+      "@repo/auth/*": ["../../packages/auth/src/*"]
     },
     "plugins": [
       {
@@ -20,7 +20,5 @@
     "next.config.js",
     ".next/types/**/*.ts"
   ],
-  "exclude": [
-    "node_modules"
-  ]
+  "exclude": ["node_modules"]
 }

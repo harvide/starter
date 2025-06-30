@@ -1,14 +1,21 @@
+import path from 'node:path';
+import fs from 'fs-extra';
+import defaultConfig from '../../../starter.config.js';
+import { checkMissingEnvVars } from './check-env.js';
+import { generateEnvContent } from './env.js';
 import type { CreateAppOptions } from './types.js';
 import { deepClone, SocialProviderConfigs, stringifyConfig } from './utils.js';
-import fs from 'fs-extra';
-import path from 'path';
-import chalk from 'chalk';
-import { generateEnvContent } from './env.js';
-import { checkMissingEnvVars } from './check-env.js';
-import defaultConfig from '../../../starter.config.js';
 
 export async function generateConfig(options: CreateAppOptions) {
-  const { appName, description, auth = [], features, socialProviders = [], projectPath, mailProvider } = options;
+  const {
+    appName,
+    description,
+    auth = [],
+    features,
+    socialProviders = [],
+    projectPath,
+    mailProvider,
+  } = options;
 
   // Clone the starter config
   const config = deepClone(defaultConfig) as typeof defaultConfig.default;
@@ -29,13 +36,21 @@ export async function generateConfig(options: CreateAppOptions) {
   config.auth.emailAndPassword.enabled = auth.includes('email');
 
   // Handle social providers
-  const socialProviderConfig: Record<string, { enabled: boolean; clientId?: string; clientSecret?: string;[key: string]: any }> = {};
+  const socialProviderConfig: Record<
+    string,
+    {
+      enabled: boolean;
+      clientId?: string;
+      clientSecret?: string;
+      [key: string]: any;
+    }
+  > = {};
 
   if (auth.includes('social') && socialProviders.length > 0) {
     for (const provider of socialProviders) {
       socialProviderConfig[provider] = {
         enabled: true,
-        ...SocialProviderConfigs[provider]
+        ...SocialProviderConfigs[provider],
       };
     }
   }
@@ -47,11 +62,7 @@ export async function generateConfig(options: CreateAppOptions) {
   // Check for missing environment variables
   const missingVars = checkMissingEnvVars(socialProviders);
   if (missingVars.length > 0) {
-    console.log(chalk.yellow('\nWarning: Missing environment variables for social providers:'));
-    missingVars.forEach(envVar => {
-      console.log(chalk.yellow(`  - ${envVar}`));
-    });
-    console.log(chalk.yellow('\nPlease set these variables in your .env file.\n'));
+    missingVars.forEach((_envVar) => {});
   }
 
   // Generate and write .env file

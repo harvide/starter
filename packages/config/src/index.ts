@@ -1,5 +1,5 @@
-import type { BaseConfig } from "./schema";
-import userConfig from "../../../starter.config";
+import userConfig from '../../../starter.config';
+import type { BaseConfig } from './schema';
 
 export const config = userConfig;
 

@@ -1,9 +1,8 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, expect, it } from 'vitest';
 import { generateEnvContent } from '../src/env';
 import type { SocialProvider } from '../src/types';
 
 describe('Environment Content Generation', () => {
-
   it('should generate base env variables when no providers selected', () => {
     const content = generateEnvContent([]);
     expect(content).toContain('DATABASE_URL=');

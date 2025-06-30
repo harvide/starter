@@ -1,22 +1,24 @@
+import { BsKey } from 'react-icons/bs';
 import {
-  FaGithub,
-  FaGoogle,
-  FaDiscord,
   FaApple,
+  FaBitbucket,
+  FaDiscord,
   FaFacebook,
+  FaGithub,
+  FaGitlab,
+  FaGoogle,
+  FaLinkedin,
   FaSlack,
   FaSpotify,
   FaTwitch,
   FaTwitter,
-  FaLinkedin,
-  FaBitbucket,
-  FaGitlab,
-} from "react-icons/fa";
-import { SiNotion, SiFigma, SiZoom, SiKakao } from "react-icons/si";
-import { TbBrandAzure } from "react-icons/tb";
-import { BsKey } from "react-icons/bs";
+} from 'react-icons/fa';
+import { SiFigma, SiKakao, SiNotion, SiZoom } from 'react-icons/si';
+import { TbBrandAzure } from 'react-icons/tb';
 
-export const oauthIconsMap: Partial<Record<string, React.ComponentType<{ className?: string }>>> = {
+export const oauthIconsMap: Partial<
+  Record<string, React.ComponentType<{ className?: string }>>
+> = {
   apple: FaApple,
   azure: TbBrandAzure,
   bitbucket: FaBitbucket,

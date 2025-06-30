@@ -1,6 +1,6 @@
-"use server";
-import { auth } from "@repo/auth";
-import { config } from "@repo/config";
+'use server';
+import { auth } from '@repo/auth';
+import { config } from '@repo/config';
 
 export interface SignupFlowProps {
   onError: (error: string | null) => void;
@@ -9,7 +9,7 @@ export interface SignupFlowProps {
 
 export async function checkAdminsExist() {
   if (!config.admin.enabled) {
-    return { error: "Admin feature is disabled" };
+    return { error: 'Admin feature is disabled' };
   }
 
   try {
@@ -21,10 +21,10 @@ export async function checkAdminsExist() {
       undefined,
       [
         {
-          field: "role",
-          operator: "contains",
-          value: "admin",
-        }
+          field: 'role',
+          operator: 'contains',
+          value: 'admin',
+        },
       ]
     );
 
@@ -34,8 +34,7 @@ export async function checkAdminsExist() {
 
     return { exists: false };
   } catch (error: any) {
-    console.error("Error checking admin accounts:", error);
-    return { error: error.message || "Failed to check admin accounts" };
+    return { error: error.message || 'Failed to check admin accounts' };
   }
 }
 
@@ -45,23 +44,29 @@ export async function createAdminUser(
   firstName: string,
   lastName: string
 ): Promise<{ success: boolean; error?: string }> {
-  if (!config.admin.enabled) return { success: false, error: "Admin feature is disabled" };
+  if (!config.admin.enabled) {
+    return { success: false, error: 'Admin feature is disabled' };
+  }
 
-  if (!email || !password || !firstName || !lastName) {
-    return { success: false, error: "All fields are required" };
+  if (!(email && password && firstName && lastName)) {
+    return { success: false, error: 'All fields are required' };
   }
 
   try {
     const { exists, error } = await checkAdminsExist();
-    if (error) return { success: false, error };
-    if (exists) return { success: false, error: "An admin account already exists" };
+    if (error) {
+      return { success: false, error };
+    }
+    if (exists) {
+      return { success: false, error: 'An admin account already exists' };
+    }
 
     const ctx = await auth.$context;
 
     const newUser = await ctx.internalAdapter.createUser({
       email,
       name: `${firstName} ${lastName}`,
-      role: "admin",
+      role: 'admin',
       emailVerified: true,
       image: config.branding.logo.icon,
     });
@@ -69,17 +74,17 @@ export async function createAdminUser(
     const hash = await ctx.password.hash(password);
     await ctx.internalAdapter.linkAccount({
       userId: newUser.id,
-      providerId: "credential",
+      providerId: 'credential',
       accountId: newUser.id,
-      password: hash
-    })
+      password: hash,
+    });
 
     return { success: true };
   } catch (err: any) {
-    if (err?.code === "23505") {
-      return { success: false, error: "A user with this email already exists" };
+    if (err?.code === '23505') {
+      return { success: false, error: 'A user with this email already exists' };
     }
 
-    return { success: false, error: err?.message || "Unknown error" };
+    return { success: false, error: err?.message || 'Unknown error' };
   }
 }

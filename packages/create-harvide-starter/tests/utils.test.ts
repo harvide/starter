@@ -1,9 +1,9 @@
-import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { execa } from 'execa';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { ensurePackageManager, installDependencies } from '../src/utils';
 
 vi.mock('execa', () => ({
-  execa: vi.fn()
+  execa: vi.fn(),
 }));
 
 describe('Package Manager Utils', () => {
@@ -70,7 +70,7 @@ describe('Package Manager Utils', () => {
       await installDependencies('npm', '/test/path');
       expect(execa).toHaveBeenCalledWith('npm', ['install'], {
         cwd: '/test/path',
-        stdio: 'inherit'
+        stdio: 'inherit',
       });
     });
 
@@ -78,7 +78,7 @@ describe('Package Manager Utils', () => {
       await installDependencies('yarn', '/test/path');
       expect(execa).toHaveBeenCalledWith('yarn', ['install'], {
         cwd: '/test/path',
-        stdio: 'inherit'
+        stdio: 'inherit',
       });
     });
 
@@ -86,7 +86,7 @@ describe('Package Manager Utils', () => {
       await installDependencies('pnpm', '/test/path');
       expect(execa).toHaveBeenCalledWith('pnpm', ['install'], {
         cwd: '/test/path',
-        stdio: 'inherit'
+        stdio: 'inherit',
       });
     });
 
@@ -94,7 +94,7 @@ describe('Package Manager Utils', () => {
       await installDependencies('bun', '/test/path');
       expect(execa).toHaveBeenCalledWith('bun', ['install'], {
         cwd: '/test/path',
-        stdio: 'inherit'
+        stdio: 'inherit',
       });
     });
   });

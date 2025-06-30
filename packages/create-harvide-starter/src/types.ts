@@ -12,7 +12,14 @@ export type SocialProvider =
   | 'twitter'
   | 'linkedin';
 
-export type LLMType = 'claude' | 'cursor' | 'windsurf' | 'copilot' | 'zed' | 'codex' | 'none';
+export type LLMType =
+  | 'claude'
+  | 'cursor'
+  | 'windsurf'
+  | 'copilot'
+  | 'zed'
+  | 'codex'
+  | 'none';
 export type MailProvider = 'resend' | 'smtp'; // New type for mail providers
 
 export interface CliAnswers {

@@ -1,9 +1,9 @@
-import { BasicSignupForm } from "./variants/basic";
+import { BasicSignupForm } from './variants/basic';
 
 export type AdminSignupFormProps = React.ComponentProps<typeof BasicSignupForm>;
 
 export const variants = {
-  basic: BasicSignupForm
+  basic: BasicSignupForm,
 } as const;
 
 export type AdminSignupFormVariant = keyof typeof variants;

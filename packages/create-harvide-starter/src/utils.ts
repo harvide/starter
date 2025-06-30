@@ -1,7 +1,9 @@
 import { execa } from 'execa';
 import type { PackageManager } from './types.js';
 
-export async function isPackageManagerInstalled(packageManager: PackageManager): Promise<boolean> {
+export async function isPackageManagerInstalled(
+  packageManager: PackageManager
+): Promise<boolean> {
   try {
     await execa(packageManager, ['--version']);
     return true;
@@ -13,16 +15,16 @@ export async function isPackageManagerInstalled(packageManager: PackageManager):
   }
 }
 
-export async function ensurePackageManager(packageManager: PackageManager): Promise<void> {
+export async function ensurePackageManager(
+  packageManager: PackageManager
+): Promise<void> {
   try {
     await execa(packageManager, ['--version']);
     return;
-  } catch (error) {
+  } catch (_error) {
     if (packageManager === 'npm') {
       throw new Error('npm is required but not found');
     }
-
-    console.log(`${packageManager} not found, installing globally...`);
     try {
       await execa('npm', ['install', '-g', packageManager]);
 
@@ -33,26 +35,30 @@ export async function ensurePackageManager(packageManager: PackageManager): Prom
         throw new Error(`Failed to verify ${packageManager} installation`);
       }
     } catch (error) {
-      console.error(`Failed to install ${packageManager}. Please install it manually.`);
       if (error instanceof Error) {
-        throw new Error(`Package manager installation failed: ${error.message}`);
+        throw new Error(
+          `Package manager installation failed: ${error.message}`
+        );
       }
       throw error;
     }
   }
 }
 
-export async function installDependencies(packageManager: PackageManager, cwd: string): Promise<void> {
+export async function installDependencies(
+  packageManager: PackageManager,
+  cwd: string
+): Promise<void> {
   const commands = {
     npm: ['install'],
     pnpm: ['install'],
     yarn: ['install'],
-    bun: ['install']
+    bun: ['install'],
   };
 
   await execa(packageManager, commands[packageManager], {
     cwd,
-    stdio: 'inherit' // Show installation progress
+    stdio: 'inherit', // Show installation progress
   });
 }
 
@@ -65,16 +71,26 @@ export function deepClone<T>(obj: T): T {
  * (without unnecessary quotes around property names)
  */
 export function stringifyConfig(obj: any, indent = 0): string {
-  if (obj === null) return 'null';
-  if (typeof obj !== 'object') return JSON.stringify(obj);
+  if (obj === null) {
+    return 'null';
+  }
+  if (typeof obj !== 'object') {
+    return JSON.stringify(obj);
+  }
   if (Array.isArray(obj)) {
-    if (obj.length === 0) return '[]';
-    const items = obj.map(item => `${' '.repeat(indent + 2)}${stringifyConfig(item, indent + 2)}`);
+    if (obj.length === 0) {
+      return '[]';
+    }
+    const items = obj.map(
+      (item) => `${' '.repeat(indent + 2)}${stringifyConfig(item, indent + 2)}`
+    );
     return `[\n${items.join(',\n')}\n${' '.repeat(indent)}]`;
   }
 
   const entries = Object.entries(obj);
-  if (entries.length === 0) return '{}';
+  if (entries.length === 0) {
+    return '{}';
+  }
 
   const props = entries.map(([key, value]) => {
     // Use string literal only if key contains special characters
@@ -87,7 +103,8 @@ export function stringifyConfig(obj: any, indent = 0): string {
 }
 
 export function generateSecretKey(length = 32): string {
-  const charset = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+[]{}|;:,.<>?';
+  const charset =
+    'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+[]{}|;:,.<>?';
   let secret = '';
   for (let i = 0; i < length; i++) {
     secret += charset.charAt(Math.floor(Math.random() * charset.length));

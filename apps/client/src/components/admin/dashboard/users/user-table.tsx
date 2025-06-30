@@ -357,17 +357,17 @@ export function UserTable() {
           {isLoading
             ? Array.from({ length: 8 }).map((_, i) => <SkeletonRow key={i} />)
             : table.getRowModel().rows.map((row) => (
-              <TableRow key={row.id}>
-                {row.getVisibleCells().map((cell) => (
-                  <TableCell key={cell.id}>
-                    {flexRender(
-                      cell.column.columnDef.cell,
-                      cell.getContext()
-                    )}
-                  </TableCell>
-                ))}
-              </TableRow>
-            ))}
+                <TableRow key={row.id}>
+                  {row.getVisibleCells().map((cell) => (
+                    <TableCell key={cell.id}>
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext()
+                      )}
+                    </TableCell>
+                  ))}
+                </TableRow>
+              ))}
         </TableBody>
       </Table>
 
@@ -503,11 +503,11 @@ export function UserTable() {
                             return (
                               data < today ||
                               data >
-                              new Date(
-                                today.getFullYear() + 1,
-                                today.getMonth(),
-                                today.getDate()
-                              )
+                                new Date(
+                                  today.getFullYear() + 1,
+                                  today.getMonth(),
+                                  today.getDate()
+                                )
                             );
                           }}
                           mode="single"
@@ -578,12 +578,12 @@ export function UserTable() {
                     } else {
                       let expiresIn: number | undefined;
 
-                      if (!banForever) {
-                        if (banUntilDate) {
-                          expiresIn = Math.floor((banUntilDate.getTime() - Date.now()) / 1000);
-                        } else {
-                          expiresIn = undefined;
-                        }
+                      if (banForever) {
+                        expiresIn = undefined;
+                      } else if (banUntilDate) {
+                        expiresIn = Math.floor(
+                          (banUntilDate.getTime() - Date.now()) / 1000
+                        );
                       } else {
                         expiresIn = undefined;
                       }
@@ -598,7 +598,9 @@ export function UserTable() {
                     setAlertAction(null);
                   } catch (err) {
                     setIsBanning(false);
-                    setBanError((err as Error).message || 'Error processing ban');
+                    setBanError(
+                      (err as Error).message || 'Error processing ban'
+                    );
                   }
                 }}
               >
@@ -657,7 +659,9 @@ export function UserTable() {
                     setAlertAction(null);
                   } catch (err) {
                     setIsDeleting(false);
-                    setDeleteError((err as Error).message || 'Error deleting user');
+                    setDeleteError(
+                      (err as Error).message || 'Error deleting user'
+                    );
                   }
                 }}
               >

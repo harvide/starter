@@ -23,7 +23,7 @@ import {
 } from '@repo/ui/components/select';
 import { ToggleGroup, ToggleGroupItem } from '@repo/ui/components/toggle-group';
 import { useIsMobile } from '@repo/ui/hooks/use-mobile';
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Area, AreaChart, CartesianGrid, XAxis } from 'recharts';
 
 export const description = 'An interactive area chart';

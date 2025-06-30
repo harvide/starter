@@ -179,7 +179,7 @@ export async function resolveMetricCard(
           positive: isPositive,
         },
         footer: {
-          title: title,
+          title,
           subtitle: `${previous.toLocaleString()} in previous month`,
           icon: isPositive ? (
             <IconTrendingUp className="size-4" />
@@ -301,7 +301,7 @@ export async function resolveMetricCard(
             },
           ],
         });
-      } catch (_error) { }
+      } catch (_error) {}
 
       return {
         id: 'active_sessions_now',

@@ -30,6 +30,9 @@ export function ToastOnPageLoadWrapper({
         case 'error':
           showToast.error(message, data);
           break;
+        default:
+          showToast.info(message, data);
+          break;
       }
     }, 100);
   }, [data, message, type]);

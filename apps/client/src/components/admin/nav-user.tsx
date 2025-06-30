@@ -66,7 +66,9 @@ export function NavUser({
           },
         },
       });
-    } catch (_error) {}
+    } catch (_error) {
+      console.error('Logout failed:', _error);
+    }
   };
 
   return (

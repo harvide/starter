@@ -23,7 +23,7 @@ import {
 } from '@repo/ui/components/select';
 import { ToggleGroup, ToggleGroupItem } from '@repo/ui/components/toggle-group';
 import { useIsMobile } from '@repo/ui/hooks/use-mobile';
-import * as React from 'react';
+import { useState, useEffect } from 'react';
 import { Area, AreaChart, CartesianGrid, XAxis } from 'recharts';
 
 export const description = 'An interactive area chart';
@@ -138,9 +138,9 @@ const chartConfig = {
 
 export function ChartAreaInteractive() {
   const isMobile = useIsMobile();
-  const [timeRange, setTimeRange] = React.useState('90d');
+  const [timeRange, setTimeRange] = useState('90d');
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (isMobile) {
       setTimeRange('7d');
     }

@@ -28,6 +28,7 @@ import type * as React from 'react';
 import { NavMain } from '@/components/admin/nav-main';
 import { NavSecondary } from '@/components/admin/nav-secondary';
 import { NavUser } from '@/components/admin/nav-user';
+import Link from 'next/link';
 
 const data = {
   navMain: [
@@ -145,7 +146,7 @@ export function AppSidebar({
               asChild
               className="data-[slot=sidebar-menu-button]:!p-1.5"
             >
-              <a href="#">
+              <Link href="/admin/dashboard">
                 <Image
                   alt={config.branding.name}
                   height={20}
@@ -155,7 +156,7 @@ export function AppSidebar({
                 <span className="font-semibold text-base">
                   {config.branding.name}
                 </span>
-              </a>
+              </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>

@@ -2,6 +2,7 @@ import { config } from '@repo/config';
 import { Button } from '@repo/ui/components/button';
 import { Separator } from '@repo/ui/components/separator';
 import { SidebarTrigger } from '@repo/ui/components/sidebar';
+import Image from 'next/image';
 
 export function SiteHeader() {
   return (
@@ -14,7 +15,7 @@ export function SiteHeader() {
         />
         <h1 className="font-medium text-base">Documents</h1>
         <div className="ml-auto flex items-center gap-2">
-          {config.admin.dashboard.shortcuts.map((shortcut, i) => {
+          {config.admin.dashboard.shortcuts.map((shortcut) => {
             const Icon = shortcut.icon;
             const isUrl = typeof Icon === 'string';
             const isIcon = Icon !== undefined;
@@ -23,7 +24,7 @@ export function SiteHeader() {
               <Button
                 asChild
                 className="hidden sm:flex"
-                key={shortcut.label + i}
+                key={shortcut.label}
                 size="sm"
                 variant="ghost"
               >
@@ -35,10 +36,13 @@ export function SiteHeader() {
                 >
                   {isIcon ? (
                     isUrl ? (
-                      <img
+                      <Image
                         alt={shortcut.label}
                         className="size-4 object-contain"
+                        height={16}
+                        loading="lazy"
                         src={Icon}
+                        width={16}
                       />
                     ) : (
                       <Icon className="size-4" />

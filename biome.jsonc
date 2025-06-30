@@ -6,7 +6,11 @@
       "**",
       "packages/ui/src/components/**/*",
       "!packages/ui/src/components/*.ts",
-      "!packages/ui/src/components/*.tsx"
+      "!packages/ui/src/components/*.tsx",
+      "!packages/ui/src/styles/**/*",
+      "!packages/ui/src/hooks/**/*",
+      "!packages/ui/eslint.config.mjs",
+      "!apps/docs/src/app/globals.css"
     ]
   }
 }

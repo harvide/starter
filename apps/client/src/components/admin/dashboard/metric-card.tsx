@@ -144,12 +144,23 @@ export async function resolveMetricCard(
             },
           ],
         });
-      } catch (_error) {}
+      } catch (_error) {
+        console.error('Failed to fetch new users:', _error);
+      }
 
       const deltaRaw = total - previous;
       const deltaPercent =
         previous === 0 ? deltaRaw / 0.01 : (deltaRaw / previous) * 100;
       const isPositive = deltaPercent === null || deltaPercent >= 0;
+
+      let title: string;
+      if (deltaPercent === null) {
+        title = 'No previous data';
+      } else if (isPositive) {
+        title = 'Growth from last month';
+      } else {
+        title = 'Drop from last month';
+      }
 
       return {
         id: 'new_users_month',
@@ -168,12 +179,7 @@ export async function resolveMetricCard(
           positive: isPositive,
         },
         footer: {
-          title:
-            deltaPercent === null
-              ? 'No previous data'
-              : isPositive
-                ? 'Growth from last month'
-                : 'Drop from last month',
+          title: title,
           subtitle: `${previous.toLocaleString()} in previous month`,
           icon: isPositive ? (
             <IconTrendingUp className="size-4" />
@@ -233,7 +239,7 @@ export async function resolveMetricCard(
           startOfLastMonth,
           endOfLastMonth
         );
-      } catch (_error) {}
+      } catch (_error) { }
 
       const current = new Set(thisMonthSessions.map((s) => s.userId));
       const previous = new Set(lastMonthSessions.map((s) => s.userId));
@@ -292,7 +298,7 @@ export async function resolveMetricCard(
             },
           ],
         });
-      } catch (_error) {}
+      } catch (_error) { }
 
       return {
         id: 'active_sessions_now',

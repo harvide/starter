@@ -7,11 +7,12 @@ export default async function AdminProtectedLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const result = await useAdminUser();
+
   if (!config.admin.enabled) {
     return notFound();
   }
 
-  const result = await useAdminUser();
   if (result.error === 'unauthorized') {
     return unauthorized();
   }

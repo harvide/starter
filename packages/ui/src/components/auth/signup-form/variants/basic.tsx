@@ -9,13 +9,18 @@ import { showToast } from '@repo/ui/lib/toast';
 import { cn } from '@repo/ui/lib/utils';
 import { type HTMLMotionProps, motion } from 'framer-motion';
 import { Loader2 } from 'lucide-react';
+import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import type React from 'react';
 import { useState } from 'react';
 
 import { oauthIconsMap } from '../../oauth-icons';
-import * as flows from '../flows';
+import {
+  handleEmailPasswordSignup,
+  handleOAuthSignup,
+  type SignupFlowProps,
+} from '../flows';
 
 const _EMAIL_AUTH_ENABLED = config.auth.emailAndPassword.enabled;
 const SIGNUP_ENABLED = !config.auth.emailAndPassword.disableSignUp;
@@ -32,7 +37,7 @@ export function BasicSignupForm({ className, ...props }: MotionDivProps) {
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
-  function buildFlowProps(): flows.SignupFlowProps {
+  function buildFlowProps(): SignupFlowProps {
     return {
       onError: setError,
       onSuccess: () => {
@@ -76,7 +81,7 @@ export function BasicSignupForm({ className, ...props }: MotionDivProps) {
       return;
     }
 
-    await flows.handleEmailPasswordSignup(
+    await handleEmailPasswordSignup(
       email,
       password,
       firstName,
@@ -88,7 +93,7 @@ export function BasicSignupForm({ className, ...props }: MotionDivProps) {
 
   async function handleOAuth(provider: string) {
     setIsLoading(true);
-    await flows.handleOAuthSignup(provider, buildFlowProps());
+    await handleOAuthSignup(provider, buildFlowProps());
     setIsLoading(false);
   }
 
@@ -250,10 +255,11 @@ export function BasicSignupForm({ className, ...props }: MotionDivProps) {
               initial={{ opacity: 0 }}
               key="image"
             >
-              <img
-                alt="Image"
+              <Image
+                alt="Logo"
                 className="absolute inset-0 h-full w-full rounded-md object-cover dark:brightness-[0.2] dark:grayscale"
                 height={400}
+                priority
                 src="https://www.harvide.com/logo/small-dark-white.svg"
                 width={400}
               />

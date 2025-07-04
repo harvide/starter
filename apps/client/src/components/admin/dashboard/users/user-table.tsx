@@ -67,6 +67,8 @@ import { ChevronDownIcon, MoreHorizontal } from 'lucide-react';
 import Link from 'next/link';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { getAcronym } from '@/lib/utils';
+import { showToast } from '@repo/ui/lib/toast';
+import { useRouter } from 'next/router';
 
 type DialogAction = 'profile' | 'listSession' | 'revokeSession' | 'impersonate';
 type AlertAction = 'promote' | 'revokeAll' | 'ban' | 'delete';
@@ -94,6 +96,8 @@ function SkeletonRow() {
 }
 
 export function UserTable() {
+  const router = useRouter();
+
   const [search, setSearch] = useState('');
   const [users, setUsers] = useState<User[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -330,6 +334,29 @@ export function UserTable() {
     getCoreRowModel: getCoreRowModel(),
   });
 
+  // action functions
+  const impersonateUser = async (userId: string | undefined) => {
+    if (!userId) return;
+
+    try {
+      await authClient.admin.impersonateUser({ userId });
+      showToast.success(
+        <>You are now impersonating {actionUser?.name}.</>
+        , {
+          description: <>You will be redirected to the dashboard in 5 seconds.</>
+        });
+      setTimeout(() => {
+        router.push('/dashboard');
+      }, 5000);
+
+    } catch (err) {
+      console.error('Error impersonating user:', err);
+      showToast.error(
+        <>Error impersonating user: {(err as Error).message}</>
+      );
+    }
+  }
+
   return (
     <>
       <Input
@@ -418,19 +445,46 @@ export function UserTable() {
               {dialogAction === 'revokeSession' && 'Revoke Session'}
               {dialogAction === 'impersonate' && 'Impersonate User'}
             </DialogTitle>
-            <DialogDescription>
-              {dialogAction === 'profile' && `Details for ${actionUser?.name}`}
-              {dialogAction === 'listSession' &&
-                `Sessions for ${actionUser?.name}`}
-              {dialogAction === 'revokeSession' &&
-                `Select session to revoke for ${actionUser?.name}`}
-              {dialogAction === 'impersonate' &&
-                `You will impersonate ${actionUser?.name}`}
+            <DialogDescription asChild>
+              <div>
+                {dialogAction === 'profile' &&
+                  <div className="flex flex-col gap-2">
+                    <span>
+                      Details for ${actionUser?.name}
+                    </span>
+                  </div>
+                }
+                {dialogAction === 'listSession' &&
+                  <div className="flex flex-col gap-2">
+                    <span>
+                      Sessions for {actionUser?.name}
+                    </span>
+                  </div>
+                }
+                {dialogAction === 'revokeSession' &&
+                  <div className="flex flex-col gap-2">
+                    <span>
+                      Select session to revoke for {actionUser?.name}
+                    </span>
+                  </div>
+                }
+                {dialogAction === 'impersonate' &&
+                  <div className="flex flex-col gap-2">
+                    <span>
+                      You will impersonate {actionUser?.name}
+                    </span>
+                    <span className="text-xs text-muted-foreground">
+                      This will create a new session for you with the same permissions as the user.
+                    </span>
+                  </div>
+                }
+              </div>
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
             <Button onClick={() => setDialogAction(null)}>Close</Button>
             {dialogAction === 'revokeSession' && <Button>Revoke</Button>}
+            {dialogAction === 'impersonate' && <Button onClick={async () => { await impersonateUser(actionUser?.id) }}>Impersonate</Button>}
           </DialogFooter>
         </DialogContent>
       </Dialog>

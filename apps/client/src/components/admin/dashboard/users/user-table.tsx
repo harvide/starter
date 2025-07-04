@@ -68,7 +68,7 @@ import Link from 'next/link';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { getAcronym } from '@/lib/utils';
 import { showToast } from '@repo/ui/lib/toast';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 
 type DialogAction = 'profile' | 'listSession' | 'revokeSession' | 'impersonate';
 type AlertAction = 'promote' | 'revokeAll' | 'ban' | 'delete';
@@ -450,7 +450,7 @@ export function UserTable() {
                 {dialogAction === 'profile' &&
                   <div className="flex flex-col gap-2">
                     <span>
-                      Details for ${actionUser?.name}
+                      Details for {actionUser?.name}
                     </span>
                   </div>
                 }
@@ -501,12 +501,12 @@ export function UserTable() {
           <AlertDialogContent>
             <AlertDialogHeader>
               <AlertDialogTitle>
-                {actionUser.banned ? 'Unban user?' : 'Ban user?'}
+                {actionUser.banned ? <>Unban user?</> : <>Ban user?</>}
               </AlertDialogTitle>
               <AlertDialogDescription>
                 {actionUser.banned
-                  ? `Remove ban from ${actionUser.name}.`
-                  : `Ban ${actionUser.name}. Provide reason and expiry date.`}
+                  ? <>Remove ban from {actionUser.name}.</>
+                  : <>Ban {actionUser.name}. Provide reason and expiry date.</>}
               </AlertDialogDescription>
             </AlertDialogHeader>
 
@@ -538,7 +538,7 @@ export function UserTable() {
                         >
                           {banUntilDate
                             ? banUntilDate.toLocaleDateString()
-                            : 'Select date'}
+                            : <>Select date</>}
                           <ChevronDownIcon />
                         </Button>
                       </PopoverTrigger>

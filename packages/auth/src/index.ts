@@ -35,7 +35,7 @@ let plugins: BetterAuthPlugin[] = [
     sendOTP: ({ phoneNumber, code }, _request) => {
       // Implement sending OTP code via SMS
     },
-    sendPasswordResetOTP: ({ phoneNumber, code }, _request) => {},
+    sendPasswordResetOTP: ({ phoneNumber, code }, _request) => { },
     signUpOnVerification: {
       getTempEmail: (phoneNumber) => {
         return `${phoneNumber}@example.com`;

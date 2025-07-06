@@ -11,14 +11,8 @@ import {
   SidebarMenuItem,
 } from '@repo/ui/components/sidebar';
 import {
-  IconCamera,
-  IconChartBar,
   IconDashboard,
-  IconFileAi,
-  IconFileDescription,
-  IconFolder,
   IconHelp,
-  IconListDetails,
   IconSearch,
   IconSettings,
   IconUsers,

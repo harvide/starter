@@ -56,6 +56,9 @@ export function DeleteUserDialog({ user, onAction }: DeleteUserDialogProps) {
                             await authClient.admin.removeUser({
                                 userId: user.id,
                             });
+                            showToast.success(
+                                <>User {user.name} has been deleted successfully.</>
+                            );
                             setIsDeleting(false);
                             onAction?.();
                         } catch (err) {

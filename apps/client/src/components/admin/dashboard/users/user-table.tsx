@@ -3,21 +3,12 @@ import { authClient, type User } from '@repo/auth/client';
 import {
   ProfileDialog,
   SessionsDialog,
-  RevokeSessionDialog,
   ImpersonateDialog,
   PromoteDialog,
   BanDialog,
 } from './action-dialogs';
-import { config } from '@repo/config';
 import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
+  AlertDialog
 } from '@repo/ui/components/alert-dialog';
 import {
   Avatar,
@@ -26,15 +17,8 @@ import {
 } from '@repo/ui/components/avatar';
 import { Badge } from '@repo/ui/components/badge';
 import { Button } from '@repo/ui/components/button';
-import { Calendar } from '@repo/ui/components/calendar';
-import { Checkbox } from '@repo/ui/components/checkbox';
 import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
+  Dialog
 } from '@repo/ui/components/dialog';
 import {
   DropdownMenu,
@@ -504,6 +488,10 @@ export function UserTable() {
         {alertAction === 'delete' && actionUser && (
           <DeleteUserDialog
             user={actionUser}
+            onAction={async () => {
+              setAlertAction(null);
+              fetchUsers(pageIndex);
+            }}
           />
         )}
       </AlertDialog >

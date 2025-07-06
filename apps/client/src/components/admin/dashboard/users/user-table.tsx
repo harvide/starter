@@ -1,5 +1,13 @@
 'use client';
 import { authClient, type User } from '@repo/auth/client';
+import {
+  ProfileDialog,
+  SessionsDialog,
+  RevokeSessionDialog,
+  ImpersonateDialog,
+  PromoteDialog,
+  BanDialog,
+} from './action-dialogs';
 import { config } from '@repo/config';
 import {
   AlertDialog,
@@ -69,9 +77,11 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { getAcronym } from '@/lib/utils';
 import { showToast } from '@repo/ui/lib/toast';
 import { useRouter } from 'next/navigation';
+import { DeleteUserDialog } from './action-dialogs/delete-user';
+import { RevokeAllSessionsDialog } from './action-dialogs/revoke-all-sessions-dialog';
 
-type DialogAction = 'profile' | 'listSession' | 'revokeSession' | 'impersonate';
-type AlertAction = 'promote' | 'revokeAll' | 'ban' | 'delete';
+type DialogAction = 'profile' | 'listSession' | 'revokeSession';
+type AlertAction = 'promote' | 'revokeAll' | 'ban' | 'delete' | 'impersonate';
 
 function SkeletonRow() {
   return (
@@ -96,8 +106,6 @@ function SkeletonRow() {
 }
 
 export function UserTable() {
-  const router = useRouter();
-
   const [search, setSearch] = useState('');
   const [users, setUsers] = useState<User[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -112,15 +120,9 @@ export function UserTable() {
   const [isDeleting, setIsDeleting] = useState(false);
   const [deleteError, setDeleteError] = useState('');
 
-  const [banReason, setBanReason] = useState('');
-  const [banUntilDate, setBanUntilDate] = useState<Date | null>(null);
-  const [banUntilTime, setBanUntilTime] = useState<string | null>(null);
-  const [banForever, setBanForever] = useState(false);
-
-  const [isBanning, setIsBanning] = useState(false);
-  const [banError, setBanError] = useState('');
-
-  const [popoverOpen, setPopoverOpen] = useState(false);
+  const [sessions, setSessions] = useState<any[]>([]);
+  const [isLoadingSessions, setIsLoadingSessions] = useState(false);
+  const [isRevokingAll, setIsRevokingAll] = useState(false);
 
   const columns = useMemo<ColumnDef<User>[]>(
     () => [
@@ -148,8 +150,8 @@ export function UserTable() {
             <span>
               {u.name}
               {u.banned && (
-                <Badge className="mr-2" variant="destructive">
-                  Banned
+                <Badge className="ml-2 text-xs" variant="destructive">
+                  BAN
                 </Badge>
               )}
             </span>
@@ -218,7 +220,7 @@ export function UserTable() {
                   }}
                   variant="destructive"
                 >
-                  Promote to admin
+                  {u.role === 'admin' ? <>Demote to user</> : <>Promote to admin</>}
                 </DropdownMenuItem>
                 <Tooltip>
                   <TooltipTrigger asChild>
@@ -240,17 +242,41 @@ export function UserTable() {
                 <DropdownMenuSeparator />
 
                 <DropdownMenuItem
-                  onSelect={() => {
+                  onSelect={async () => {
                     setActionUser(u);
                     setDialogAction('listSession');
+                    setIsLoadingSessions(true);
+                    try {
+                      const sessionsData = await authClient.admin.listUserSessions({
+                        userId: u.id,
+                      });
+                      setSessions(sessionsData.data?.sessions || []);
+                    } catch (err) {
+                      showToast.error(
+                        <>Error loading sessions: {(err as Error).message}</>
+                      );
+                    }
+                    setIsLoadingSessions(false);
                   }}
                 >
                   List Session
                 </DropdownMenuItem>
                 <DropdownMenuItem
-                  onSelect={() => {
+                  onSelect={async () => {
                     setActionUser(u);
                     setDialogAction('revokeSession');
+                    setIsLoadingSessions(true);
+                    try {
+                      const sessionsData = await authClient.admin.listUserSessions({
+                        userId: u.id,
+                      });
+                      setSessions(sessionsData.data?.sessions || []);
+                    } catch (err) {
+                      showToast.error(
+                        <>Error loading sessions: {(err as Error).message}</>
+                      );
+                    }
+                    setIsLoadingSessions(false);
                   }}
                 >
                   Revoke session
@@ -270,7 +296,7 @@ export function UserTable() {
                 <DropdownMenuItem
                   onSelect={() => {
                     setActionUser(u);
-                    setDialogAction('impersonate');
+                    setAlertAction('impersonate');
                   }}
                 >
                   Impersonate
@@ -333,29 +359,6 @@ export function UserTable() {
     columns,
     getCoreRowModel: getCoreRowModel(),
   });
-
-  // action functions
-  const impersonateUser = async (userId: string | undefined) => {
-    if (!userId) return;
-
-    try {
-      await authClient.admin.impersonateUser({ userId });
-      showToast.success(
-        <>You are now impersonating {actionUser?.name}.</>
-        , {
-          description: <>You will be redirected to the dashboard in 5 seconds.</>
-        });
-      setTimeout(() => {
-        router.push('/dashboard');
-      }, 5000);
-
-    } catch (err) {
-      console.error('Error impersonating user:', err);
-      showToast.error(
-        <>Error impersonating user: {(err as Error).message}</>
-      );
-    }
-  }
 
   return (
     <>
@@ -432,61 +435,28 @@ export function UserTable() {
       <Dialog
         onOpenChange={(v) => {
           if (!v) {
-            setDialogAction(null);
+            setTimeout(() => {
+              setDialogAction(null);
+            }, 400); // Delay to allow dialog to close before resetting state
           }
         }}
         open={!!dialogAction}
       >
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>
-              {dialogAction === 'profile' && 'User Profile'}
-              {dialogAction === 'listSession' && 'Sessions'}
-              {dialogAction === 'revokeSession' && 'Revoke Session'}
-              {dialogAction === 'impersonate' && 'Impersonate User'}
-            </DialogTitle>
-            <DialogDescription asChild>
-              <div>
-                {dialogAction === 'profile' &&
-                  <div className="flex flex-col gap-2">
-                    <span>
-                      Details for {actionUser?.name}
-                    </span>
-                  </div>
-                }
-                {dialogAction === 'listSession' &&
-                  <div className="flex flex-col gap-2">
-                    <span>
-                      Sessions for {actionUser?.name}
-                    </span>
-                  </div>
-                }
-                {dialogAction === 'revokeSession' &&
-                  <div className="flex flex-col gap-2">
-                    <span>
-                      Select session to revoke for {actionUser?.name}
-                    </span>
-                  </div>
-                }
-                {dialogAction === 'impersonate' &&
-                  <div className="flex flex-col gap-2">
-                    <span>
-                      You will impersonate {actionUser?.name}
-                    </span>
-                    <span className="text-xs text-muted-foreground">
-                      This will create a new session for you with the same permissions as the user.
-                    </span>
-                  </div>
-                }
-              </div>
-            </DialogDescription>
-          </DialogHeader>
-          <DialogFooter>
-            <Button onClick={() => setDialogAction(null)}>Close</Button>
-            {dialogAction === 'revokeSession' && <Button>Revoke</Button>}
-            {dialogAction === 'impersonate' && <Button onClick={async () => { await impersonateUser(actionUser?.id) }}>Impersonate</Button>}
-          </DialogFooter>
-        </DialogContent>
+        {dialogAction === 'profile' && actionUser && (
+          <ProfileDialog user={actionUser} />
+        )}
+        {dialogAction === 'listSession' && actionUser && (
+          <SessionsDialog
+            user={actionUser}
+            onAction={async () => { setDialogAction(null); fetchUsers(pageIndex); }}
+          />
+        )}
+        {dialogAction === 'revokeSession' && actionUser && (
+          <SessionsDialog
+            user={actionUser}
+            onAction={async () => { setDialogAction(null); fetchUsers(pageIndex); }}
+          />
+        )}
       </Dialog>
 
       <AlertDialog
@@ -497,234 +467,46 @@ export function UserTable() {
         }}
         open={!!alertAction}
       >
+        {alertAction === 'revokeAll' && actionUser && (
+          <RevokeAllSessionsDialog
+            user={actionUser}
+            onAction={async () => {
+              setAlertAction(null);
+            }}
+          />
+        )}
         {alertAction === 'ban' && actionUser && (
-          <AlertDialogContent>
-            <AlertDialogHeader>
-              <AlertDialogTitle>
-                {actionUser.banned ? <>Unban user?</> : <>Ban user?</>}
-              </AlertDialogTitle>
-              <AlertDialogDescription>
-                {actionUser.banned
-                  ? <>Remove ban from {actionUser.name}.</>
-                  : <>Ban {actionUser.name}. Provide reason and expiry date.</>}
-              </AlertDialogDescription>
-            </AlertDialogHeader>
-
-            {!actionUser.banned && (
-              <div className="mt-4 space-y-4">
-                <div className="flex flex-col gap-2">
-                  <Label>Reason</Label>
-                  <Input
-                    disabled={isBanning}
-                    onChange={(e) => {
-                      setBanReason(e.target.value);
-                      setBanError('');
-                    }}
-                    placeholder={config.admin.defaultBanReason || 'No reason'}
-                    value={banReason}
-                  />
-                </div>
-                <div className="flex gap-4">
-                  <div className="flex flex-col gap-2">
-                    <Label className="px-1" htmlFor="date-picker">
-                      Date
-                    </Label>
-                    <Popover onOpenChange={setPopoverOpen} open={popoverOpen}>
-                      <PopoverTrigger asChild>
-                        <Button
-                          className="w-32 justify-between font-normal"
-                          id="date-picker"
-                          variant="outline"
-                        >
-                          {banUntilDate
-                            ? banUntilDate.toLocaleDateString()
-                            : <>Select date</>}
-                          <ChevronDownIcon />
-                        </Button>
-                      </PopoverTrigger>
-                      <PopoverContent
-                        align="start"
-                        className="w-auto overflow-hidden p-0"
-                      >
-                        <Calendar
-                          captionLayout="dropdown"
-                          disabled={(data) => {
-                            if (banForever) {
-                              return true;
-                            }
-
-                            const today = new Date();
-                            return (
-                              data < today ||
-                              data >
-                              new Date(
-                                today.getFullYear() + 1,
-                                today.getMonth(),
-                                today.getDate()
-                              )
-                            );
-                          }}
-                          mode="single"
-                          onSelect={(date) => {
-                            setBanUntilDate(date || null);
-                            setPopoverOpen(false);
-                          }}
-                          selected={banUntilDate || undefined}
-                          showOutsideDays={true}
-                        />
-                      </PopoverContent>
-                    </Popover>
-                  </div>
-                  <div className="flex flex-col gap-2">
-                    <Label className="px-1" htmlFor="time-picker">
-                      Time
-                    </Label>
-                    <Input
-                      className="appearance-none bg-background [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none"
-                      disabled={!banUntilDate || isBanning || banForever}
-                      id="time-picker"
-                      onChange={(e) => {
-                        // todo fix
-                        const timeParts = e.target.value.split(':');
-                        if (timeParts.length === 3) {
-                          const date = new Date(banUntilDate || Date.now());
-                          date.setHours(
-                            Number.parseInt(timeParts[0] || '0', 10),
-                            Number.parseInt(timeParts[1] || '0', 10)
-                          );
-                          setBanUntilDate(date);
-                          setBanUntilTime(e.target.value);
-                        }
-                      }}
-                      step="3600"
-                      type="time" // 1 hour step
-                      value={banUntilTime || '10:30'}
-                    />
-                  </div>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Checkbox
-                    checked={banForever}
-                    disabled={isBanning}
-                    onCheckedChange={(checked) => {
-                      setBanForever(checked as boolean); // what the actual fuck todo
-                    }}
-                  />
-                  <Label htmlFor="ban-forever">Forever</Label>
-                </div>
-                {banError && (
-                  <p className="text-destructive text-sm">{banError}</p>
-                )}
-              </div>
-            )}
-
-            <AlertDialogFooter>
-              <AlertDialogCancel disabled={isBanning}>Cancel</AlertDialogCancel>
-              <AlertDialogAction
-                disabled={isBanning}
-                onClick={async () => {
-                  setIsBanning(true);
-                  try {
-                    if (actionUser.banned) {
-                      await authClient.admin.unbanUser({
-                        userId: actionUser.id,
-                      });
-                    } else {
-                      let expiresIn: number | undefined;
-
-                      if (banForever) {
-                        expiresIn = undefined;
-                      } else if (banUntilDate) {
-                        expiresIn = Math.floor(
-                          (banUntilDate.getTime() - Date.now()) / 1000
-                        );
-                      } else {
-                        expiresIn = undefined;
-                      }
-
-                      await authClient.admin.banUser({
-                        userId: actionUser.id,
-                        banReason: banReason || undefined,
-                        banExpiresIn: expiresIn,
-                      });
-                    }
-                    setIsBanning(false);
-                    setAlertAction(null);
-                  } catch (err) {
-                    setIsBanning(false);
-                    setBanError(
-                      (err as Error).message || 'Error processing ban'
-                    );
-                  }
-                }}
-              >
-                {isBanning
-                  ? actionUser.banned
-                    ? 'Unbanning…'
-                    : 'Banning…'
-                  : actionUser.banned
-                    ? 'Unban'
-                    : 'Ban'}
-              </AlertDialogAction>
-            </AlertDialogFooter>
-          </AlertDialogContent>
+          <BanDialog
+            user={actionUser}
+            onAction={() => {
+              fetchUsers(pageIndex);
+              setAlertAction(null);
+            }}
+          />
+        )}
+        {alertAction === 'promote' && actionUser && (
+          <PromoteDialog
+            user={actionUser}
+            onAction={async () => {
+              await fetchUsers(pageIndex);
+              setAlertAction(null);
+            }}
+          />
+        )}
+        {alertAction === 'impersonate' && actionUser && (
+          <ImpersonateDialog
+            user={actionUser}
+            onAction={async () => {
+              setAlertAction(null);
+            }}
+          />
         )}
         {alertAction === 'delete' && actionUser && (
-          <AlertDialogContent>
-            <AlertDialogHeader>
-              <AlertDialogTitle>Delete user?</AlertDialogTitle>
-              <AlertDialogDescription>
-                This action is permanent and cannot be undone.
-              </AlertDialogDescription>
-            </AlertDialogHeader>
-            <div className="mt-4">
-              <Label className="pb-2 tracking-tigher">
-                To confirm, type the full name of the user{' '}
-                <code className="ml-2 select-none font-mono text-muted-foreground text-xs tracking-tighter">
-                  {actionUser.name}
-                </code>
-              </Label>
-              <Input
-                disabled={isDeleting}
-                onChange={(e) => {
-                  setConfirmInput(e.target.value);
-                  setDeleteError('');
-                }}
-                placeholder={actionUser.name}
-                value={confirmInput}
-              />
-              {deleteError && (
-                <p className="mt-2 text-destructive text-sm">{deleteError}</p>
-              )}
-            </div>
-            <AlertDialogFooter>
-              <AlertDialogCancel disabled={isDeleting}>
-                Cancel
-              </AlertDialogCancel>
-              <AlertDialogAction
-                disabled={confirmInput !== actionUser.name || isDeleting}
-                onClick={async () => {
-                  setIsDeleting(true);
-                  try {
-                    await authClient.admin.removeUser({
-                      userId: actionUser.id,
-                    });
-                    setIsDeleting(false);
-                    setAlertAction(null);
-                  } catch (err) {
-                    setIsDeleting(false);
-                    setDeleteError(
-                      (err as Error).message || 'Error deleting user'
-                    );
-                  }
-                }}
-              >
-                {isDeleting ? 'Deleting…' : 'Delete'}
-              </AlertDialogAction>
-            </AlertDialogFooter>
-          </AlertDialogContent>
+          <DeleteUserDialog
+            user={actionUser}
+          />
         )}
-      </AlertDialog>
+      </AlertDialog >
     </>
   );
 }

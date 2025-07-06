@@ -47,6 +47,7 @@ let plugins: BetterAuthPlugin[] = [
     },
   }),
 ];
+
 if (
   process.env.NODE_ENV === 'development' &&
   !plugins.some((plugin) => plugin.id === 'open-api')

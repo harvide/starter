@@ -4,6 +4,7 @@ import { User, authClient } from "@repo/auth/client";
 import { AlertDialogContent, AlertDialogHeader, AlertDialogTitle, AlertDialogDescription, AlertDialogFooter, AlertDialogCancel, AlertDialogAction } from "@repo/ui/components/alert-dialog";
 import { Input } from "@repo/ui/components/input";
 import { Label } from "@repo/ui/components/label";
+import { showToast } from "@repo/ui/lib/toast";
 import { useState } from "react";
 
 interface DeleteUserDialogProps {

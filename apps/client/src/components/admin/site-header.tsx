@@ -1,10 +1,18 @@
+"use client";
 import { config } from '@repo/config';
 import { Button } from '@repo/ui/components/button';
 import { Separator } from '@repo/ui/components/separator';
 import { SidebarTrigger } from '@repo/ui/components/sidebar';
 import Image from 'next/image';
+import { usePathname } from 'next/navigation';
 
 export function SiteHeader() {
+  const path = usePathname();
+  const getSiteTitle = () => {
+    const pathName = (path.split('/').pop() || 'Dashboard');
+    return pathName.charAt(0).toUpperCase() + pathName.slice(1);
+  };
+
   return (
     <header className="flex h-(--header-height) shrink-0 items-center gap-2 border-b transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-(--header-height)">
       <div className="flex w-full items-center gap-1 px-4 lg:gap-2 lg:px-6">
@@ -13,7 +21,7 @@ export function SiteHeader() {
           className="mx-2 data-[orientation=vertical]:h-4"
           orientation="vertical"
         />
-        <h1 className="font-medium text-base">Documents</h1>
+        <h1 className="font-medium text-base">{getSiteTitle()}</h1>
         <div className="ml-auto flex items-center gap-2">
           {config.admin.dashboard.shortcuts.map((shortcut) => {
             const Icon = shortcut.icon;

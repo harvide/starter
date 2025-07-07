@@ -82,7 +82,7 @@ if (config.payments.provider.name === 'polar') {
   plugins.push(polar({
     client: polarClient,
     createCustomerOnSignUp: config.payments.createCustomerOnSignUp,
-    use: [
+    use: [ // todo fix type
       config.payments.checkout?.enabled && checkout({
         products: config.payments.checkout?.products || [],
         successUrl: '/dashboard?checkout_id={CHECKOUT_ID}&t=success',

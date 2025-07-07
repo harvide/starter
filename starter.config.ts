@@ -22,11 +22,11 @@ export default {
       enabled: true,
       products: [
         {
-          productId: 'starter-plan',
-          slug: 'starter'
+          productId: '29b33f6b-47ea-4819-9906-4347b2fa8837',
+          slug: 'free'
         },
         {
-          productId: 'pro-plan',
+          productId: '64a47469-a020-490f-b93a-a44d584d50c8',
           slug: 'pro'
         }
       ]

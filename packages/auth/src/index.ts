@@ -12,8 +12,8 @@ import Stripe from 'stripe';
 
 // Initialize Polar client
 const polarClient = config.payments.provider.name === "polar" && new Polar({
-  accessToken: process.env.POLAR_ACCESS_TOKEN,
-  server: config.payments.provider.environment || 'sandbox'
+  accessToken: process.env.POLAR_ACCESS_TOKEN!,
+  server: config.payments.provider.environment
 });
 
 // Initialize Stripe client
@@ -76,15 +76,15 @@ if (
 }
 
 type _PolarPlugin = ReturnType<typeof checkout> | ReturnType<typeof usage> | ReturnType<typeof portal> | ReturnType<typeof webhooks>;
-type _PolarPlugins = [_PolarPlugin, ..._PolarPlugin[]];
+type _PolarPlugins = _PolarPlugin[];
 
 if (config.payments.provider.name === 'polar') {
   plugins.push(polar({
     client: polarClient,
     createCustomerOnSignUp: config.payments.createCustomerOnSignUp,
     use: [
-      config.payments.checkout.enabled && checkout({
-        products: config.payments.checkout.products,
+      config.payments.checkout?.enabled && checkout({
+        products: config.payments.checkout?.products || [],
         successUrl: '/dashboard?checkout_id={CHECKOUT_ID}&t=success',
         authenticatedUsersOnly: true,
       }),

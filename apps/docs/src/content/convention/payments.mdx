@@ -1,0 +1,281 @@
+# Payment Integration
+
+Harvide Starter supports multiple payment providers through Better Auth's payment plugins. Each provider offers specific features while sharing some common configuration settings.
+
+## Common Configuration
+
+All payment providers share these base settings:
+
+```typescript
+{
+  payments: {
+    /** Enable payment functionality */
+    enabled: boolean;
+    /** Create customer record when user signs up */
+    createCustomerOnSignUp: boolean;
+    /** Webhook integration */
+    webhooks: {
+      enabled: boolean;
+    };
+  }
+}
+```
+
+## Environment Variables
+
+Each provider requires specific environment variables:
+
+```env
+# Polar
+POLAR_ACCESS_TOKEN=your_access_token
+POLAR_WEBHOOK_SECRET=your_webhook_secret
+
+# Stripe
+STRIPE_SECRET_KEY=your_secret_key
+STRIPE_WEBHOOK_SECRET=your_webhook_secret
+```
+
+## Polar Integration
+
+### Configuration
+
+```typescript
+{
+  payments: {
+    enabled: true,
+    createCustomerOnSignUp: true,
+    provider: {
+      name: 'polar',
+      environment: 'sandbox' | 'production'
+    },
+    checkout: {
+      enabled: boolean;
+      products: Array<{
+        productId: string;
+        slug?: string;
+      }>;
+    },
+    usage: {
+      enabled: boolean;
+    },
+    portal: {
+      enabled: boolean;
+      externalPortal: true;
+      returnUrl: string;
+    },
+    webhooks: {
+      enabled: boolean;
+    }
+  }
+}
+```
+
+### Features
+
+#### Checkout
+
+Initialize checkouts for products:
+
+```typescript
+import { authClient } from '@repo/auth/client';
+
+// Using product ID
+await authClient.checkout({
+  products: ["e651f46d-ac20-4f26-b769-ad088b123df2"]
+});
+
+// Or using configured slug
+await authClient.checkout({
+  slug: "pro"
+});
+```
+
+See more at https://www.better-auth.com/docs/plugins/polar#checkout-plugin
+
+#### Customer Portal
+
+Manage customer subscriptions and billing:
+
+```typescript
+// Redirect to portal
+await authClient.customer.portal();
+
+// Get customer state
+const { data: customerState } = await authClient.customer.state();
+
+// List customer benefits
+const { data: benefits } = await authClient.customer.benefits.list({
+  query: { page: 1, limit: 10 }
+});
+
+// List customer orders
+const { data: orders } = await authClient.customer.orders.list({
+  query: {
+    page: 1,
+    limit: 10,
+    productBillingType: "one_time"
+  }
+});
+
+// List customer subscriptions
+const { data: subscriptions } = await authClient.customer.subscriptions.list({
+  query: {
+    active: true,
+    page: 1,
+    limit: 10
+  }
+});
+```
+
+See more at https://www.better-auth.com/docs/plugins/polar#portal-plugin
+
+#### Usage Based Billing
+
+Track and manage usage:
+
+```typescript
+// Ingest usage event
+await authClient.usage.ingest({
+  event: "api-calls",
+  metadata: {
+    endpoint: "/api/data",
+    requestSize: "2mb"
+  }
+});
+
+// List customer meters
+const { data: meters } = await authClient.usage.meters.list({
+  query: { page: 1, limit: 10 }
+});
+```
+
+See more at https://www.better-auth.com/docs/plugins/polar#usage-plugin
+
+## Stripe Integration
+
+### Configuration
+
+```typescript
+{
+  payments: {
+    enabled: true,
+    createCustomerOnSignUp: true,
+    provider: {
+      name: 'stripe'
+    },
+    subscription: {
+      enabled: boolean;
+      plans: Array<{
+        name: string;
+        priceId: string;
+        annualDiscountPriceId?: string;
+        lookupKey?: string;
+        annualDiscountLookupKey?: string;
+        limits?: Record<string, number>;
+        group?: string;
+        freeTrial?: {
+          days: number;
+        };
+      }>;
+      requireEmailVerification?: boolean;
+    },
+    webhooks: {
+      enabled: boolean;
+    }
+  }
+}
+```
+
+### Features
+
+#### Subscription Management
+
+```typescript
+// Upgrade to a plan
+await authClient.subscription.upgrade({
+  plan: "pro",
+  successUrl: "/dashboard",
+  cancelUrl: "/pricing"
+});
+
+// Check subscription status
+const subscription = await authClient.subscription.get();
+
+// Cancel subscription
+await authClient.subscription.cancel();
+```
+
+See more at https://www.better-auth.com/docs/plugins/stripe#subscription-management
+
+#### Customer Portal
+
+```typescript
+// Redirect to Stripe Customer Portal
+await authClient.customer.portal();
+```
+
+See more at https://www.better-auth.com/docs/plugins/stripe#customer-portal
+
+## Webhook Integration
+
+### Polar Webhooks
+
+```typescript
+webhooks({
+  secret: process.env.POLAR_WEBHOOK_SECRET,
+  // Common events
+  onCustomerStateChanged: (payload) => {
+    // Handle customer state changes
+  },
+  onOrderPaid: (payload) => {
+    // Handle successful payments
+  },
+  // Subscription events
+  onSubscriptionActive: (payload) => {
+    // Handle subscription activation
+  },
+  onSubscriptionCanceled: (payload) => {
+    // Handle subscription cancellation
+  },
+  // Benefit events
+  onBenefitGranted: (payload) => {
+    // Handle benefit grants
+  },
+  // Catch all events
+  onPayload: (payload) => {
+    // Handle any webhook event
+  }
+})
+```
+
+See more at https://www.better-auth.com/docs/plugins/polar#webhooks-plugin
+
+### Stripe Webhooks
+
+```typescript
+stripe({
+  stripeClient,
+  stripeWebhookSecret: process.env.STRIPE_WEBHOOK_SECRET,
+  onEvent: async (event) => {
+    switch (event.type) {
+      case 'customer.subscription.created':
+        // Handle new subscription
+        break;
+      case 'customer.subscription.deleted':
+        // Handle subscription cancellation
+        break;
+      case 'invoice.paid':
+        // Handle successful payment
+        break;
+    }
+  }
+})
+```
+
+See more at https://www.better-auth.com/docs/plugins/stripe#webhook-handling
+
+## Provider Documentation
+
+For complete documentation, refer to:
+- [Polar Plugin Documentation](https://www.better-auth.com/docs/plugins/polar)
+- [Stripe Plugin Documentation](https://www.better-auth.com/docs/plugins/stripe)

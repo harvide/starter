@@ -46,14 +46,6 @@ type PolarProduct = {
 type CommonConfig = {
   enabled: boolean;
   createCustomerOnSignUp: boolean;
-  usage: {
-    enabled: boolean;
-  };
-  portal: {
-    enabled: boolean;
-    externalPortal: true;
-    returnUrl: string;
-  };
   webhooks: {
     enabled: boolean;
   };
@@ -78,6 +70,14 @@ type PolarPaymentConfig = CommonConfig & {
   checkout: {
     enabled: boolean;
     products: PolarProduct[];
+  };
+  usage: {
+    enabled: boolean;
+  };
+  portal: {
+    enabled: boolean;
+    externalPortal: true;
+    returnUrl: string;
   };
 };
 

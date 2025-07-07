@@ -4,6 +4,49 @@
  * Customize authentication flows, branding, and preferences.
  */
 export default {
+  /** Payment configuration */
+  payments: {
+    /** Enable payment functionality */
+    enabled: true,
+    /** Create customer record when user signs up */
+    createCustomerOnSignUp: true,
+    /** Provider specific configuration */
+    provider: {
+      /** Select payment provider */
+      name: 'polar',
+      /** Environment configuration for Polar */
+      environment: 'sandbox'
+    },
+    /** Products configuration for Polar */
+    checkout: {
+      enabled: true,
+      products: [
+        {
+          productId: 'starter-plan',
+          slug: 'starter'
+        },
+        {
+          productId: 'pro-plan',
+          slug: 'pro'
+        }
+      ]
+    },
+    /** Usage based billing settings */
+    usage: {
+      enabled: false
+    },
+    /** Customer portal configuration */
+    portal: {
+      enabled: true,
+      externalPortal: true,
+      returnUrl: '/dashboard'
+    },
+    /** Webhook integration */
+    webhooks: {
+      enabled: false
+    }
+  },
+
   /** Admin panel configuration */
   admin: {
     /** Enable or disable the admin panel */

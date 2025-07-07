@@ -25,6 +25,64 @@ export type EmailAddress = {
   name?: string;
 };
 
+type StripeProduct = {
+  name: string;
+  priceId: string;
+  annualDiscountPriceId?: string;
+  lookupKey?: string;
+  annualDiscountLookupKey?: string;
+  limits?: Record<string, number>;
+  group?: string;
+  freeTrial?: {
+    days: number;
+  };
+};
+
+type PolarProduct = {
+  productId: string;
+  slug?: string;
+};
+
+type CommonConfig = {
+  enabled: boolean;
+  createCustomerOnSignUp: boolean;
+  usage: {
+    enabled: boolean;
+  };
+  portal: {
+    enabled: boolean;
+    externalPortal: true;
+    returnUrl: string;
+  };
+  webhooks: {
+    enabled: boolean;
+  };
+};
+
+type StripePaymentConfig = CommonConfig & {
+  provider: {
+    name: 'stripe';
+  };
+  subscription: {
+    enabled: boolean;
+    plans: StripeProduct[];
+    requireEmailVerification?: boolean;
+  };
+};
+
+type PolarPaymentConfig = CommonConfig & {
+  provider: {
+    name: 'polar';
+    environment: 'sandbox' | 'production';
+  };
+  checkout: {
+    enabled: boolean;
+    products: PolarProduct[];
+  };
+};
+
+export type PaymentConfig = StripePaymentConfig | PolarPaymentConfig;
+
 /** Base configuration type for the starter project */
 export interface BaseConfig {
   /** Admin configuration */
@@ -108,6 +166,9 @@ export interface BaseConfig {
     };
   };
 
+  /** Payment configuration */
+  payments: PaymentConfig;
+
   /** Branding configuration */
   branding: {
     name: string;
@@ -126,13 +187,13 @@ export interface BaseConfig {
     provider: EmailProvider;
     /** Default sender email address */
     from:
-      | {
-          admin: EmailAddress;
-          support: EmailAddress;
-          noReply: EmailAddress;
-        }
-      | EmailAddress
-      | string;
+    | {
+      admin: EmailAddress;
+      support: EmailAddress;
+      noReply: EmailAddress;
+    }
+    | EmailAddress
+    | string;
 
     templates: {
       /** Email verification template */
@@ -198,10 +259,6 @@ export interface BaseConfig {
       /** Base URL for the sitemap */
       baseUrl?: string;
     };
-
-    /** Favicon configuration
-     * Use https://realfavicongenerator.net/ to generate favicons
-     */
 
     /** OpenGraph configuration */
     openGraph?: {

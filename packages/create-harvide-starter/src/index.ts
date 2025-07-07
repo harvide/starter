@@ -148,22 +148,22 @@ async function main() {
       const features = (results as any).features;
       return features?.includes('web')
         ? multiselect({
-            message: 'Select authentication methods',
-            options: [
-              {
-                value: 'email' as const,
-                label: 'Email/Password',
-                hint: 'recommended',
-              },
-              { value: 'phone' as const, label: 'Phone Number' },
-              {
-                value: 'social' as const,
-                label: 'Social Providers',
-                hint: 'Google, GitHub, etc.',
-              },
-            ],
-            required: true,
-          })
+          message: 'Select authentication methods',
+          options: [
+            {
+              value: 'email' as const,
+              label: 'Email/Password',
+              hint: 'recommended',
+            },
+            { value: 'phone' as const, label: 'Phone Number' },
+            {
+              value: 'social' as const,
+              label: 'Social Providers',
+              hint: 'Google, GitHub, etc.',
+            },
+          ],
+          required: true,
+        })
         : null;
     },
 
@@ -171,18 +171,18 @@ async function main() {
       const auth = (results as any).auth;
       return auth?.includes('social')
         ? multiselect({
-            message: 'Select social providers',
-            options: [
-              { value: 'google' as const, label: 'Google' },
-              { value: 'github' as const, label: 'GitHub' },
-              { value: 'facebook' as const, label: 'Facebook' },
-              { value: 'apple' as const, label: 'Apple' },
-              { value: 'twitter' as const, label: 'Twitter' },
-              { value: 'discord' as const, label: 'Discord' },
-              { value: 'linkedin' as const, label: 'LinkedIn' },
-            ],
-            required: true,
-          })
+          message: 'Select social providers',
+          options: [
+            { value: 'google' as const, label: 'Google' },
+            { value: 'github' as const, label: 'GitHub' },
+            { value: 'facebook' as const, label: 'Facebook' },
+            { value: 'apple' as const, label: 'Apple' },
+            { value: 'twitter' as const, label: 'Twitter' },
+            { value: 'discord' as const, label: 'Discord' },
+            { value: 'linkedin' as const, label: 'LinkedIn' },
+          ],
+          required: true,
+        })
         : null;
     },
 
@@ -191,17 +191,45 @@ async function main() {
       const auth = (results as any).auth;
       return features?.includes('web') && auth?.includes('email')
         ? select({
-            message: 'Select email provider',
-            options: [
-              {
-                value: 'resend' as const,
-                label: 'Resend',
-                hint: 'recommended',
-              },
-              { value: 'smtp' as const, label: 'SMTP' },
-            ],
-            initialValue: 'resend',
-          })
+          message: 'Select email provider',
+          options: [
+            {
+              value: 'resend' as const,
+              label: 'Resend',
+              hint: 'recommended',
+            },
+            { value: 'smtp' as const, label: 'SMTP' },
+          ],
+          initialValue: 'resend',
+        })
+        : null;
+    },
+
+    paymentProvider: ({ results }) => {
+      const features = (results as any).features;
+      return features?.includes('web')
+        ? select({
+          message: 'Select payment provider',
+          options: [
+            { value: 'polar' as const, label: 'Polar' },
+            { value: 'stripe' as const, label: 'Stripe' },
+            { value: undefined, label: 'None' }
+          ],
+        })
+        : null;
+    },
+
+    useWebhook: ({ results }) => {
+      const payment = (results as any).paymentProvider;
+      return payment
+        ? select({
+          message: 'Will you use webhooks?',
+          options: [
+            { value: true, label: 'Yes' },
+            { value: false, label: 'No' }
+          ],
+          initialValue: false,
+        })
         : null;
     },
 
@@ -242,7 +270,9 @@ async function main() {
       features: (answers as any).features,
       auth: (answers as any).auth,
       socialProviders: (answers as any).socialProviders,
-      mailProvider: (answers as any).mailProvider, // Pass mailProvider
+      mailProvider: (answers as any).mailProvider,
+      paymentProvider: (answers as any).paymentProvider,
+      useWebhook: (answers as any).useWebhook,
       llm: (answers as any).llm,
     };
 

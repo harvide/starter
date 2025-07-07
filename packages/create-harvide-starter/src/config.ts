@@ -15,6 +15,8 @@ export async function generateConfig(options: CreateAppOptions) {
     socialProviders = [],
     projectPath,
     mailProvider,
+    paymentProvider,
+    useWebhook,
   } = options;
 
   // Clone the starter config
@@ -62,13 +64,15 @@ export async function generateConfig(options: CreateAppOptions) {
   // Check for missing environment variables
   const missingVars = checkMissingEnvVars(socialProviders);
   if (missingVars.length > 0) {
-    missingVars.forEach((_envVar) => {});
+    missingVars.forEach((_envVar) => { });
   }
 
   // Generate and write .env file
   const envContent = generateEnvContent(
     auth.includes('social') ? socialProviders : [],
-    mailProvider
+    mailProvider,
+    paymentProvider,
+    useWebhook
   );
   const envFilePath = path.join(projectPath, '.env');
   await fs.ensureDir(path.dirname(envFilePath)); // Ensure directory exists

@@ -5,7 +5,7 @@ import { type BetterAuthPlugin, betterAuth } from 'better-auth';
 import { drizzleAdapter } from 'better-auth/adapters/drizzle';
 import { nextCookies } from 'better-auth/next-js';
 import { admin, emailOTP, openAPI, phoneNumber } from 'better-auth/plugins';
-import { polar, checkout, portal, usage, webhooks } from '@polar-sh/better-auth';
+import { polar, checkout, portal, usage, webhooks } from "@polar-sh/better-auth";
 import { Polar } from '@polar-sh/sdk';
 import { stripe } from '@better-auth/stripe';
 import Stripe from 'stripe';
@@ -17,17 +17,12 @@ const polarClient = config.payments.provider.name === "polar" && new Polar({
 });
 
 // Initialize Stripe client
-const stripeClient = new Stripe(process.env.STRIPE_SECRET_KEY!, {
+const stripeClient = (config.payments.provider.name as "polar" | "stripe") === "stripe" && new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: '2025-06-30.basil',
 });
 
 let plugins: BetterAuthPlugin[] = [
   nextCookies(),
-  stripe({
-    stripeClient,
-    stripeWebhookSecret: process.env.STRIPE_WEBHOOK_SECRET || '',
-    createCustomerOnSignUp: config.payments.createCustomerOnSignUp,
-  }),
   admin({
     ...config.admin,
   }),
@@ -78,7 +73,7 @@ if (
 type _PolarPlugin = ReturnType<typeof checkout> | ReturnType<typeof usage> | ReturnType<typeof portal> | ReturnType<typeof webhooks>;
 type _PolarPlugins = _PolarPlugin[];
 
-if (config.payments.provider.name === 'polar') {
+if (config.payments.provider.name === 'polar' && polarClient) {
   plugins.push(polar({
     client: polarClient,
     createCustomerOnSignUp: config.payments.createCustomerOnSignUp,
@@ -98,7 +93,7 @@ if (config.payments.provider.name === 'polar') {
       }),
     ].filter(Boolean) as _PolarPlugins,
   }));
-} else if (config.payments.provider.name === 'stripe') {
+} else if ((config.payments.provider.name as "polar" | "stripe") === "stripe" && stripeClient) {
   plugins.push(stripe({
     stripeClient,
     stripeWebhookSecret: process.env.STRIPE_WEBHOOK_SECRET as string,

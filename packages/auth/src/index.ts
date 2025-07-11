@@ -73,25 +73,24 @@ if (
 type _PolarPlugin = ReturnType<typeof checkout> | ReturnType<typeof usage> | ReturnType<typeof portal> | ReturnType<typeof webhooks>;
 type _PolarPlugins = _PolarPlugin[];
 
+const polarPlugins = [
+  config.payments.checkout?.enabled && checkout({
+    products: config.payments.checkout.products || [],
+    successUrl: '/dashboard?checkout_id={CHECKOUT_ID}&t=success',
+    authenticatedUsersOnly: true,
+  }),
+  config.payments.portal.enabled && portal(),
+  config.payments.usage.enabled && usage(),
+  config.payments.webhooks.enabled && webhooks({
+    secret: process.env.POLAR_WEBHOOK_SECRET as string,
+  }),
+].filter(Boolean) as NonNullable<Parameters<typeof polar>[0]['use']>;
+
 if (config.payments.provider.name === 'polar' && polarClient) {
   plugins.push(polar({
     client: polarClient,
     createCustomerOnSignUp: config.payments.createCustomerOnSignUp,
-    use: [ // todo fix type
-      config.payments.checkout?.enabled && checkout({
-        products: config.payments.checkout?.products || [],
-        successUrl: '/dashboard?checkout_id={CHECKOUT_ID}&t=success',
-        authenticatedUsersOnly: true,
-      }),
-      config.payments.portal.enabled && portal(),
-      config.payments.usage.enabled && usage(),
-      config.payments.webhooks.enabled && webhooks({
-        secret: process.env.POLAR_WEBHOOK_SECRET as string,
-
-        // Implement your webhook handling logic here
-        // @see https://www.better-auth.com/docs/plugins/polar#webhooks-plugin
-      }),
-    ].filter(Boolean) as _PolarPlugins,
+    use: polarPlugins,
   }));
 } else if ((config.payments.provider.name as "polar" | "stripe") === "stripe" && stripeClient) {
   plugins.push(stripe({

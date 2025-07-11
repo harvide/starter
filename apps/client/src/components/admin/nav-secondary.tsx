@@ -8,7 +8,6 @@ import {
   SidebarMenuItem,
 } from '@repo/ui/components/sidebar';
 import type { Icon } from '@tabler/icons-react';
-import type * as React from 'react';
 
 export function NavSecondary({
   items,

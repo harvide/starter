@@ -1,3 +1,4 @@
+'use client';
 import { config } from '@repo/config';
 import { getResetPasswordFormVariant } from '@repo/ui/components/auth/reset-password-form';
 import type { Metadata } from 'next';

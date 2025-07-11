@@ -1,7 +1,8 @@
-'use client';
+
 import { config } from '@repo/config';
 import { getResetPasswordFormVariant } from '@repo/ui/components/auth/reset-password-form';
 import type { Metadata } from 'next';
+import { Suspense } from 'react';
 
 export const metadata: Metadata = {
   title: 'Reset Password',
@@ -19,7 +20,9 @@ export default function ResetPasswordPage() {
 
   return (
     <div className="container flex h-screen w-screen flex-col items-center justify-center">
-      <ResetPasswordForm />
+      <Suspense fallback={<div>Loading...</div>}>
+        <ResetPasswordForm />
+      </Suspense>
     </div>
   );
 }

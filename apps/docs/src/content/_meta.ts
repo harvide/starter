@@ -5,39 +5,50 @@ export default {
   },
   index: 'Introduction',
   'getting-started': 'Getting Started',
-  setup: 'Setup',
+  'next-setup': 'Next Steps',
+
+  'overview-separator': {
+    type: 'separator',
+    title: 'Overview',
+  },
+  'project-structure': 'Project Structure',
+  'leveraging-ai': 'Leveraging AI',
 
   'authentication-separator': {
     type: 'separator',
     title: 'Authentication',
   },
-  authentication: {
-    title: 'Overview',
-  },
+  'authentication-overview': 'Authentication Overview',
+  'authentication-email': 'Email & Password Authentication',
+  'authentication-phone': 'Phone Authentication',
+  'authentication-social': 'Social Authentication',
 
   'branding-separator': {
     type: 'separator',
     title: 'Branding',
   },
-  branding: {
-    title: 'Overview',
+  'branding-overview': 'Configuration',
+  'customizing-theme': 'Customizing Theme',
+
+  'emails-separator': {
+    type: 'separator',
+    title: 'Emails',
   },
+  'email-overview': 'Overview',
+  'email-templates': 'Emails Templates',
 
   'payments-separator': {
     type: 'separator',
     title: 'Payments',
   },
-  payments: {
-    title: 'Overview',
-  },
+  'payments-polar': 'Polar Integration',
+  'payments-stripe': 'Stripe Integration',
 
   'core-separator': {
     type: 'separator',
-    title: 'Core Features',
+    title: 'Core',
   },
-  core: {
-    title: 'Overview',
-  },
+  'admin-panel': 'Admin Panel',
 
   'deployment-separator': {
     type: 'separator',
@@ -45,7 +56,7 @@ export default {
   },
   'deployment-overview': 'Overview',
   deployment: {
-    title: 'Deployment',
+    title: 'Deployment Options',
   },
 
   'contributing-separator': {

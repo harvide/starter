@@ -1,6 +1,6 @@
 # Email & Password Authentication
 
-Email and password authentication is the most common authentication method. Harvide Starter provides a complete solution with email verification, password reset, and customizable UI components.
+Email and password authentication is the most common authentication method. @harvide/starter provides a complete solution with email verification, password reset, and customizable UI components.
 
 ## Configuration
 
@@ -77,23 +77,27 @@ When `otp.enabled` is enabled:
 
 ### Login Form
 
+
 ```typescript
 export default {
   ui: {
-    loginForm: "modern" // or "basic"
+    loginForm: "basic"
   }
 }
 ```
+
+<img src="/screenshots/variants/login/basic.png" alt="Basic variant Login Form" />
 
 ### Signup Form
 
 ```typescript
 export default {
   ui: {
-    signupForm: "modern" // or "basic"
+    signupForm: "basic"
   }
 }
 ```
+<img src="/screenshots/variants/signup/basic.png" alt="Basic variant Signup Form" />
 
 ### Email Templates
 
@@ -114,23 +118,9 @@ export default {
 }
 ```
 
-## Security Considerations
+Email templates can be customized in `packages/mail/src/transactional/emails`, to visualize them just run 
+```bash
+bun run dev
+```
 
-1. **Password Requirements**
-   - Set appropriate `minPasswordLength`
-   - Consider implementing password strength checks
-   - Prevent common/weak passwords
-
-2. **Rate Limiting**
-   - Failed login attempts are automatically rate limited
-   - OTP attempts are limited by `allowedAttempts`
-
-3. **Token Security**
-   - All tokens are single-use
-   - Tokens expire based on configured timeouts
-   - Invalid tokens are immediately revoked
-
-4. **Email Security**
-   - Verification required by default
-   - No sensitive data in emails
-   - Secure reset password flows
+React-email web server will start and you can see the templates in your browser at `http://localhost:3004/`

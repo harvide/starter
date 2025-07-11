@@ -1,0 +1,168 @@
+# Stripe Integration
+
+[Stripe](https://stripe.com) is a powerful payment infrastructure that handles payments, subscriptions, and billing. Harvide Starter includes built-in support for Stripe integration.
+
+## Initial Setup
+
+1. **Environment Variables**
+   ```bash
+   # Required: Stripe API keys
+   STRIPE_SECRET_KEY=sk_test_...
+   STRIPE_PUBLISHABLE_KEY=pk_test_...
+   STRIPE_WEBHOOK_SECRET=whsec_...
+   ```
+
+## Configuration
+
+Configure Stripe in your `starter.config.ts`:
+
+```typescript
+export default {
+  payments: {
+    /** Enable payment functionality */
+    enabled: true,
+    /** Create customer record when user signs up */
+    createCustomerOnSignUp: true,
+    /** Provider specific configuration */
+    provider: {
+      /** Select payment provider */
+      name: 'stripe'
+    },
+    /** Subscription configuration */
+    subscription: {
+      enabled: true,
+      plans: [
+        {
+          name: "basic",
+          priceId: "price_...",
+          annualDiscountPriceId: "price_...", // Optional: price ID for annual billing
+          limits: {
+            projects: 5,
+            storage: 10
+          },
+          freeTrial: {
+            days: 14
+          }
+        }
+      ],
+      requireEmailVerification: true
+    },
+    /** Webhook integration */
+    webhooks: {
+      enabled: false
+    }
+  }
+}
+```
+
+## Core Features
+
+### Subscription Management
+
+- Multiple subscription plans
+- Trial periods support
+- Usage limits per plan
+- Annual billing with optional discounts
+- Email verification requirement option
+
+### Customer Management
+
+- Automatic customer creation on signup
+- Customer portal integration
+- Subscription status tracking
+- Payment method management
+
+### Webhook Integration
+
+- Secure webhook handling
+- Event-based subscription updates
+- Payment status monitoring
+- Error handling and retries
+
+## Implementation Guide
+
+### 1. Basic Subscription
+
+```typescript
+// Initialize subscription with plan name
+await authClient.subscription.upgrade({
+  plan: "basic",
+  successUrl: "/dashboard",
+  cancelUrl: "/pricing"
+});
+
+// Or with annual billing
+await authClient.subscription.upgrade({
+  plan: "basic",
+  annual: true,
+  successUrl: "/dashboard",
+  cancelUrl: "/pricing"
+});
+```
+
+### 2. Customer Portal
+
+```typescript
+// Redirect to customer portal
+await authClient.subscription.portal({
+  returnUrl: "/dashboard"
+});
+
+// Check subscription status
+const { data: subscriptions } = await authClient.subscription.list();
+```
+
+### 3. Webhook Integration
+
+1. Enable webhooks in your configuration:
+```typescript
+export default {
+  payments: {
+    webhooks: {
+      enabled: true
+    }
+  }
+}
+```
+
+2. Set up your webhook endpoint in the Stripe dashboard pointing to:
+   `/api/webhooks/stripe`
+
+3. Add the webhook secret to your environment variables
+
+## Plan Configuration
+
+### Basic Plan Structure
+```typescript
+{
+  name: "pro",
+  priceId: "price_...", // Stripe Price ID
+  annualDiscountPriceId: "price_...", // Optional: Annual price ID
+  lookupKey: "pro_monthly", // Optional: Price lookup key
+  annualDiscountLookupKey: "pro_yearly", // Optional: Annual price lookup key
+  limits: {
+    projects: 10,
+    storage: 20
+  },
+  freeTrial: {
+    days: 14
+  }
+}
+```
+
+### Trial Configuration
+
+Trials can be configured per plan:
+```typescript
+{
+  name: "enterprise",
+  priceId: "price_...",
+  freeTrial: {
+    days: 30
+  }
+}
+```
+
+## Additional Resources
+
+For more detailed information about Stripe's features and API, visit the [Stripe Documentation](https://stripe.com/docs).

@@ -1,0 +1,138 @@
+# Email Templates
+
+Harvide Starter provides customizable email templates for all transactional and marketing communications. This guide covers how to customize and manage your email templates.
+
+## Template Configuration
+
+Configure email templates in your `starter.config.ts`:
+
+```typescript
+export default {
+  email: {
+    enabled: true,
+    provider: "resend", // or "smtp"
+    from: {
+      admin: {
+        email: "admin@example.com",
+        name: "Admin Team"
+      },
+      support: {
+        email: "support@example.com",
+        name: "Support Team"
+      },
+      noReply: {
+        email: "noreply@example.com"
+      }
+    },
+    templates: {
+      verification: {
+        subject: "Verify your email address",
+        variant: "basic"
+      },
+      resetPassword: {
+        subject: "Reset your password",
+        variant: "basic"
+      }
+    }
+  }
+}
+```
+
+## Available Templates
+
+### Authentication Templates
+
+1. **Email Verification**
+   - Location: `packages/mail/src/transactional/emails/email-verification/variants/`
+   - Used for: New user email verification
+   - Variants: `basic`
+
+2. **Password Reset**
+   - Location: `packages/mail/src/transactional/emails/reset-password/variants/`
+   - Used for: Password reset requests
+   - Variants: `basic`
+
+## Creating Custom Variants
+
+Refer to [react.email documentation](https://react.email/docs/components/html) for creating custom email templates. Here’s a quick guide to create a custom verification email template.
+
+1. **Create Template File**
+  ```typescript
+  // packages/mail/src/transactional/emails/email-verification/variants/custom.tsx
+  import { VerificationEmailProps } from '../types';
+   
+  import {
+  Body,
+  Button,
+  Container,
+  Head,
+  Heading,
+  Html,
+  Section,
+  Text,
+  } from '@react-email/components';
+  import type { JSX } from 'react';
+  import { EmailBase } from '../../base';
+  import type { EmailVerificationProps } from '../props';
+
+  export default function Custom({
+    user,
+    url,
+    token,
+  }: EmailVerificationProps): JSX.Element {
+    return (
+      ...
+    )
+  }
+  ```
+
+2. **Add to variants index**
+  ```typescript
+   // packages/mail/src/transactional/emails/email-verification/index.ts
+   export * from './custom';
+  ```
+
+3. **Register Variant**
+  ```typescript
+    // packages/mail/src/transactional/index.ts
+    import emailVerificationBasic from './emails/email-verification/variants/basic';
+    import resetPasswordBasic from './emails/reset-password/variants/basic';
+
+    // Import custom variant
+    import emailVerificationCustom from './emails/email-verification/variants/custom';
+
+    export const templates = {
+      'email-verification': {
+        variants: {
+          basic: emailVerificationBasic,
+          // add custom variant
+          custom: emailVerificationCustom
+        },
+      },
+      'reset-password': {
+        variants: {
+          basic: resetPasswordBasic,
+        },
+      },
+    } as const;
+
+    export type TemplateName = keyof typeof templates;
+    export type TemplateVariant<T extends TemplateName> =
+    keyof (typeof templates)[T]['variants'];
+  ```
+
+4. **Use custom variant**
+  ```typescript
+   export default {
+     email: {
+       templates: {
+        /** Email verification template */
+        verification: {
+          subject: 'Verify your email address',
+          variant: 'custom',
+        },
+        ...
+      },
+     }
+   }
+  ```

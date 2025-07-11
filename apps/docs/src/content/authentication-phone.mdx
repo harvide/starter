@@ -1,0 +1,52 @@
+# Phone Authentication
+
+import { Callout } from 'nextra/components'
+
+<Callout type="warning">
+**Coming Soon**: Phone authentication is currently under development. While the configuration options exist in `starter.config.ts`, the full implementation including SMS provider integration and UI components is not yet available.
+</Callout>
+
+Phone number authentication in @harvide/starter provides a secure way to verify users through SMS one-time passwords (OTP). This guide covers setup and configuration for phone-based authentication.
+
+## Configuration
+
+Configure phone authentication in your `starter.config.ts`:
+
+```typescript
+export default {
+  auth: {
+    phone: {
+      enabled: true,
+      otp: {
+        enabled: true,
+        allowedAttempts: 3,
+        otpLength: 6,
+        expiresIn: 300, // 5 minutes
+        requireVerification: true
+      }
+    }
+  }
+}
+```
+
+## OTP Configuration
+
+1. **OTP Length**
+   ```typescript
+   otpLength: 6 // Number of digits in OTP
+   ```
+
+2. **Expiration Time**
+   ```typescript
+   expiresIn: 300 // Time in seconds before OTP expires
+   ```
+
+3. **Attempt Limiting**
+   ```typescript
+   allowedAttempts: 3 // Maximum failed attempts before timeout
+   ```
+
+4. **Verification Requirement**
+   ```typescript
+   requireVerification: true // Force phone verification
+   ```

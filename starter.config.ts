@@ -4,6 +4,51 @@
  * Customize authentication flows, branding, and preferences.
  */
 export default {
+  /** Polar Payment configuration
+   * For Stripe configuration, @see https://starter.harvide.com/docs/payments/stripe
+  */
+  payments: {
+    /** Enable payment functionality */
+    enabled: true,
+    /** Create customer record when user signs up */
+    createCustomerOnSignUp: true,
+    /** Provider specific configuration */
+    provider: {
+      /** Select payment provider */
+      name: 'polar',
+      /** Environment configuration for Polar */
+      environment: 'sandbox'
+    },
+    /** Products configuration for Polar */
+    checkout: {
+      enabled: true,
+      products: [
+        {
+          productId: '29b33f6b-47ea-4819-9906-4347b2fa8837',
+          slug: 'free'
+        },
+        {
+          productId: '64a47469-a020-490f-b93a-a44d584d50c8',
+          slug: 'pro'
+        }
+      ]
+    },
+    /** Usage based billing settings */
+    usage: {
+      enabled: false
+    },
+    /** Customer portal configuration */
+    portal: {
+      enabled: true,
+      externalPortal: true,
+      returnUrl: '/dashboard'
+    },
+    /** Webhook integration */
+    webhooks: {
+      enabled: false
+    }
+  },
+
   /** Admin panel configuration */
   admin: {
     /** Enable or disable the admin panel */

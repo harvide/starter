@@ -1,20 +1,44 @@
 # Welcome to @harvide/starter
 
-**Never handle authentication flows, user management, or email notifications manually again.**
+**The foundation for your next application, built for speed and flexibility.**
 
-`@harvide/starter` is a production-ready, highly customizable boilerplate for your next application. It comes with pre-configured authentication, UI components, and a set of best practices to help you ship faster.
+@harvide/starter is a production-ready boilerplate that provides everything you need to build modern web applications. Focus on your business logic while we handle the complexities of authentication, user management, payments, and more.
 
-Whether you're building a simple side project or a full-fledged SaaS application, `@harvide/starter` provides the foundation you need to focus on what matters most: your product.
+@harvide/starter uses Next.js as a foundation, with BetterAuth for authentication and user management, multiple payment providers such as Polar or Stripe and DrizzleORM for database interactions. It comes with a powerful admin panel, email service and easy configuration through a single file.
 
-## Core Concepts
+## What's Included
 
-- **Customizable Flows**: Most of the application's behavior can be configured through a single `starter.config.ts` file. No need to dig through the codebase to make changes.
-- **Extensible by Design**: Built with modularity in mind, you can easily add new features, pages, and components.
-- **Developer Experience**: We care about DX. Enjoy a modern stack with Next.js, TypeScript, Tailwind CSS, and a powerful CLI to get you started in minutes.
+### Core Features
+- **Authentication**: Email/password, social providers, phone auth
+- **User Management**: Profiles, roles, permissions
+- **Admin Panel**: User management, analytics, settings
+- **Email Service**: Transactional emails, templates, multiple providers
+
+### Payments & Monetization
+- **Stripe Integration**: Subscriptions, usage-based billing
+- **Polar Integration**: Open source monetization
+- **Multiple Providers**: Flexible payment options
+
+### Developer Experience
+- **Single Config**: Control everything through `starter.config.ts`
+- **Type Safety**: Full TypeScript support
+- **Modern Stack**: Next.js, Tailwind CSS, Drizzle ORM
+- **AI Ready**: Optimized for AI code assistants
 
 ## Getting Started
 
-Ready to dive in? Here's how you can get started:
+1. Create a new project:
+```bash
+npx create-harvide-starter
+```
 
-- **[Installation](docs/getting-started)**: The quickest way to create a new project.
-- **[Configuration](docs/configuration)**: Learn how to customize every aspect of your application.
+2. Configure your application in `starter.config.ts`
+
+3. Start building!
+
+## Next Steps
+
+- [Installation Guide](/getting-started)
+- [Core Features](/core)
+- [Configuration](/configuration)
+- [Deployment](/deployment-overview)

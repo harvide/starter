@@ -1,36 +1,68 @@
 export default {
+  'introduction-separator': {
+    type: 'separator',
+    title: 'Introduction',
+  },
   index: 'Introduction',
-  'getting-started-separator': {
-    type: 'separator',
-    title: 'Getting Started',
-  },
   'getting-started': 'Getting Started',
-  setup: 'Setup',
+  'next-setup': 'Next Steps',
+
+  'overview-separator': {
+    type: 'separator',
+    title: 'Overview',
+  },
   'project-structure': 'Project Structure',
-  convention: 'Concepts',
-  'configuration-separator': {
-    type: 'separator',
-    title: 'Configuration',
-  },
-  configuration: 'Configuration',
-  'customizing-theme': 'Customizing Theme',
-  'ai-separator': {
-    type: 'separator',
-    title: 'AI',
-  },
   'leveraging-ai': 'Leveraging AI',
+
+  'authentication-separator': {
+    type: 'separator',
+    title: 'Authentication',
+  },
+  'authentication-overview': 'Authentication Overview',
+  'authentication-email': 'Email & Password Authentication',
+  'authentication-phone': 'Phone Authentication',
+  'authentication-social': 'Social Authentication',
+
+  'branding-separator': {
+    type: 'separator',
+    title: 'Branding',
+  },
+  'branding-overview': 'Configuration',
+  'customizing-theme': 'Customizing Theme',
+
+  'emails-separator': {
+    type: 'separator',
+    title: 'Emails',
+  },
+  'email-overview': 'Overview',
+  'email-templates': 'Emails Templates',
+
+  'payments-separator': {
+    type: 'separator',
+    title: 'Payments',
+  },
+  'payments-polar': 'Polar Integration',
+  'payments-stripe': 'Stripe Integration',
+
+  'core-separator': {
+    type: 'separator',
+    title: 'Core',
+  },
+  'admin-panel': 'Admin Panel',
+
   'deployment-separator': {
     type: 'separator',
     title: 'Deployment',
   },
   'deployment-overview': 'Overview',
   deployment: {
-    title: 'Deployment',
+    title: 'Deployment Options',
   },
+
   'contributing-separator': {
     type: 'separator',
     title: 'Contributing',
   },
   contributing: 'Contributing',
-  'adding-new-variants': 'Adding New Variants',
+  'adding-new-variants': 'Adding New Variants'
 };

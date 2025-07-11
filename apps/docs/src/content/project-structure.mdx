@@ -1,11 +1,11 @@
 # Project Structure
 
-The Harvide Starter project is organized into a monorepo structure, leveraging `turborepo` for efficient management of multiple packages and applications. This structure promotes code reusability, clear separation of concerns, and streamlined development workflows.
+The Harvide Starter project uses a monorepo structure with `turborepo`, organizing code into packages and applications for better maintainability and reuse.
 
 ## Root Directory
 
-- `apps/`: Contains independent applications, such as the `client` (Next.js frontend) and `admin` (Next.js admin panel).
-  - `client/`: The main Next.js application serving as the frontend for your project. It contains admin panel.
+- `apps/`: Contains the main application code
+  - `client/`: The Next.js application that includes both frontend and admin panel
 - `packages/`: Houses reusable packages that can be shared across applications and other packages.
   - `auth/`: Authentication utilities and configurations.
   - `config/`: Shared configurations (e.g., environment variables, `starter.config.ts` schema).

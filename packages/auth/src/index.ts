@@ -5,6 +5,21 @@ import { type BetterAuthPlugin, betterAuth } from 'better-auth';
 import { drizzleAdapter } from 'better-auth/adapters/drizzle';
 import { nextCookies } from 'better-auth/next-js';
 import { admin, emailOTP, openAPI, phoneNumber } from 'better-auth/plugins';
+import { polar, checkout, portal, usage, webhooks } from "@polar-sh/better-auth";
+import { Polar } from '@polar-sh/sdk';
+import { stripe } from '@better-auth/stripe';
+import Stripe from 'stripe';
+
+// Initialize Polar client
+const polarClient = config.payments.provider.name === "polar" && new Polar({
+  accessToken: process.env.POLAR_ACCESS_TOKEN!,
+  server: config.payments.provider.environment
+});
+
+// Initialize Stripe client
+const stripeClient = (config.payments.provider.name as "polar" | "stripe") === "stripe" && new Stripe(process.env.STRIPE_SECRET_KEY!, {
+  apiVersion: '2025-06-30.basil',
+});
 
 let plugins: BetterAuthPlugin[] = [
   nextCookies(),
@@ -15,7 +30,6 @@ let plugins: BetterAuthPlugin[] = [
     ...config.auth.emailAndPassword.otp,
 
     // uncomment to use a custom OTP generation function
-    // Note: This is just an example, you can implement your own OTP generation logic
     // generateOTP: () => {
     //   return Math.floor(100000 + Math.random() * 900000).toString();
     // },
@@ -35,7 +49,7 @@ let plugins: BetterAuthPlugin[] = [
     sendOTP: ({ phoneNumber, code }, _request) => {
       // Implement sending OTP code via SMS
     },
-    sendPasswordResetOTP: ({ phoneNumber, code }, _request) => {},
+    sendPasswordResetOTP: ({ phoneNumber, code }, _request) => { },
     signUpOnVerification: {
       getTempEmail: (phoneNumber) => {
         return `${phoneNumber}@example.com`;
@@ -47,6 +61,7 @@ let plugins: BetterAuthPlugin[] = [
     },
   }),
 ];
+
 if (
   process.env.NODE_ENV === 'development' &&
   !plugins.some((plugin) => plugin.id === 'open-api')
@@ -54,6 +69,45 @@ if (
   // Add OpenAPI plugin only in development mode if not already included
   plugins = [...plugins, openAPI()];
 }
+
+type _PolarPlugin = ReturnType<typeof checkout> | ReturnType<typeof usage> | ReturnType<typeof portal> | ReturnType<typeof webhooks>;
+type _PolarPlugins = _PolarPlugin[];
+
+const polarPlugins = [
+  config.payments.checkout?.enabled && checkout({
+    products: config.payments.checkout.products || [],
+    successUrl: '/dashboard?checkout_id={CHECKOUT_ID}&t=success',
+    authenticatedUsersOnly: true,
+  }),
+  config.payments.portal.enabled && portal(),
+  config.payments.usage.enabled && usage(),
+  config.payments.webhooks.enabled && webhooks({
+    secret: process.env.POLAR_WEBHOOK_SECRET as string,
+  }),
+].filter(Boolean) as NonNullable<Parameters<typeof polar>[0]['use']>;
+
+if (config.payments.provider.name === 'polar' && polarClient) {
+  plugins.push(polar({
+    client: polarClient,
+    createCustomerOnSignUp: config.payments.createCustomerOnSignUp,
+    use: polarPlugins,
+  }));
+} else if ((config.payments.provider.name as "polar" | "stripe") === "stripe" && stripeClient) {
+  plugins.push(stripe({
+    stripeClient,
+    stripeWebhookSecret: process.env.STRIPE_WEBHOOK_SECRET as string,
+    createCustomerOnSignUp: config.payments.createCustomerOnSignUp,
+    onEvent: async (event) => {
+      if (!config.payments.webhooks.enabled) return;
+
+      // Implement your webhook handling logic here
+      // @see https://www.better-auth.com/docs/plugins/stripe#webhook-handling
+    }
+  }
+  ))
+}
+
+// BetterAuth object 
 
 export const auth = betterAuth({
   database: drizzleAdapter(db, {

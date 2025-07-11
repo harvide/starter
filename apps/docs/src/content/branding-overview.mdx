@@ -1,0 +1,58 @@
+# Branding Overview
+
+@harvide/starter provides comprehensive branding options to ensure your application reflects your brand identity. From themes to email templates, you can customize every aspect of your application's appearance.
+
+## Core Branding Configuration
+
+Configure basic branding in your `starter.config.ts`:
+
+```typescript
+export default {
+  /** Application branding configuration */
+  branding: {
+    /**
+     * Application name.
+     * Used in UI elements and email templates.
+     */
+    name: 'Starter',
+
+    /**
+     * Application URL
+     */
+    url: 'https://starter.harvide.com',
+
+    /**
+     * Application description.
+     * Used in meta tags and documentation.
+     */
+    description:
+      'Never handle flows manually again. Use @harvide/starter to kickstart your next project with pre-configured authentication and UI components.',
+
+    /** Logo configuration */
+    logo: {
+      /**
+       * URL to full-size logo image.
+       * Used in login pages and email headers.
+       */
+      large: 'https://harvide.com/logo/big-dark-transparent.svg',
+
+      /**
+       * URL to icon-size logo image.
+       * Used in favicons and small UI elements.
+       */
+      icon: 'https://www.harvide.com/logo/small-dark-white.svg',
+
+      /**
+       * Alternative text for logo images.
+       * Important for accessibility.
+       */
+      altText: 'Harvide Logo',
+    },
+  },
+}
+```
+
+## Related Guides
+
+- [Customizing Theme](/docs/customizing-theme) - Detailed guide on theme customization
+- [Email Templates](/docs/email-templates) - Email template customization

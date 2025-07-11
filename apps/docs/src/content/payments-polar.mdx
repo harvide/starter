@@ -1,0 +1,145 @@
+# Polar Integration
+
+[Polar](https://polar.sh) is a developer-first payment infrastructure that provides seamless integration for payments and checkouts. Harvide Starter includes built-in support for Polar payments.
+
+## Initial Setup
+
+1. **Environment Variables**
+   ```bash
+   # Required: Polar access token
+   POLAR_ACCESS_TOKEN=your_access_token
+   
+   # Optional: Webhook secret (if using webhooks)
+   POLAR_WEBHOOK_SECRET=your_webhook_secret
+   ```
+
+## Configuration
+
+Configure Polar in your `starter.config.ts`:
+
+```typescript
+export default {
+  payments: {
+    /** Enable payment functionality */
+    enabled: true,
+    /** Create customer record when user signs up */
+    createCustomerOnSignUp: true,
+    /** Provider specific configuration */
+    provider: {
+      /** Select payment provider */
+      name: 'polar',
+      /** Environment configuration for Polar */
+      environment: 'sandbox' // or 'production'
+    },
+    /** Products configuration for Polar */
+    checkout: {
+      enabled: true,
+      products: [
+        {
+          productId: 'your-product-id',
+          slug: 'pro' // Optional: Custom slug for easy reference
+        }
+      ]
+    },
+    /** Usage based billing settings */
+    usage: {
+      enabled: false
+    },
+    /** Customer portal configuration */
+    portal: {
+      enabled: true,
+      externalPortal: true,
+      returnUrl: '/dashboard'
+    },
+    /** Webhook integration */
+    webhooks: {
+      enabled: false
+    }
+  }
+}
+```
+
+## Core Features
+
+### Checkout Integration
+
+- Create checkout sessions for products
+- Support for one-time and subscription products
+- Custom slugs for easy product referencing
+- Configurable success redirect URLs
+
+### Customer Portal
+
+Enable customers to:
+- Manage their subscriptions
+- View billing history
+- Update payment methods
+- Access purchased products
+
+### Usage Based Billing
+
+Optional feature for:
+- Tracking usage metrics
+- Implementing metered billing
+- Managing customer quotas
+
+## Implementation Guide
+
+### 1. Basic Checkout
+
+```typescript
+// Initialize checkout using product ID
+await authClient.checkout({
+  products: ["your-product-id"]
+});
+
+// Or use configured slug
+await authClient.checkout({
+  slug: "pro"
+});
+```
+
+### 2. Customer Portal
+
+```typescript
+// Redirect to customer portal
+await authClient.customer.portal();
+
+// Get customer state
+const { data: customerState } = await authClient.customer.state();
+```
+
+### 3. Usage Tracking
+
+Enable usage tracking in your configuration:
+
+```typescript
+export default {
+  payments: {
+    usage: {
+      enabled: true
+    }
+  }
+}
+```
+
+### 4. Webhook Integration
+
+1. Enable webhooks in your configuration:
+```typescript
+export default {
+  payments: {
+    webhooks: {
+      enabled: true
+    }
+  }
+}
+```
+
+2. Configure the webhook endpoint in your Polar dashboard
+3. Add your webhook secret to environment variables
+4. Handle webhook events in your application
+
+## Additional Resources
+
+For more detailed information about Polar's features and API, visit the [Polar Documentation](https://docs.polar.sh).

@@ -1,0 +1,84 @@
+# Social Authentication
+
+@harvide/starter supports multiple social authentication providers out of the box. This guide covers how to set up and configure social sign-in for your application.
+
+## Supported Providers
+
+All major social providers are supported, check [Better Auth docs](https://www.better-auth.com/docs/authentication/apple) for the latest list.
+
+## Configuration
+
+Enable and configure social providers in your `starter.config.ts`:
+
+```typescript
+export default {
+  auth: {
+    socialProviders: {
+      google: {
+        enabled: true,
+        clientId: process.env.GOOGLE_CLIENT_ID,
+        clientSecret: process.env.GOOGLE_CLIENT_SECRET
+      },
+      apple: {
+        enabled: true,
+        clientId: process.env.APPLE_CLIENT_ID,
+        clientSecret: process.env.APPLE_CLIENT_SECRET
+      },
+      linkedin: {
+        enabled: true,
+        clientId: process.env.LINKEDIN_CLIENT_ID,
+        clientSecret: process.env.LINKEDIN_CLIENT_SECRET
+      }
+    }
+  }
+}
+```
+
+## Provider Setup
+
+Reference the official documentation of [Better Auth](https://www.better-auth.com/docs/authentication/apple) for detailed setup instructions for each provider.
+
+## Account Linking
+
+Enable users to link multiple social accounts:
+
+```typescript
+export default {
+  auth: {
+    account: {
+      accountLinking: {
+        enabled: true,
+        allowUnlinkingAll: false
+      }
+    }
+  }
+}
+```
+
+This allows:
+- Users to sign in with multiple providers
+- Linking new providers to existing accounts
+- Managing connected accounts
+
+## Customization
+
+All built-in login and signup form variants supports social authentication. You don't have to write any additional code to enable social sign-in, beside configuring the providers in `starter.config.ts`.
+
+### Provider Order
+
+Order is based on the configuration in `starter.config.ts`. The first provider will be first in the list, followed by the others in the order they are defined.
+
+```typescript
+export default {
+  auth: {
+    socialProviders: {
+      google: {
+        ...
+      },
+      apple: {
+        ...
+      }
+    }
+  }
+}
+```

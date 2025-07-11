@@ -1,9 +1,11 @@
-import type { MailProvider, SocialProvider } from './types.js';
+import type { MailProvider, PaymentProvider, SocialProvider } from './types.js';
 import { generateSecretKey } from './utils.js';
 
 export function generateEnvContent(
   socialProviders: SocialProvider[] = [],
-  mailProvider?: MailProvider
+  mailProvider?: MailProvider,
+  paymentProvider?: PaymentProvider,
+  useWebhook?: boolean
 ): string {
   let mailEnv = '';
   if (mailProvider === 'resend') {
@@ -22,14 +24,24 @@ SMTP_PASS=""
 `;
   }
 
+  let paymentEnv = '';
+  if (paymentProvider === 'polar') {
+    paymentEnv = `
+# Polar Payments
+POLAR_ACCESS_TOKEN=""${useWebhook ? '\nPOLAR_WEBHOOK_SECRET=""' : ''}`;
+  } else if (paymentProvider === 'stripe') {
+    paymentEnv = `
+# Stripe Payments
+STRIPE_SECRET_KEY=""${useWebhook ? '\nSTRIPE_WEBHOOK_SECRET=""' : ''}`;
+  }
+
   const baseEnv = `# Database
 DATABASE_URL="postgres://user:password@localhost:5432/database"
 
 # Auth
 AUTH_SECRET="${generateSecretKey(32)}"
 
-${mailEnv}
-`;
+${mailEnv}${paymentEnv}`;
 
   const socialEnv = socialProviders
     .map((provider) => {

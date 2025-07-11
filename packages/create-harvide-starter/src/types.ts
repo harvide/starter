@@ -20,6 +20,9 @@ export type LLMType =
   | 'zed'
   | 'codex'
   | 'none';
+
+export type PaymentProvider = 'polar' | 'stripe';
+
 export type MailProvider = 'resend' | 'smtp'; // New type for mail providers
 
 export interface CliAnswers {
@@ -33,6 +36,8 @@ export interface CliAnswers {
   socialProviders?: SocialProvider[];
   llm?: LLMType;
   mailProvider?: MailProvider; // Add mailProvider to CLI answers
+  paymentProvider?: PaymentProvider;
+  useWebhook?: boolean;
 }
 
 export interface CreateAppOptions {
@@ -45,6 +50,8 @@ export interface CreateAppOptions {
   socialProviders?: SocialProvider[];
   llm?: LLMType;
   mailProvider?: MailProvider; // Add mailProvider to app options
+  paymentProvider?: PaymentProvider;
+  useWebhook?: boolean;
 }
 
 export interface SocialProviderConfig {

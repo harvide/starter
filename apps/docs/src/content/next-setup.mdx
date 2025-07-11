@@ -1,0 +1,67 @@
+# Next Steps
+
+This section guides you through setting up your development environment for Harvide Starter.
+
+## Prerequisites
+
+Before you begin, ensure you have the following installed on your system:
+
+*   **Node.js**: Version 18.x or later ([nodejs.org](https://nodejs.org/))
+*   **Git**: For version control ([git-scm.com](https://git-scm.com/))
+*   **Package Manager**: Choose one:
+    ```bash
+    # Bun (recommended)
+    curl -fsSL https://bun.sh/install | bash
+
+    # pnpm
+    npm install -g pnpm
+
+    # yarn
+    npm install -g yarn
+    ```
+
+## Database Setup
+
+Harvide Starter uses Drizzle ORM with PostgreSQL. After setting up your database, run migrations from the project root:
+
+```bash
+bun run db:migrate # or npm/yarn/pnpm
+```
+
+## Environment Variables
+
+Edit the `.env` file in your project root with your configuration:
+
+```dotenv
+# Required: Database connection
+DATABASE_URL="postgres://user:password@localhost:5432/database"
+
+# Required: Application URL
+NEXT_PUBLIC_CLIENT_URL="http://localhost:3000"
+
+# Required: Auth secret (generate with `openssl rand -base64 32`)
+BETTER_AUTH_SECRET="your_strong_auth_secret_key"
+
+# Email Provider (choose one)
+# Resend:
+RESEND_API_KEY=your_resend_api_key
+
+# SMTP:
+SMTP_HOST=smtp.example.com
+SMTP_PORT=587
+SMTP_USER=your_username
+SMTP_PASSWORD=your_password
+```
+
+For detailed email configuration and additional settings, see the [Email Service](/docs/authentication-email) guide.
+
+## Development Server
+
+Start the development server:
+
+```bash
+cd your-project
+bun run dev # or npm/yarn/pnpm
+```
+
+Your application will be available at `http://localhost:3000`.

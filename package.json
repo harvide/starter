@@ -12,14 +12,16 @@
     "build:docs": "turbo run build --filter=docs"
   },
   "devDependencies": {
-    "@biomejs/biome": "2.0.5",
+    "@biomejs/biome": "2.1.1",
     "@types/minimatch": "^6.0.0",
+    "@types/react": "^19.1.8",
+    "@types/react-dom": "^19.1.6",
     "dotenv-cli": "^8.0.0",
     "husky": "^9.1.7",
     "prettier": "^3.6.2",
     "turbo": "^2.5.4",
-    "typescript": "5.8.2",
-    "ultracite": "5.0.20"
+    "typescript": "5.8.3",
+    "ultracite": "5.0.32"
   },
   "engines": {
     "node": ">=18"

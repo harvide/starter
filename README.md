@@ -3,7 +3,7 @@
     <a href="https://starter.harvide.com" target="_blank"><img src="./static/images/harvide-starter-banner.png" alt="Harvide Starter banner, with logo and text." width="800"></a>
     <br />
     <br />
-    <b>Starter is a production-ready, highly customizable boilerplate for your next application. It provides a solid foundation with pre-configured authentication, UI components, and best practices baked in, allowing you to focus on what matters most: your product.</b>
+    <b>@harvide/starter is a production-ready, highly customizable boilerplate for your next application. It provides a solid foundation with pre-configured authentication, UI components, and best practices baked in, allowing you to focus on what matters most: your product.</b>
     <br />
     <br />
 </p>

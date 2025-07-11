@@ -1,0 +1,166 @@
+# Social Authentication
+
+Harvide Starter supports multiple social authentication providers out of the box. This guide covers how to set up and configure social sign-in for your application.
+
+## Supported Providers
+
+- Google
+- Apple
+- LinkedIn
+
+## Configuration
+
+Enable and configure social providers in your `starter.config.ts`:
+
+```typescript
+export default {
+  auth: {
+    socialProviders: {
+      google: {
+        enabled: true,
+        clientId: process.env.GOOGLE_CLIENT_ID,
+        clientSecret: process.env.GOOGLE_CLIENT_SECRET
+      },
+      apple: {
+        enabled: true,
+        clientId: process.env.APPLE_CLIENT_ID,
+        clientSecret: process.env.APPLE_CLIENT_SECRET
+      },
+      linkedin: {
+        enabled: true,
+        clientId: process.env.LINKEDIN_CLIENT_ID,
+        clientSecret: process.env.LINKEDIN_CLIENT_SECRET
+      }
+    }
+  }
+}
+```
+
+## Provider Setup
+
+### Google
+
+1. Go to [Google Cloud Console](https://console.cloud.google.com)
+2. Create a new project or select an existing one
+3. Enable the Google OAuth2 API
+4. Configure OAuth consent screen:
+   - Add authorized domains
+   - Set application type (Internal/External)
+   - Add necessary scopes
+5. Create OAuth 2.0 credentials:
+   - Add authorized JavaScript origins
+   - Add authorized redirect URIs (typically `http://localhost:3000/api/auth/callback/google` for development)
+6. Copy the Client ID and Client Secret
+
+```bash
+GOOGLE_CLIENT_ID=your_client_id
+GOOGLE_CLIENT_SECRET=your_client_secret
+```
+
+### Apple
+
+1. Go to [Apple Developer Portal](https://developer.apple.com)
+2. Register your app and enable Sign in with Apple
+3. Create Service ID and configure domains
+4. Generate client secret (private key)
+5. Set up redirect URIs
+
+```bash
+APPLE_CLIENT_ID=your_service_id
+APPLE_CLIENT_SECRET=your_private_key
+```
+
+### LinkedIn
+
+1. Visit [LinkedIn Developers](https://www.linkedin.com/developers)
+2. Create a new app
+3. Configure OAuth 2.0 settings:
+   - Add authorized redirect URLs
+   - Request necessary permissions
+4. Get your client credentials
+
+```bash
+LINKEDIN_CLIENT_ID=your_client_id
+LINKEDIN_CLIENT_SECRET=your_client_secret
+```
+
+## Account Linking
+
+Enable users to link multiple social accounts:
+
+```typescript
+export default {
+  auth: {
+    account: {
+      accountLinking: {
+        enabled: true,
+        allowUnlinkingAll: false
+      }
+    }
+  }
+}
+```
+
+This allows:
+- Users to sign in with multiple providers
+- Linking new providers to existing accounts
+- Managing connected accounts
+
+## Security Considerations
+
+1. **Provider Verification**
+   - Validate email domains if needed
+   - Verify required scopes
+   - Handle missing email cases
+
+2. **Account Linking**
+   - Prevent account takeover
+   - Maintain at least one login method
+   - Handle conflicting emails
+
+3. **Error Handling**
+   - Handle provider downtime
+   - Manage token expiration
+   - Process consent revocation
+
+## Customization
+
+### UI Components
+
+```typescript
+export default {
+  ui: {
+    loginForm: "modern", // Affects social buttons layout
+    socialButtonsPosition: "top" // or "bottom"
+  }
+}
+```
+
+### Provider Order
+
+```typescript
+export default {
+  auth: {
+    socialProviders: {
+      order: ["google", "apple", "linkedin"]
+    }
+  }
+}
+```
+
+## Best Practices
+
+1. **Implementation**
+   - Enable account linking for better user experience
+   - Implement fallback authentication methods
+   - Handle provider-specific edge cases
+
+2. **Security**
+   - Keep credentials secure
+   - Regularly rotate secrets
+   - Monitor for suspicious activity
+
+3. **User Experience**
+   - Clear error messages
+   - Smooth account linking process
+   - Consistent branding

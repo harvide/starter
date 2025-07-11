@@ -1,0 +1,231 @@
+# Stripe Integration
+
+Harvide Starter provides built-in Stripe integration for handling payments, subscriptions, and usage-based billing.
+
+## Initial Setup
+
+1. **Install Dependencies**
+   ```bash
+   npm install @stripe/stripe-js
+   ```
+
+2. **Environment Variables**
+   ```bash
+   STRIPE_SECRET_KEY=sk_test_...
+   STRIPE_PUBLISHABLE_KEY=pk_test_...
+   STRIPE_WEBHOOK_SECRET=whsec_...
+   ```
+
+## Configuration
+
+Configure Stripe in your `starter.config.ts`:
+
+```typescript
+export default {
+  payments: {
+    stripe: {
+      enabled: true,
+      subscriptions: {
+        enabled: true,
+        trials: {
+          enabled: true,
+          defaultDays: 14
+        }
+      },
+      webhooks: {
+        enabled: true,
+        path: "/api/webhooks/stripe"
+      }
+    }
+  }
+}
+```
+
+## Features
+
+### Subscription Management
+
+- Flexible plan configuration
+- Trial periods
+- Usage-based billing
+- Automatic renewals
+- Proration handling
+
+### Payment Processing
+
+- One-time payments
+- Recurring billing
+- Multiple currency support
+- Tax handling
+- Invoice generation
+
+### Webhook Integration
+
+- Automatic webhook handling
+- Event processing
+- Error recovery
+- Logging and monitoring
+
+## Implementation
+
+### 1. Create Products and Prices
+
+```typescript
+// Example: Creating a subscription product
+const product = await stripe.products.create({
+  name: "Pro Plan",
+  description: "Professional plan with all features"
+});
+
+const price = await stripe.prices.create({
+  product: product.id,
+  unit_amount: 1999, // $19.99
+  currency: "usd",
+  recurring: {
+    interval: "month"
+  }
+});
+```
+
+### 2. Handle Subscriptions
+
+```typescript
+// Example: Creating a subscription
+const subscription = await stripe.subscriptions.create({
+  customer: customerId,
+  items: [{ price: priceId }],
+  trial_period_days: 14
+});
+```
+
+### 3. Set Up Webhooks
+
+```typescript
+// Example webhook handler
+export async function POST(req: Request) {
+  const event = await stripe.webhooks.constructEvent(
+    await req.text(),
+    req.headers.get("stripe-signature") as string,
+    process.env.STRIPE_WEBHOOK_SECRET
+  );
+
+  switch (event.type) {
+    case "customer.subscription.created":
+      // Handle subscription creation
+      break;
+    case "invoice.paid":
+      // Handle successful payment
+      break;
+    // ... handle other events
+  }
+}
+```
+
+## UI Components
+
+### Pricing Table
+
+```typescript
+export default {
+  ui: {
+    pricing: {
+      variant: "modern",
+      showComparison: true
+    }
+  }
+}
+```
+
+### Payment Form
+
+```typescript
+export default {
+  ui: {
+    paymentForm: {
+      variant: "minimal",
+      showSaveCard: true
+    }
+  }
+}
+```
+
+## Testing
+
+1. **Test Cards**
+   - `4242424242424242`: Successful payment
+   - `4000000000003220`: 3D Secure authentication
+   - `4000000000000341`: Attach additional information
+
+2. **Webhook Testing**
+   - Use Stripe CLI for local testing
+   - Test event handling
+   - Verify error handling
+
+## Best Practices
+
+### Security
+
+1. **API Keys**
+   - Use environment variables
+   - Rotate keys regularly
+   - Separate test/production keys
+
+2. **Webhooks**
+   - Validate signatures
+   - Handle idempotency
+   - Implement retry logic
+
+### Error Handling
+
+1. **Payment Failures**
+   - Card decline responses
+   - Authentication failures
+   - Insufficient funds
+
+2. **Recovery Strategies**
+   - Retry failed payments
+   - Notify customers
+   - Update subscription status
+
+### Maintenance
+
+1. **Monitoring**
+   - Track successful/failed payments
+   - Monitor webhook delivery
+   - Check subscription status
+
+2. **Updates**
+   - Keep dependencies updated
+   - Follow Stripe API changes
+   - Update webhook endpoints
+
+## Common Use Cases
+
+1. **Subscription Management**
+   ```typescript
+   // Update subscription
+   await stripe.subscriptions.update(subscriptionId, {
+     items: [{ price: newPriceId }],
+     proration_behavior: "create_prorations"
+   });
+   ```
+
+2. **Usage-Based Billing**
+   ```typescript
+   // Report usage
+   await stripe.subscriptionItems.createUsageRecord(
+     subscriptionItemId,
+     {
+       quantity: 100,
+       timestamp: "now"
+     }
+   );
+   ```
+
+3. **Customer Portal**
+   ```typescript
+   // Create portal session
+   const session = await stripe.billingPortal.sessions.create({
+     customer: customerId,
+     return_url: "https://example.com/account"
+   });

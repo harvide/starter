@@ -1,0 +1,64 @@
+# Authentication Overview
+
+Harvide Starter provides a comprehensive authentication system that's both secure and flexible. This section covers the various authentication methods available and how to implement them in your application.
+
+## Available Authentication Methods
+
+- **Email & Password**: Traditional authentication with email verification
+- **Social Providers**: Integration with popular providers like Google, Apple, and LinkedIn
+- **Phone Authentication**: SMS-based verification with OTP support
+
+## Key Features
+
+- Secure password hashing
+- Email verification
+- Password reset flows
+- Social authentication
+- Phone number verification
+- Multi-factor authentication support
+- Session management
+- Account linking
+
+## Getting Started
+
+1. Choose your authentication methods in `starter.config.ts`:
+
+```typescript
+export default {
+  auth: {
+    emailAndPassword: {
+      enabled: true,
+      requireEmailVerification: true,
+      // ... other email settings
+    },
+    socialProviders: {
+      google: {
+        enabled: true,
+        // ... provider settings
+      }
+    },
+    phone: {
+      enabled: true,
+      // ... phone settings
+    }
+  }
+}
+```
+
+2. Configure your environment variables (refer to the [Setup](/setup) guide)
+3. Enable the desired authentication features
+4. Customize the UI components if needed
+
+## Security Best Practices
+
+- Always enable email verification for new accounts
+- Implement rate limiting for authentication attempts
+- Use secure password policies
+- Keep social provider credentials secure
+- Regularly audit authentication logs
+- Enable account recovery options
+
+For detailed implementation guides, see:
+- [Email & Password Authentication](/auth-email)
+- [Social Providers](/auth-social)
+- [Phone Authentication](/auth-phone)

@@ -1,24 +1,44 @@
 export default {
-  index: 'Introduction',
-  'getting-started-separator': {
+  'introduction-separator': {
     type: 'separator',
-    title: 'Getting Started',
+    title: 'Introduction',
   },
+  index: 'Introduction',
   'getting-started': 'Getting Started',
   setup: 'Setup',
-  'project-structure': 'Project Structure',
-  convention: 'Concepts',
-  'configuration-separator': {
+
+  'authentication-separator': {
     type: 'separator',
-    title: 'Configuration',
+    title: 'Authentication',
   },
-  configuration: 'Configuration',
-  'customizing-theme': 'Customizing Theme',
-  'ai-separator': {
+  authentication: {
+    title: 'Overview',
+  },
+
+  'branding-separator': {
     type: 'separator',
-    title: 'AI',
+    title: 'Branding',
   },
-  'leveraging-ai': 'Leveraging AI',
+  branding: {
+    title: 'Overview',
+  },
+
+  'payments-separator': {
+    type: 'separator',
+    title: 'Payments',
+  },
+  payments: {
+    title: 'Overview',
+  },
+
+  'core-separator': {
+    type: 'separator',
+    title: 'Core Features',
+  },
+  core: {
+    title: 'Overview',
+  },
+
   'deployment-separator': {
     type: 'separator',
     title: 'Deployment',
@@ -27,10 +47,11 @@ export default {
   deployment: {
     title: 'Deployment',
   },
+
   'contributing-separator': {
     type: 'separator',
     title: 'Contributing',
   },
   contributing: 'Contributing',
-  'adding-new-variants': 'Adding New Variants',
+  'adding-new-variants': 'Adding New Variants'
 };

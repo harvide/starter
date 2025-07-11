@@ -1,0 +1,136 @@
+# Email & Password Authentication
+
+Email and password authentication is the most common authentication method. Harvide Starter provides a complete solution with email verification, password reset, and customizable UI components.
+
+## Configuration
+
+In your `starter.config.ts`, configure email authentication:
+
+```typescript
+export default {
+  auth: {
+    emailAndPassword: {
+      enabled: true,
+      autoSignIn: true,
+      disableSignUp: false,
+      minPasswordLength: 8,
+      maxPasswordLength: 100,
+      requireEmailVerification: true,
+      resetPasswordTokenExpiresIn: 3600, // 1 hour
+      verificationTokenExpiresIn: 3600,
+      sendEmailVerificationOnSignup: true,
+      sendResetPassword: true,
+      otp: {
+        enabled: false,
+        otpLength: 6,
+        expiresIn: 300, // 5 minutes
+        sendVerificationOnSignUp: true,
+        disableSignUp: false,
+        allowedAttempts: 3
+      }
+    }
+  }
+}
+```
+
+### Required Environment Variables
+
+```bash
+# Frontend URL for email links
+NEXT_PUBLIC_CLIENT_URL="http://localhost:3000"
+
+# Email provider configuration (choose one)
+# For Resend:
+RESEND_API_KEY=your_resend_api_key
+
+# For SMTP:
+SMTP_HOST=smtp.example.com
+SMTP_PORT=587
+SMTP_USER=your_username
+SMTP_PASSWORD=your_password
+```
+
+## Features
+
+### Email Verification
+
+When `requireEmailVerification` is enabled:
+1. Users receive a verification email upon signup
+2. Account access is restricted until email is verified
+3. Verification links expire based on `verificationTokenExpiresIn`
+
+### Password Reset
+
+When `sendResetPassword` is enabled:
+1. Users can request password reset from login page
+2. Reset tokens expire based on `resetPasswordTokenExpiresIn`
+3. Users receive email with reset instructions
+
+### Email OTP
+
+When `otp.enabled` is enabled:
+1. Users can sign in using one-time passwords
+2. OTP codes expire based on `otp.expiresIn`
+3. Failed attempts are limited by `otp.allowedAttempts`
+
+## Customization
+
+### Login Form
+
+```typescript
+export default {
+  ui: {
+    loginForm: "modern" // or "basic"
+  }
+}
+```
+
+### Signup Form
+
+```typescript
+export default {
+  ui: {
+    signupForm: "modern" // or "basic"
+  }
+}
+```
+
+### Email Templates
+
+```typescript
+export default {
+  email: {
+    templates: {
+      verification: {
+        subject: "Verify your email",
+        variant: "default"
+      },
+      resetPassword: {
+        subject: "Reset your password",
+        variant: "default"
+      }
+    }
+  }
+}
+```
+
+## Security Considerations
+
+1. **Password Requirements**
+   - Set appropriate `minPasswordLength`
+   - Consider implementing password strength checks
+   - Prevent common/weak passwords
+
+2. **Rate Limiting**
+   - Failed login attempts are automatically rate limited
+   - OTP attempts are limited by `allowedAttempts`
+
+3. **Token Security**
+   - All tokens are single-use
+   - Tokens expire based on configured timeouts
+   - Invalid tokens are immediately revoked
+
+4. **Email Security**
+   - Verification required by default
+   - No sensitive data in emails
+   - Secure reset password flows

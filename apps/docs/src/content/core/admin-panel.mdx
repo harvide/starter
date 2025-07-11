@@ -1,0 +1,280 @@
+# Admin Panel
+
+The Harvide Starter admin panel provides a comprehensive interface for managing your application, users, and system settings.
+
+## Configuration
+
+Enable and configure the admin panel in your `starter.config.ts`:
+
+```typescript
+export default {
+  admin: {
+    enabled: true,
+    impersonationSessionDuration: 3600, // 1 hour
+    defaultBanReason: "Violation of terms of service",
+    defaultBanExpiresIn: 7 * 24 * 3600, // 7 days
+    bannedUserMessage: "Your account has been suspended",
+    dashboard: {
+      shortcuts: [
+        {
+          name: "Users",
+          description: "Manage user accounts",
+          href: "/admin/users"
+        },
+        {
+          name: "Settings",
+          description: "System configuration",
+          href: "/admin/settings"
+        }
+      ],
+      metrics: [
+        {
+          name: "Total Users",
+          type: "count",
+          query: "SELECT COUNT(*) FROM users"
+        },
+        {
+          name: "Active Users",
+          type: "count",
+          query: "SELECT COUNT(*) FROM users WHERE status = 'active'"
+        }
+      ]
+    }
+  }
+}
+```
+
+## Features
+
+### User Management
+
+1. **User List**
+   - View all users
+   - Search and filter
+   - Bulk actions
+   - Export data
+
+2. **User Details**
+   - Profile information
+   - Activity history
+   - Authentication methods
+   - Connected accounts
+
+3. **User Actions**
+   - Impersonation
+   - Account suspension
+   - Password reset
+   - Email verification
+
+### Analytics
+
+1. **Dashboard**
+   - User statistics
+   - Authentication metrics
+   - System health
+   - Recent activity
+
+2. **Reports**
+   - User growth
+   - Authentication methods
+   - Usage patterns
+   - Error rates
+
+### System Settings
+
+1. **Authentication**
+   - Provider configuration
+   - Security settings
+   - Rate limiting
+   - Session management
+
+2. **Email**
+   - Provider settings
+   - Template management
+   - Delivery monitoring
+   - Bounce handling
+
+## User Impersonation
+
+### Configuration
+
+```typescript
+export default {
+  admin: {
+    impersonation: {
+      enabled: true,
+      sessionDuration: 3600,
+      requireReason: true,
+      logActions: true
+    }
+  }
+}
+```
+
+### Usage
+
+1. **Start Impersonation**
+   ```typescript
+   await admin.impersonate({
+     userId: "user_123",
+     reason: "Support assistance",
+     duration: 3600
+   });
+   ```
+
+2. **End Impersonation**
+   ```typescript
+   await admin.endImpersonation({
+     userId: "user_123"
+   });
+   ```
+
+## User Banning
+
+### Configuration
+
+```typescript
+export default {
+  admin: {
+    banning: {
+      enabled: true,
+      defaultReason: "Terms violation",
+      defaultDuration: 7 * 24 * 3600,
+      requireReason: true,
+      notifyUser: true
+    }
+  }
+}
+```
+
+### Usage
+
+1. **Ban User**
+   ```typescript
+   await admin.banUser({
+     userId: "user_123",
+     reason: "Spam",
+     expiresIn: 24 * 3600
+   });
+   ```
+
+2. **Unban User**
+   ```typescript
+   await admin.unbanUser({
+     userId: "user_123"
+   });
+   ```
+
+## Dashboard Customization
+
+### Shortcuts
+
+Configure quick access links:
+
+```typescript
+shortcuts: [
+  {
+    name: "Analytics",
+    description: "View system metrics",
+    href: "/admin/analytics",
+    icon: "ChartBarIcon"
+  }
+]
+```
+
+### Metrics
+
+Add custom metrics:
+
+```typescript
+metrics: [
+  {
+    name: "New Users (24h)",
+    type: "count",
+    query: `
+      SELECT COUNT(*)
+      FROM users
+      WHERE created_at > NOW() - INTERVAL '24 hours'
+    `
+  }
+]
+```
+
+## Best Practices
+
+### Security
+
+1. **Access Control**
+   - Implement role-based access
+   - Log admin actions
+   - Regular security audits
+   - Session monitoring
+
+2. **Impersonation**
+   - Limit session duration
+   - Require justification
+   - Log all actions
+   - Notify users (optional)
+
+### Performance
+
+1. **Dashboard**
+   - Cache metrics
+   - Paginate lists
+   - Optimize queries
+   - Lazy load data
+
+2. **Actions**
+   - Use background jobs
+   - Handle rate limits
+   - Implement retries
+   - Monitor errors
+
+## Development
+
+### Custom Pages
+
+Add new admin pages:
+
+```typescript
+// apps/client/src/app/admin/custom/page.tsx
+export default function CustomAdminPage() {
+  return (
+    <AdminLayout>
+      <h1>Custom Admin Page</h1>
+      {/* Your content */}
+    </AdminLayout>
+  );
+}
+```
+
+### Custom Actions
+
+Add new admin actions:
+
+```typescript
+// packages/auth/src/admin.ts
+export async function customAdminAction(params: CustomActionParams) {
+  // Implementation
+}
+```
+
+## Deployment
+
+1. **Environment Setup**
+   - Set admin credentials
+   - Configure permissions
+   - Enable monitoring
+   - Set up logging
+
+2. **Security Measures**
+   - Enable HTTPS
+   - Set up firewalls
+   - Configure CORS
+   - Implement rate limiting
+
+3. **Monitoring**
+   - Track usage metrics
+   - Monitor errors
+   - Set up alerts
+   - Regular backups

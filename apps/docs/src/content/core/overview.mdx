@@ -1,0 +1,125 @@
+# Core Features
+
+Harvide Starter comes with a robust set of core features designed to accelerate your application development. This section provides an overview of the main functionalities and where to find detailed documentation for each.
+
+## Admin Panel
+
+A powerful admin interface for managing your application:
+
+- User management and impersonation
+- Activity monitoring
+- Configuration controls
+- Analytics dashboard
+- User banning capabilities
+
+[Learn more about the Admin Panel →](/core/admin-panel)
+
+## Email Service
+
+Built-in email functionality for all your communication needs:
+
+- Transactional emails
+- Marketing communications
+- Custom templates
+- Multiple provider support (Resend, SMTP)
+- Email analytics
+
+[Learn more about Email Service →](/core/email-service)
+
+## Authentication
+
+Multiple authentication methods:
+
+- Email and password
+- Social providers (Google, Apple, LinkedIn)
+- Phone number with OTP
+- Multi-factor authentication
+- Session management
+
+[Learn more about Authentication →](/authentication)
+
+## Payments
+
+Integrated payment solutions:
+
+- Stripe integration for subscriptions
+- Polar for open source monetization
+- Usage-based billing
+- Multiple currency support
+
+[Learn more about Payments →](/payments-stripe)
+
+## Branding & Customization
+
+Extensive customization options:
+
+- Theme customization
+- Email template variants
+- UI component styling
+- White-labeling support
+
+[Learn more about Branding →](/branding-overview)
+
+## Additional Features
+
+### Security
+
+- Rate limiting
+- CSRF protection
+- XSS prevention
+- Secure session handling
+- Input sanitization
+
+### Performance
+
+- Optimized builds
+- Code splitting
+- Image optimization
+- Caching strategies
+- API rate limiting
+
+### Developer Experience
+
+- TypeScript support
+- ESLint configuration
+- Testing setup
+- Development tools
+- Documentation
+
+### Deployment
+
+- Deployment guides
+- Environment configuration
+- Production checklist
+- Monitoring setup
+- Performance optimization
+
+## Configuration
+
+All features can be configured through the central `starter.config.ts` file:
+
+```typescript
+export default {
+  // Enable/disable features
+  admin: {
+    enabled: true,
+    // Admin panel configuration
+  },
+  email: {
+    enabled: true,
+    // Email service configuration
+  },
+  auth: {
+    // Authentication configuration
+  },
+  // Other feature configurations
+}
+```
+
+## Next Steps
+
+- [Set up Authentication](/authentication)
+- [Configure Email Service](/core/email-service)
+- [Customize Branding](/branding-overview)
+- [Integrate Payments](/payments-stripe)
+- [Deploy Your Application](/deployment-overview)

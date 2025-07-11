@@ -1,0 +1,164 @@
+# Phone Authentication
+
+Phone number authentication in Harvide Starter provides a secure way to verify users through SMS one-time passwords (OTP). This guide covers setup and configuration for phone-based authentication.
+
+## Configuration
+
+Configure phone authentication in your `starter.config.ts`:
+
+```typescript
+export default {
+  auth: {
+    phone: {
+      enabled: true,
+      otp: {
+        enabled: true,
+        allowedAttempts: 3,
+        otpLength: 6,
+        expiresIn: 300, // 5 minutes
+        requireVerification: true
+      }
+    }
+  }
+}
+```
+
+## Features
+
+### Phone Number Verification
+
+- Automatic phone number validation
+- Configurable OTP length
+- Customizable expiration times
+- Attempt limiting for security
+- International number support
+
+### OTP Configuration
+
+1. **OTP Length**
+   ```typescript
+   otpLength: 6 // Number of digits in OTP
+   ```
+
+2. **Expiration Time**
+   ```typescript
+   expiresIn: 300 // Time in seconds before OTP expires
+   ```
+
+3. **Attempt Limiting**
+   ```typescript
+   allowedAttempts: 3 // Maximum failed attempts before timeout
+   ```
+
+4. **Verification Requirement**
+   ```typescript
+   requireVerification: true // Force phone verification
+   ```
+
+## Implementation Steps
+
+1. **Enable Phone Authentication**
+   - Set `phone.enabled: true` in configuration
+   - Configure OTP settings as needed
+
+2. **Set Up SMS Provider**
+   - Choose your SMS provider
+   - Add provider credentials to environment variables
+   - Configure message templates
+
+3. **Customize UI Components**
+   - Use provided phone input components
+   - Style OTP input fields
+   - Add error handling
+
+## Security Best Practices
+
+1. **Rate Limiting**
+   - Limit verification attempts
+   - Implement cooldown periods
+   - Track failed attempts
+
+2. **Number Validation**
+   - Validate number format
+   - Check country codes
+   - Prevent spam numbers
+
+3. **OTP Security**
+   - Use secure random generation
+   - Implement short expiration times
+   - Clear used codes immediately
+
+## Error Handling
+
+Common scenarios to handle:
+
+- Invalid phone numbers
+- Expired OTP codes
+- Too many failed attempts
+- Network issues
+- Provider failures
+
+## UI Customization
+
+### Phone Input Component
+
+```typescript
+export default {
+  ui: {
+    phoneInput: {
+      defaultCountry: "US",
+      showCountrySelect: true
+    }
+  }
+}
+```
+
+### OTP Input
+
+```typescript
+export default {
+  ui: {
+    otpInput: {
+      autoFocus: true,
+      size: "lg"
+    }
+  }
+}
+```
+
+## Phone Number Format
+
+- Store numbers in E.164 format
+- Handle international numbers
+- Support country code selection
+- Validate number format
+
+## Testing
+
+1. **Local Testing**
+   - Use test phone numbers
+   - Mock SMS provider
+   - Verify OTP flow
+
+2. **Production Testing**
+   - Test with real numbers
+   - Verify delivery times
+   - Monitor success rates
+
+## Best Practices
+
+1. **User Experience**
+   - Clear error messages
+   - Auto-focus OTP input
+   - Show remaining time
+   - Enable resend options
+
+2. **Performance**
+   - Cache verification status
+   - Optimize API calls
+   - Handle network latency
+
+3. **Maintenance**
+   - Monitor SMS costs
+   - Track delivery rates
+   - Update provider settings

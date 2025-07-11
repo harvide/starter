@@ -1,0 +1,168 @@
+# Branding Overview
+
+Harvide Starter provides comprehensive branding options to ensure your application reflects your brand identity. From themes to email templates, you can customize every aspect of your application's appearance.
+
+## Core Branding Configuration
+
+Configure basic branding in your `starter.config.ts`:
+
+```typescript
+export default {
+  branding: {
+    name: "Your App",
+    description: "Your app description for SEO",
+    logo: {
+      large: "/images/logo.png",
+      icon: "/images/icon.png",
+      altText: "Your App Logo"
+    },
+    colors: {
+      primary: "#007AFF",
+      secondary: "#6C757D"
+    }
+  }
+}
+```
+
+## Key Areas
+
+### 1. Visual Identity
+
+- Logo and favicon
+- Color scheme
+- Typography
+- UI components styling
+- Loading states
+- Error pages
+
+### 2. Content Branding
+
+- Application name
+- Meta descriptions
+- Error messages
+- Toast notifications
+- Loading messages
+- Empty states
+
+### 3. Email Templates
+
+- Verification emails
+- Password reset emails
+- Welcome messages
+- Notification templates
+- Marketing emails
+
+### 4. UI Components
+
+- Authentication forms
+- Navigation bars
+- Buttons and inputs
+- Cards and containers
+- Modal dialogs
+- Alerts and notifications
+
+## Component Theming
+
+### Global Theme
+
+```typescript
+export default {
+  theme: {
+    extend: {
+      colors: {
+        brand: {
+          primary: "var(--brand-primary)",
+          secondary: "var(--brand-secondary)"
+        }
+      },
+      fontFamily: {
+        sans: ["Inter", "sans-serif"],
+        heading: ["Poppins", "sans-serif"]
+      }
+    }
+  }
+}
+```
+
+### Dark Mode Support
+
+```typescript
+export default {
+  theme: {
+    darkMode: {
+      enabled: true,
+      default: "system"
+    }
+  }
+}
+```
+
+## White Labeling
+
+For complete white-labeling support:
+
+1. **Basic Information**
+   ```typescript
+   export default {
+     branding: {
+       name: process.env.APP_NAME,
+       domain: process.env.APP_DOMAIN,
+       supportEmail: process.env.SUPPORT_EMAIL
+     }
+   }
+   ```
+
+2. **Assets**
+   ```typescript
+   export default {
+     branding: {
+       assets: {
+         logoPath: "/branding/logo",
+         faviconPath: "/branding/favicon",
+         ogImagePath: "/branding/og-image"
+       }
+     }
+   }
+   ```
+
+3. **Email Configuration**
+   ```typescript
+   export default {
+     email: {
+       from: {
+         name: process.env.EMAIL_FROM_NAME,
+         email: process.env.EMAIL_FROM_ADDRESS
+       }
+     }
+   }
+   ```
+
+## Best Practices
+
+1. **Consistency**
+   - Use consistent colors and typography
+   - Maintain brand voice in all content
+   - Apply uniform spacing and layouts
+
+2. **Accessibility**
+   - Ensure sufficient color contrast
+   - Provide alt text for images
+   - Support screen readers
+   - Test with various devices
+
+3. **Responsive Design**
+   - Test on multiple screen sizes
+   - Ensure logo clarity at all sizes
+   - Maintain readability on mobile
+
+4. **Performance**
+   - Optimize image assets
+   - Use appropriate file formats
+   - Implement lazy loading
+   - Consider bundle size
+
+## Related Guides
+
+- [Customizing Theme](/customizing-theme) - Detailed guide on theme customization
+- [Email Templates](/email-templates) - Email template customization
+- [UI Components](/ui-components) - Available UI components and their variants

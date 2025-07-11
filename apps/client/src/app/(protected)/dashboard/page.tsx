@@ -1,12 +1,14 @@
 import { auth } from '@repo/auth';
 import { Button } from '@repo/ui/components/button';
 import { headers } from 'next/headers';
-import Image from 'next/image';
+import { UserInfoCard } from '@/components/dashboard/user-info-card';
 import { unauthorized } from 'next/navigation';
+import { User } from '@repo/auth/client';
+import Image from 'next/image';
 
 export default async function DashboardPage() {
     const session = await auth.api.getSession({ headers: await headers() });
-    const user = session?.user;
+    const user = session?.user as User | null;
 
     if (!user) {
         unauthorized();
@@ -42,23 +44,13 @@ export default async function DashboardPage() {
 
                 {/* Quick Start Section */}
                 <div className="w-full max-w-3xl space-y-6">
-                    <h2 className="text-2xl font-medium">I just want to try @harvide/starter</h2>
-                    <div className="grid gap-4 sm:grid-cols-2">
-                        <div className="rounded-lg border bg-card p-4 text-left">
-                            <h3 className="font-medium mb-2">1. Add Components</h3>
-                            <p className="text-sm text-muted-foreground">
-                                Create new components in{' '}
-                                <code className="rounded bg-muted px-1">src/components/dashboard</code>{' '}
-                                and add them to this page.
-                            </p>
-                        </div>
-                        <div className="rounded-lg border bg-card p-4 text-left">
-                            <h3 className="font-medium mb-2">2. Access User Data</h3>
-                            <p className="text-sm text-muted-foreground">
-                                Use <code className="rounded bg-muted px-1">useAuthUser()</code>{' '}
-                                hook to access the authenticated user&apos;s data.
-                            </p>
-                        </div>
+                    <div className="flex min-h-screen flex-col">
+                        <main className="container mx-auto flex flex-1 flex-col gap-8 px-4">
+                            <div className="mx-auto w-full max-w-5xl space-y-8">
+                                {/* User Info Card */}
+                                <UserInfoCard user={user} />
+                            </div>
+                        </main>
                     </div>
                 </div>
 
@@ -78,7 +70,7 @@ export default async function DashboardPage() {
                                 viewBox="0 0 24 24"
                             >
                                 <path
-                                    d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                                    d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"
                                     strokeLinecap="round"
                                     strokeLinejoin="round"
                                     strokeWidth={2}
@@ -101,7 +93,7 @@ export default async function DashboardPage() {
                                 viewBox="0 0 24 24"
                             >
                                 <path
-                                    d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"
+                                    d="M6 18L18 6M6 6l12 12"
                                     strokeLinecap="round"
                                     strokeLinejoin="round"
                                     strokeWidth={2}

@@ -6,6 +6,42 @@ import { generateEnvContent } from './env.js';
 import type { CreateAppOptions } from './types.js';
 import { deepClone, SocialProviderConfigs, stringifyConfig } from './utils.js';
 
+const DEFAULT_STRIPE_PRODUCTS = [
+  {
+    name: 'Basic Plan',
+    priceId: '', // Will be filled from env
+    annualDiscountPriceId: '', // Will be filled from env
+    lookupKey: 'basic',
+    annualDiscountLookupKey: 'basic-annual',
+    limits: {
+      storage: 5,
+      users: 1,
+    }
+  },
+  {
+    name: 'Pro Plan',
+    priceId: '', // Will be filled from env
+    annualDiscountPriceId: '', // Will be filled from env
+    lookupKey: 'pro',
+    annualDiscountLookupKey: 'pro-annual',
+    limits: {
+      storage: 50,
+      users: 5,
+    }
+  }
+];
+
+const DEFAULT_POLAR_PRODUCTS = [
+  {
+    productId: '', // Will be filled from env
+    slug: 'basic'
+  },
+  {
+    productId: '', // Will be filled from env
+    slug: 'pro'
+  }
+];
+
 export async function generateConfig(options: CreateAppOptions) {
   const {
     appName,
@@ -59,6 +95,48 @@ export async function generateConfig(options: CreateAppOptions) {
 
   config.auth.socialProviders = socialProviderConfig;
 
+  // Configure payments if provider is selected
+  if (paymentProvider) {
+    config.payments = {
+      enabled: true,
+      createCustomerOnSignUp: true,
+      webhooks: {
+        enabled: useWebhook || false
+      },
+      provider: {
+        name: paymentProvider,
+        ...(paymentProvider === 'polar' ? { environment: 'production' } : {})
+      }
+    } as any;
+
+    if (paymentProvider === 'stripe') {
+      config.payments = {
+        ...config.payments,
+        subscription: {
+          enabled: true,
+          plans: DEFAULT_STRIPE_PRODUCTS,
+          requireEmailVerification: true
+        }
+      };
+    } else if (paymentProvider === 'polar') {
+      config.payments = {
+        ...config.payments,
+        checkout: {
+          enabled: true,
+          products: DEFAULT_POLAR_PRODUCTS
+        },
+        usage: {
+          enabled: true
+        },
+        portal: {
+          enabled: true,
+          externalPortal: true,
+          returnUrl: '${process.env.NEXT_PUBLIC_CLIENT_URL}/dashboard'
+        }
+      };
+    }
+  }
+
   config.admin.enabled = features.includes('admin');
 
   // Check for missing environment variables
@@ -77,7 +155,6 @@ export async function generateConfig(options: CreateAppOptions) {
   const envFilePath = path.join(projectPath, '.env');
   await fs.ensureDir(path.dirname(envFilePath)); // Ensure directory exists
   await fs.writeFile(envFilePath, envContent);
-  // Custom object stringifier that produces clean JS object literals
 
   return `/** 
  * @type {import('@repo/config').Config}

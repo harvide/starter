@@ -72,6 +72,8 @@ export async function createApp(options: CreateAppOptions) {
     auth,
     packageManager,
     llm,
+    paymentProvider,
+    useWebhook
   } = options;
   const templatePath = path.resolve(
     path.dirname(new URL(import.meta.url).pathname),

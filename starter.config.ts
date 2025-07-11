@@ -4,7 +4,7 @@
  * Customize authentication flows, branding, and preferences.
  */
 export default {
-  /** Payment configuration */
+  /** Polar Payment configuration */
   payments: {
     /** Enable payment functionality */
     enabled: true,

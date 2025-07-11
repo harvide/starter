@@ -4,7 +4,9 @@
  * Customize authentication flows, branding, and preferences.
  */
 export default {
-  /** Polar Payment configuration */
+  /** Polar Payment configuration
+   * For Stripe configuration, @see https://starter.harvide.com/docs/payments/stripe
+  */
   payments: {
     /** Enable payment functionality */
     enabled: true,

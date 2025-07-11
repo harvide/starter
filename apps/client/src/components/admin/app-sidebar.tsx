@@ -1,5 +1,4 @@
 'use client';
-
 import { config } from '@repo/config';
 import {
   Sidebar,
@@ -19,7 +18,6 @@ import {
 } from '@tabler/icons-react';
 import Image from 'next/image';
 import Link from 'next/link';
-import type * as React from 'react';
 import { NavMain } from '@/components/admin/nav-main';
 import { NavSecondary } from '@/components/admin/nav-secondary';
 import { NavUser } from '@/components/admin/nav-user';
